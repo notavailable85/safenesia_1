@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safenesia_1/features/profile/presentation/pages/profile_page.dart';
+import 'package:safenesia_1/features/home/presentation/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const AccountPage(),
+      home: const HomePage(),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
