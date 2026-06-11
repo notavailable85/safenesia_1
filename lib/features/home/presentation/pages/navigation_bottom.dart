@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safenesia_1/features/home/presentation/pages/career_page.dart';
+import 'package:safenesia_1/features/career/career_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/home_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/list_pelatihan_page.dart';
 

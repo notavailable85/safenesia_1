@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:safenesia_1/features/home/presentation/pages/article_page.dart';
-import 'package:safenesia_1/features/home/presentation/pages/career_page.dart';
+import 'package:safenesia_1/features/article/article_page.dart';
+import 'package:safenesia_1/features/career/career_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/detail_page.dart';
-import 'package:safenesia_1/features/home/presentation/pages/notification_page.dart';
-import 'package:safenesia_1/features/home/presentation/pages/regulation_page.dart';
-import 'package:safenesia_1/features/home/presentation/pages/search_page.dart';
+import 'package:safenesia_1/features/notification/notification_page.dart';
+import 'package:safenesia_1/features/regulation/regulation_page.dart';
+import 'package:safenesia_1/features/search/search_page.dart';
 
 // ==========================================
 // 1. HALAMAN UTAMA (HOME PAGE)
