@@ -10,7 +10,9 @@ class AppAssets {
   static const String _lottiePath = 'assets/lottie';
 
   // Images
-  static const String logo = '$_imagePath/app_logo.png';
+  static const String logoHorizontal =
+      '$_imagePath/logo-safenesia-horizontal.png';
+  static const String logoVertical = '$_imagePath/logo-safenesia-vertical.png';
   static const String onboarding1 = '$_imagePath/onboarding_welcome.png';
   static const String placeholder = '$_imagePath/placeholder.jpg';
 
