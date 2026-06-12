@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safenesia_1/features/auth/presentation/pages/auth_wrapper.dart';
+import 'package:safenesia_1/features/auth/presentation/pages/splash/auth_wrapper.dart';
 
 // ==========================================
 // 1. SPLASH SCREEN
@@ -15,8 +15,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Simulasi loading selama 2.5 detik, lalu pindah ke AuthWrapper
-    Future.delayed(const Duration(milliseconds: 2500), () {
+    // Simulasi loading selama 3 detik, lalu pindah ke AuthWrapper
+    Future.delayed(const Duration(milliseconds: 3000), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const AuthWrapper()),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/login/dummy_home_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/login/login_page.dart';
-import 'package:safenesia_1/features/auth/presentation/pages/onboarding/onboarding_page.dart';
+import 'package:safenesia_1/features/auth/presentation/pages/splash/onboarding_page.dart';
 
 // ==========================================
 // 2. AUTH WRAPPER (Penentu Navigasi)

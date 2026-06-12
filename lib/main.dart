@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safenesia_1/features/auth/presentation/pages/splash/splash_screen.dart';
 
 void main() {
   runApp(const SafenesiaApp());
@@ -15,15 +16,7 @@ class SafenesiaApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text(
-            'Halo! main.dart berhasil dibuat ulang.\nSilakan hubungkan dengan UI Anda.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18),
-          ),
-        ),
-      ),
+      home: const SplashScreen(),
     );
   }
 }
