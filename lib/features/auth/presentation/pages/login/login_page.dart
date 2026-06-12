@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/login/dummy_home_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/forgot_password/forgot_password_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/register/register_page.dart';
+
+import '../../../../../core/constants/constants.dart';
 
 // ==========================================
 // 4. LOGIN PAGE
@@ -16,23 +19,35 @@ class LoginPage extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 40),
-              const Text(
-                'Selamat Datang Kembali!',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              AppSizes.gapH8,
+              Image.asset(AppAssets.logoVertical, height: 200),
+              AppSizes.gapH8,
+              Text(
+                'Selamat Datang!',
+                style: GoogleFonts.inter(
+                  textStyle: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryDark,
+                  ),
+                ),
               ),
-              const Text(
+              Text(
                 'Silakan masuk ke akun Anda',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
+                style: GoogleFonts.inter(
+                  textStyle: const TextStyle(color: Colors.grey, fontSize: 15),
+                ),
               ),
               const SizedBox(height: 40),
 
               const TextField(
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
                   prefixIcon: Icon(Icons.email),
                 ),
               ),
@@ -41,7 +56,9 @@ class LoginPage extends StatelessWidget {
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
                   prefixIcon: Icon(Icons.lock),
                   suffixIcon: Icon(Icons.visibility_off),
                 ),

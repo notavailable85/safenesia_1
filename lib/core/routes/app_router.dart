@@ -7,7 +7,7 @@ import 'package:safenesia_1/features/auth/presentation/pages/splash/onboarding_p
 import 'package:safenesia_1/features/auth/presentation/pages/login/login_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/register/verify_email_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
-import 'package:safenesia_1/features/home/presentation/pages/notification_page.dart';
+import 'package:safenesia_1/features/notification/notification_page.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_detail_page.dart';
 
 class AppRouter {

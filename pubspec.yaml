@@ -83,9 +83,26 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
-    - assets/icons/
-    - assets/lottie/
+    # images
+    - assets/images/logo_safenesia_horizontal.png
+    - assets/images/logo_safenesia_vertical.png
+    # icons
+    - assets/icons/icon-safenesia.png
+    - assets/icons/social_media/icon_facebook.svg
+    - assets/icons/social_media/icon_instagram.svg
+    - assets/icons/social_media/icon_linkedin.svg
+    - assets/icons/social_media/icon_tiktok.svg
+    - assets/icons/social_media/icon_google.svg
+    # lottie animations
+    - assets/lottie/hi_we_couple.json
+    - assets/lottie/loading_dot_colors.json
+    - assets/lottie/onboarding_training.json
+    - assets/lottie/onboarding_certification.json
+    - assets/lottie/onboarding_inspection.json
+    - assets/lottie/onboarding_renewal.json
+
+
+    # translations
     - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
