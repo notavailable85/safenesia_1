@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/login/dummy_home_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/forgot_password/forgot_password_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/register/register_page.dart';
@@ -9,8 +13,132 @@ import '../../../../../core/constants/constants.dart';
 // ==========================================
 // 4. LOGIN PAGE
 // ==========================================
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _isPasswordVisible = false;
+  bool _isLoadingGoogle = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  String _getErrorMessage(String errorCode) {
+    switch (errorCode) {
+      case 'invalid_email':
+        return 'Format email tidak valid';
+      case 'user_not_found':
+        return 'Akun tidak ditemukan';
+      case 'wrong_password':
+        return 'Password yang dimasukkan salah';
+      case 'account_disabled':
+        return 'Akun telah dinonaktifkan';
+      case 'too_many_requests':
+        return 'Terlalu banyak percobaan login. Coba lagi nanti';
+      case 'network_error':
+        return 'Koneksi internet bermasalah';
+      case 'server_error':
+        return 'Terjadi kesalahan server';
+      case 'session_expired':
+        return 'Sesi telah berakhir, silakan login kembali';
+      case 'email_not_verified':
+        return 'Email belum diverifikasi';
+      case 'unauthorized':
+        return 'Anda tidak memiliki akses';
+      default:
+        return 'Terjadi kesalahan yang tidak diketahui';
+    }
+  }
+
+  void _showError(String errorCode) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(_getErrorMessage(errorCode)),
+        backgroundColor: Colors.red.shade600,
+      ),
+    );
+  }
+
+  Future<void> _login() async {
+    final identifier = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (identifier.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Email dan password harus diisi'),
+          backgroundColor: Colors.red.shade600,
+        ),
+      );
+      return;
+    }
+
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(identifier)) {
+      _showError('invalid_email');
+      return;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    final usersStr = prefs.getString('registered_users');
+
+    bool userFound = false;
+    bool passwordCorrect = false;
+
+    if (usersStr != null) {
+      final List<dynamic> registeredUsers = jsonDecode(usersStr);
+      for (var user in registeredUsers) {
+        if (user['email'] == identifier) {
+          userFound = true;
+          if (user['password'] == password) {
+            passwordCorrect = true;
+            break;
+          }
+        }
+      }
+    }
+
+    // Fallback jika belum ada list json (kompatibilitas)
+    if (!userFound) {
+      final fallbackEmail = prefs.getString('registered_email');
+      final fallbackPassword = prefs.getString('registered_password');
+      if (fallbackEmail == identifier) {
+        userFound = true;
+        if (fallbackPassword == password) {
+          passwordCorrect = true;
+        }
+      }
+    }
+
+    if (!userFound) {
+      _showError('user_not_found');
+      return;
+    }
+
+    if (!passwordCorrect) {
+      _showError('wrong_password');
+      return;
+    }
+
+    // Login berhasil
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const DummyHomePage()),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,29 +149,30 @@ class LoginPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              AppSizes.gapH8,
+              SizedBox(height: 6),
               Image.asset(AppAssets.logoVertical, height: 200),
-              AppSizes.gapH8,
+              SizedBox(height: 30),
               Text(
                 'Selamat Datang!',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.poppins(
                   textStyle: const TextStyle(
-                    fontSize: 26,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primaryDark,
+                    color: AppColors.textPrimaryLight,
                   ),
                 ),
               ),
               Text(
                 'Silakan masuk ke akun Anda',
                 style: GoogleFonts.inter(
-                  textStyle: const TextStyle(color: Colors.grey, fontSize: 15),
+                  textStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
 
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -52,15 +181,27 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              const TextField(
-                obscureText: true,
+              TextField(
+                controller: _passwordController,
+                obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
                   ),
-                  prefixIcon: Icon(Icons.lock),
-                  suffixIcon: Icon(Icons.visibility_off),
+                  prefixIcon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
               ),
 
@@ -76,7 +217,7 @@ class LoginPage extends StatelessWidget {
                   child: const Text('Lupa Password?'),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 6),
 
               SizedBox(
                 width: double.infinity,
@@ -86,18 +227,13 @@ class LoginPage extends StatelessWidget {
                     backgroundColor: Colors.blue.shade800,
                     foregroundColor: Colors.white,
                   ),
-                  onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DummyHomePage(),
-                    ),
-                  ),
+                  onPressed: _login,
                   child: const Text('Login', style: TextStyle(fontSize: 16)),
                 ),
               ),
 
               const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
+                padding: EdgeInsets.symmetric(vertical: 12),
                 child: Center(
                   child: Text('ATAU', style: TextStyle(color: Colors.grey)),
                 ),
@@ -108,33 +244,91 @@ class LoginPage extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton.icon(
-                  onPressed: () {
-                    // Logika integrasi Google Sign In diletakkan di sini
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Simulasi Google Sign-In berhasil'),
-                      ),
-                    );
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DummyHomePage(),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.g_mobiledata,
-                    color: Colors.red,
-                    size: 32,
-                  ),
-                  label: const Text(
-                    'Masuk dengan Google',
-                    style: TextStyle(color: Colors.black87),
+                  onPressed: _isLoadingGoogle
+                      ? null
+                      : () async {
+                          setState(() {
+                            _isLoadingGoogle = true;
+                          });
+
+                          try {
+                            final GoogleSignIn googleSignIn = GoogleSignIn();
+                            final GoogleSignInAccount? googleUser =
+                                await googleSignIn.signIn();
+
+                            if (googleUser == null) {
+                              // Pengguna membatalkan proses login
+                              if (mounted) {
+                                setState(() {
+                                  _isLoadingGoogle = false;
+                                });
+                              }
+                              return;
+                            }
+
+                            // Simpan data sesi ke SharedPreferences
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('login_method', 'google');
+                            await prefs.setString(
+                              'user_name',
+                              googleUser.displayName ?? 'Pengguna Google',
+                            );
+                            await prefs.setString(
+                              'user_email',
+                              googleUser.email,
+                            );
+
+                            if (mounted) {
+                              setState(() {
+                                _isLoadingGoogle = false;
+                              });
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Login berhasil sebagai ${googleUser.displayName ?? googleUser.email}',
+                                  ),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const DummyHomePage(),
+                                ),
+                              );
+                            }
+                          } catch (error) {
+                            if (mounted) {
+                              setState(() {
+                                _isLoadingGoogle = false;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Gagal login dengan Google: $error',
+                                  ),
+                                  backgroundColor: Colors.red.shade600,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                  icon: _isLoadingGoogle
+                      ? const SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : SvgPicture.asset(AppAssets.iconGoogle, height: 24),
+                  label: Text(
+                    _isLoadingGoogle ? 'Memproses...' : 'Masuk dengan Google',
+                    style: const TextStyle(color: Colors.black87),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -146,7 +340,10 @@ class LoginPage extends StatelessWidget {
                         builder: (context) => const RegisterPage(),
                       ),
                     ),
-                    child: const Text('Daftar Sekarang'),
+                    child: const Text(
+                      'Daftar Sekarang',
+                      // style: TextStyle(color: AppColors.primary),
+                    ),
                   ),
                 ],
               ),

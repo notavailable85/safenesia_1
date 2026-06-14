@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safenesia_1/features/article/article_page.dart';
+import 'package:safenesia_1/features/article/presentation/pages/article_list_page.dart';
 import 'package:safenesia_1/features/career/career_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/detail_page.dart';
 import 'package:safenesia_1/features/notification/notification_page.dart';
@@ -141,7 +141,7 @@ class _HomePageState extends State<HomePage> {
     } else if (title == 'Artikel K3') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (c) => const ArtikelPage()),
+        MaterialPageRoute(builder: (c) => const ArticleListPage()),
       );
     } else if (title == 'Karir K3') {
       Navigator.push(

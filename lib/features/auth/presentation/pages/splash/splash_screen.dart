@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/splash/auth_wrapper.dart';
 import 'package:lottie/lottie.dart';
 import '../../../../../core/constants/constants.dart';
@@ -71,12 +72,14 @@ class _SplashScreenState extends State<SplashScreen> {
       children: [
         Lottie.asset(AppAssets.lottieHiWeCouple, width: 150),
         AppSizes.gapH16,
-        const Text(
-          'Hi, Welcome!',
-          style: TextStyle(
-            color: AppColors.primaryDark,
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
+        Text(
+          'Hi, Safetizen!',
+          style: GoogleFonts.poppins(
+            textStyle: TextStyle(
+              color: AppColors.primaryDark,
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+            ),
           ),
         ),
       ],

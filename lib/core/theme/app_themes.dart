@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // Import konstanta yang sudah dibuat sebelumnya
-import 'app_colors.dart';
-import 'app_sizes.dart';
+import '../constants/app_colors.dart';
+import '../constants/app_sizes.dart';
 
 @immutable
 class AppThemes {
@@ -23,14 +24,20 @@ class AppThemes {
         error: AppColors.error,
         surface: AppColors.surfaceLight,
       ),
+      textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme),
 
       // Pengaturan AppBar Global
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white, // Warna teks & icon di AppBar
         elevation: 0,
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
+        titleTextStyle: GoogleFonts.inter(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
       ),
 
       // Pengaturan Tombol Global (ElevatedButton)
@@ -45,6 +52,10 @@ class AppThemes {
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+          ),
+          textStyle: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -89,12 +100,18 @@ class AppThemes {
         error: AppColors.error,
         surface: AppColors.surfaceDark,
       ),
+      textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
 
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: AppColors.surfaceDark,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        titleTextStyle: GoogleFonts.inter(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -108,6 +125,10 @@ class AppThemes {
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+          ),
+          textStyle: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

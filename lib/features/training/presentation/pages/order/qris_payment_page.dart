@@ -30,7 +30,7 @@ class QrisPaymentPage extends StatelessWidget {
               Container(
                 width: 250,
                 height: 250,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 child: Card(
                   elevation: 4,
                   child: Padding(
@@ -38,17 +38,17 @@ class QrisPaymentPage extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.qr_code_2,
                           size: 140,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'GPN - QRIS DUMMY',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade700,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -74,10 +74,7 @@ class QrisPaymentPage extends StatelessWidget {
 
               // Tombol Simulasi Pembayaran Sukses (Sebelum dihubungkan ke Webhook/Midtrans)
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                ),
+
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                     context,

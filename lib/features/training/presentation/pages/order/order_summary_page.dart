@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/training/presentation/pages/order/qris_payment_page.dart';
+import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
 
 // ==========================================
 // 4. HALAMAN RINGKASAN PEMESANAN (CHECKOUT)
 // ==========================================
 class OrderSummaryPage extends StatelessWidget {
-  final Map<String, dynamic> trainingData;
+  final TrainingSchedule scheduleData;
   final int jumlahPeserta;
   final String jenisPeserta;
   final List<Map<String, String>> daftarPeserta;
 
   const OrderSummaryPage({
     super.key,
-    required this.trainingData,
+    required this.scheduleData,
     required this.jumlahPeserta,
     required this.jenisPeserta,
     required this.daftarPeserta,
@@ -20,7 +21,7 @@ class OrderSummaryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int hargaSatuan = trainingData['harga'] as int;
+    int hargaSatuan = scheduleData.trainingData!.hargaPromo;
     int totalHarga = hargaSatuan * jumlahPeserta;
 
     return Scaffold(
@@ -32,11 +33,11 @@ class OrderSummaryPage extends StatelessWidget {
           Card(
             child: ListTile(
               title: Text(
-                trainingData['judul'],
+                scheduleData.trainingData!.namaPelatihan,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                '${trainingData['sertifikasi']}\nTipe: $jenisPeserta',
+                '${scheduleData.trainingData!.sertifikasi}\nTipe: $jenisPeserta\nJadwal: ${scheduleData.tanggalStr}',
               ),
             ),
           ),

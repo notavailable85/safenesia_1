@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/login/login_page.dart';
+import 'package:safenesia_1/features/auth/presentation/pages/login/registered_accounts_page.dart';
 
 // ==========================================
 // 10. DUMMY HOME PAGE (Target setelah login)
@@ -23,6 +24,22 @@ class DummyHomePage extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue.shade800,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(200, 45),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const RegisteredAccountsPage()),
+              ),
+              child: const Text('Akun Terdaftar'),
+            ),
+            const SizedBox(height: 16),
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(200, 45),
+              ),
               onPressed: () => Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),

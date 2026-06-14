@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/training/presentation/pages/order/order_form_page.dart';
 
+import 'package:safenesia_1/features/training/models/training_model.dart';
+import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
+
 // ==========================================
 // 2. HALAMAN DETAIL PELATHAN
 // ==========================================
 class TrainingDetailPage extends StatelessWidget {
-  final Map<String, dynamic> trainingData;
+  final TrainingSchedule scheduleData;
 
-  const TrainingDetailPage({super.key, required this.trainingData});
+  const TrainingDetailPage({super.key, required this.scheduleData});
 
   @override
   Widget build(BuildContext context) {
+    final trainingData = scheduleData.trainingData;
+    if (trainingData == null) return const Scaffold(body: Center(child: Text('Data error')));
+
     return Scaffold(
-      appBar: AppBar(title: Text(trainingData['judul'])),
+      appBar: AppBar(title: Text(trainingData.namaPelatihan)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -22,56 +28,43 @@ class TrainingDetailPage extends StatelessWidget {
             Container(
               width: double.infinity,
               height: 200,
-              color: Colors.blueGrey.shade100,
-              child: const Icon(Icons.image, size: 100, color: Colors.white),
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              child: Icon(Icons.image, size: 100, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             const SizedBox(height: 16),
             Text(
-              trainingData['judul'],
+              trainingData.namaPelatihan,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             Text(
-              trainingData['sertifikasi'],
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
+              trainingData.sertifikasi,
+              style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             const Divider(height: 32),
 
-            _buildSection(
-              'Deskripsi',
-              'Pelatihan ini dirancang untuk membekali peserta dengan pengetahuan dan keterampilan praktis terkait keselamatan kerja sesuai regulasi undang-undang.',
-            ),
-            _buildSection(
-              'Persyaratan',
-              '1. Pendidikan minimal D3/S1 (Umum) atau SMA (Pengalaman kerja K3 2 tahun)\n2. Scan KTP & Ijazah\n3. Surat Rekomendasi Perusahaan (jika utusan)',
-            ),
-            _buildSection(
-              'Materi Pelatihan',
-              '• Peraturan Perundangan K3\n• Dasar-dasar K3\n• Manajemen Risiko & SMK3\n• Analisis Kecelakaan Kerja',
-            ),
-            _buildSection(
-              'Fasilitas',
-              '• Sertifikat Kemnaker RI\n• Modul & Training Kit\n• Makan Siang & Coffee Break\n• Kemeja Safety (Wearpack)',
-            ),
-            _buildSection(
-              'Info Pendaftaran',
-              'Pendaftaran ditutup H-7 sebelum pelaksanaan kelas dimulai. Kuota terbatas untuk efektivitas praktikum.',
-            ),
+            _buildSection(context, 'Deskripsi', trainingData.deskripsi),
+            _buildSection(context, 'Dasar Hukum', trainingData.dasarHukum),
+            _buildSection(context, 'Tujuan', trainingData.tujuan),
+            _buildSection(context, 'Materi Pelatihan', trainingData.materi),
+            _buildSection(context, 'Persyaratan', trainingData.syaratAdministrasi),
+            _buildSection(context, 'Fasilitas', trainingData.fasilitas),
+            _buildSection(context, 'Metode', '${trainingData.metode}\n${trainingData.detailMetode}'),
+            _buildSection(context, 'Instruktur', trainingData.instruktur),
+            _buildSection(context, 'Syarat & Ketentuan', trainingData.syaratKetentuan),
+            _buildSection(context, 'Info Pendaftaran', trainingData.keterangan),
 
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                ),
+
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          OrderFormPage(trainingData: trainingData),
+                          OrderFormPage(scheduleData: scheduleData),
                     ),
                   );
                 },
@@ -87,7 +80,7 @@ class TrainingDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(String title, String content) {
+  Widget _buildSection(BuildContext context, String title, String content) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
@@ -95,10 +88,10 @@ class TrainingDetailPage extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.blue,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           const SizedBox(height: 4),

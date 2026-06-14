@@ -3,12 +3,14 @@ import 'package:safenesia_1/features/training/presentation/pages/order/order_sum
 
 import 'package:safenesia_1/features/training/presentation/pages/order/trainee_form_page.dart';
 
+import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
+
 // ==========================================
 // 3. HALAMAN FORM DATA PEMESAN & PESERTA
 // ==========================================
 class OrderFormPage extends StatefulWidget {
-  final Map<String, dynamic> trainingData;
-  const OrderFormPage({super.key, required this.trainingData});
+  final TrainingSchedule scheduleData;
+  const OrderFormPage({super.key, required this.scheduleData});
 
   @override
   State<OrderFormPage> createState() => _OrderFormPageState();
@@ -206,7 +208,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => OrderSummaryPage(
-                        trainingData: widget.trainingData,
+                        scheduleData: widget.scheduleData,
                         jumlahPeserta: _jumlahPeserta,
                         daftarPeserta: _daftarPeserta,
                         jenisPeserta: _jenisPeserta,

@@ -9,6 +9,7 @@ import 'package:safenesia_1/features/auth/presentation/pages/register/verify_ema
 import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
 import 'package:safenesia_1/features/notification/notification_page.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_detail_page.dart';
+import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -48,8 +49,8 @@ class AppRouter {
         name: 'trainingDetail',
         builder: (context, state) {
           // Menerima parameter dari state.extra
-          final trainingData = state.extra as Map<String, dynamic>? ?? {};
-          return TrainingDetailPage(trainingData: trainingData);
+          final scheduleData = state.extra as TrainingSchedule;
+          return TrainingDetailPage(scheduleData: scheduleData);
         },
       ),
     ],
