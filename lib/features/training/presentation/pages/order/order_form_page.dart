@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/training/presentation/pages/order/order_summary_page.dart';
-
-import 'package:safenesia_1/features/training/presentation/pages/order/trainee_form_page.dart';
-
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
 
 // ==========================================
@@ -29,20 +26,54 @@ class _OrderFormPageState extends State<OrderFormPage> {
   final _waPemesanController = TextEditingController();
   final _emailPemesanController = TextEditingController();
 
-  // Form 3 (Daftar Peserta detail)
-  List<Map<String, String>> _daftarPeserta = [];
+  // Form 3 (Data Peserta)
+  final List<TextEditingController> _namaPesertaControllers = [];
+  final List<TextEditingController> _ktpPesertaControllers = [];
+  final List<TextEditingController> _waPesertaControllers = [];
+  final List<TextEditingController> _emailPesertaControllers = [];
 
   @override
   void initState() {
     super.initState();
-    _updatePesertaList();
+    _updatePesertaControllers();
   }
 
-  void _updatePesertaList() {
-    _daftarPeserta = List.generate(_jumlahPeserta, (index) {
-      if (index < _daftarPeserta.length) return _daftarPeserta[index];
-      return {'nama': '', 'ktp': '', 'wa': '', 'email': ''};
-    });
+  void _updatePesertaControllers() {
+    while (_namaPesertaControllers.length < _jumlahPeserta) {
+      _namaPesertaControllers.add(TextEditingController());
+      _ktpPesertaControllers.add(TextEditingController());
+      _waPesertaControllers.add(TextEditingController());
+      _emailPesertaControllers.add(TextEditingController());
+    }
+    while (_namaPesertaControllers.length > _jumlahPeserta) {
+      _namaPesertaControllers.removeLast().dispose();
+      _ktpPesertaControllers.removeLast().dispose();
+      _waPesertaControllers.removeLast().dispose();
+      _emailPesertaControllers.removeLast().dispose();
+    }
+  }
+
+  @override
+  void dispose() {
+    _namaPemesanController.dispose();
+    _ktpPemesanController.dispose();
+    _waPemesanController.dispose();
+    _emailPemesanController.dispose();
+    for (var c in _namaPesertaControllers) { c.dispose(); }
+    for (var c in _ktpPesertaControllers) { c.dispose(); }
+    for (var c in _waPesertaControllers) { c.dispose(); }
+    for (var c in _emailPesertaControllers) { c.dispose(); }
+    super.dispose();
+  }
+
+  InputDecoration _buildInputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      filled: true,
+      fillColor: Theme.of(context).colorScheme.surface,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    );
   }
 
   @override
@@ -52,23 +83,29 @@ class _OrderFormPageState extends State<OrderFormPage> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           children: [
             // --- FORM 1: TIPE & JUMLAH PESERTA ---
-            const Text(
-              'Form 1: Tipe & Jumlah Peserta',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Text(
+              'Tipe & Jumlah Peserta',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary),
             ),
+            const SizedBox(height: 12),
             Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant)),
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     DropdownButtonFormField<String>(
-                      value: _jenisPeserta,
-                      decoration: const InputDecoration(
-                        labelText: 'Jenis Peserta',
-                      ),
+                      initialValue: _jenisPeserta,
+                      decoration: _buildInputDecoration('Jenis Peserta'),
                       items: ['Pribadi', 'Perusahaan']
                           .map(
                             (t) => DropdownMenuItem(value: t, child: Text(t)),
@@ -76,11 +113,10 @@ class _OrderFormPageState extends State<OrderFormPage> {
                           .toList(),
                       onChanged: (val) => setState(() => _jenisPeserta = val!),
                     ),
+                    const SizedBox(height: 20),
                     DropdownButtonFormField<int>(
-                      value: _jumlahPeserta,
-                      decoration: const InputDecoration(
-                        labelText: 'Jumlah Peserta (Maksimal 10)',
-                      ),
+                      initialValue: _jumlahPeserta,
+                      decoration: _buildInputDecoration('Jumlah Peserta (Maksimal 10)'),
                       items: List.generate(
                         10,
                         (i) => DropdownMenuItem(
@@ -91,7 +127,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                       onChanged: (val) {
                         setState(() {
                           _jumlahPeserta = val!;
-                          _updatePesertaList();
+                          _updatePesertaControllers();
                         });
                       },
                     ),
@@ -99,118 +135,202 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 28),
 
             // --- FORM 2: DATA PEMESAN ---
-            const Text(
-              'Form 2: Kontak Pemesan Utama',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    'Kontak Pemesan Utama',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                ),
+              ],
             ),
             Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant)),
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     TextFormField(
                       controller: _namaPemesanController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nama Lengkap',
-                      ),
+                      decoration: _buildInputDecoration('Nama Lengkap'),
                       validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
                     ),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: _ktpPemesanController,
-                      decoration: const InputDecoration(labelText: 'Nomor KTP'),
+                      decoration: _buildInputDecoration('Nomor KTP'),
                       keyboardType: TextInputType.number,
+                      validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
                     ),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: _waPemesanController,
-                      decoration: const InputDecoration(
-                        labelText: 'No. WhatsApp',
-                      ),
+                      decoration: _buildInputDecoration('No. WhatsApp'),
                       keyboardType: TextInputType.phone,
+                      validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
                     ),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: _emailPemesanController,
-                      decoration: const InputDecoration(labelText: 'Email'),
+                      decoration: _buildInputDecoration('Email'),
                       keyboardType: TextInputType.emailAddress,
+                      validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
                     ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 28),
 
             // --- FORM 3: DETAIL PESERTA ---
-            const Text(
-              'Form 3: Detail Setiap Peserta (Wajib Diisi)',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Text(
+              'Detail Setiap Peserta (Wajib Diisi)',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary),
             ),
-            ListView.builder(
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.person, size: 16),
+                    label: const Text('Isi Data Saya (Peserta 1)', style: TextStyle(fontSize: 12)),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.primary,
+                      side: BorderSide(color: Theme.of(context).colorScheme.primary),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        if (_jumlahPeserta > 0) {
+                          _namaPesertaControllers[0].text = _namaPemesanController.text;
+                          _ktpPesertaControllers[0].text = _ktpPemesanController.text;
+                          _waPesertaControllers[0].text = _waPemesanController.text;
+                          _emailPesertaControllers[0].text = _emailPemesanController.text;
+                        }
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.red,
+                      side: const BorderSide(color: Colors.red),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        if (_jumlahPeserta > 0) {
+                          _namaPesertaControllers[0].clear();
+                          _ktpPesertaControllers[0].clear();
+                          _waPesertaControllers[0].clear();
+                          _emailPesertaControllers[0].clear();
+                        }
+                      });
+                    },
+                    child: const Text('Kosongkan', style: TextStyle(fontSize: 12)),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _jumlahPeserta,
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final p = _daftarPeserta[index];
-                bool isDataFilled = p['nama']!.isNotEmpty;
-
                 return Card(
-                  color: isDataFilled
-                      ? Colors.green.shade50
-                      : Colors.orange.shade50,
-                  child: ListTile(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: ExpansionTile(
+                    initiallyExpanded: index == 0,
                     title: Text(
-                      'Peserta ${index + 1}: ${isDataFilled ? p['nama'] : "Belum diisi"}',
+                      'Peserta ${index + 1}',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
-                    subtitle: Text(
-                      isDataFilled
-                          ? 'KTP: ${p['ktp']}'
-                          : 'Klik tombol edit di samping untuk mengisi data',
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
-                      onPressed: () async {
-                        // Arahkan ke halaman baru untuk input detail peserta
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailPesertaInputPage(
-                              index: index,
-                              initialData: p,
-                            ),
-                          ),
-                        );
-                        if (result != null) {
-                          setState(() {
-                            _daftarPeserta[index] = result;
-                          });
-                        }
-                      },
-                    ),
+                    childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    children: [
+                      TextFormField(
+                        controller: _namaPesertaControllers[index],
+                        decoration: _buildInputDecoration('Nama Lengkap Peserta'),
+                        validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _ktpPesertaControllers[index],
+                        decoration: _buildInputDecoration('Nomor KTP'),
+                        keyboardType: TextInputType.number,
+                        validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _waPesertaControllers[index],
+                        decoration: _buildInputDecoration('No. WhatsApp'),
+                        keyboardType: TextInputType.phone,
+                        validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _emailPesertaControllers[index],
+                        decoration: _buildInputDecoration('Email'),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                      ),
+                    ],
                   ),
                 );
               },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 40),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.all(16),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 2,
               ),
               onPressed: () {
-                // Validasi data peserta harus terisi semua
-                bool allFilled = _daftarPeserta.every(
-                  (p) => p['nama']!.isNotEmpty,
-                );
-                if (_formKey.currentState!.validate() && allFilled) {
+                if (_formKey.currentState!.validate()) {
+                  // Build data list from controllers
+                  List<Map<String, String>> daftarPeserta = List.generate(_jumlahPeserta, (i) => {
+                    'nama': _namaPesertaControllers[i].text,
+                    'ktp': _ktpPesertaControllers[i].text,
+                    'wa': _waPesertaControllers[i].text,
+                    'email': _emailPesertaControllers[i].text,
+                  });
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => OrderSummaryPage(
                         scheduleData: widget.scheduleData,
                         jumlahPeserta: _jumlahPeserta,
-                        daftarPeserta: _daftarPeserta,
+                        daftarPeserta: daftarPeserta,
                         jenisPeserta: _jenisPeserta,
                       ),
                     ),
@@ -218,6 +338,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
+                      behavior: SnackBarBehavior.floating,
                       content: Text(
                         'Mohon lengkapi seluruh formulir dan detail data peserta!',
                       ),
@@ -227,12 +348,14 @@ class _OrderFormPageState extends State<OrderFormPage> {
               },
               child: const Text(
                 'Lanjut Ke Ringkasan Pemesanan',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 }
+

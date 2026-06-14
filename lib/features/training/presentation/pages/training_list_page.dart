@@ -5,6 +5,7 @@ import 'package:safenesia_1/features/training/presentation/pages/training_detail
 import 'package:safenesia_1/features/training/presentation/pages/admin/admin_training_list_page.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
+import 'package:safenesia_1/core/utils/currency_formatter.dart';
 
 class TrainingListPage extends StatefulWidget {
   const TrainingListPage({super.key});
@@ -508,7 +509,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                             border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3)),
                           ),
                           child: Text(
-                            'Rp ${training.hargaPromo}',
+                            training.hargaPromo.toRupiah(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onPrimaryContainer,
                               fontWeight: FontWeight.bold,

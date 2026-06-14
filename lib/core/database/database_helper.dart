@@ -207,7 +207,7 @@ CREATE TABLE training_schedules (
 
   Future<List<Training>> readAllTrainings() async {
     final db = await instance.database;
-    const orderBy = 'namaPelatihan ASC';
+    const orderBy = 'ROWID DESC';
     final result = await db.query('trainings', orderBy: orderBy);
     return result.map((json) => Training.fromMap(json)).toList();
   }
@@ -250,7 +250,7 @@ CREATE TABLE training_schedules (
       SELECT s.*, t.* 
       FROM training_schedules s
       INNER JOIN trainings t ON s.idPelatihan = t.idPelatihan
-      ORDER BY s.tanggalStart ASC
+      ORDER BY s.ROWID DESC
     ''');
 
     return result.map((row) {

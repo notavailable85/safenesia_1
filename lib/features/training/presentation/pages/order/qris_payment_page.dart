@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/training/presentation/pages/order/payment_success_page.dart';
+import 'package:safenesia_1/core/utils/currency_formatter.dart';
 
 // ==========================================
 // 5. HALAMAN PEMBAYARAN QRIS (DUMMY)
@@ -19,7 +20,7 @@ class QrisPaymentPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Total Tagihan: Rp $totalBayar',
+                'Total Tagihan: ${totalBayar.toRupiah()}',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

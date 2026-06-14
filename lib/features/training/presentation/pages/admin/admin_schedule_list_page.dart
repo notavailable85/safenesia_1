@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
@@ -38,6 +39,52 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
     }
   }
 
+  Future<void> _generateDummyData() async {
+    setState(() => _isLoading = true);
+    try {
+      final trainings = await DatabaseHelper.instance.readAllTrainings();
+      if (trainings.isEmpty) {
+        throw Exception('Tidak ada data pelatihan. Harap tambah data pelatihan terlebih dahulu.');
+      }
+      
+      final random = Random();
+      final randomTraining = trainings[random.nextInt(trainings.length)];
+      final trainingId = randomTraining.idPelatihan;
+      
+      final now = DateTime.now();
+      final startDaysOffset = random.nextInt(30);
+      final startDate = now.add(Duration(days: startDaysOffset));
+      final durationDays = 2 + random.nextInt(4);
+      final endDate = startDate.add(Duration(days: durationDays));
+      
+      final dummyId = 'dummy_schedule_${now.millisecondsSinceEpoch}_${random.nextInt(1000)}';
+      
+      final dummySchedule = TrainingSchedule(
+        idJadwal: dummyId,
+        idPelatihan: trainingId,
+        tanggalStart: startDate.toIso8601String(),
+        tanggalEnd: endDate.toIso8601String(),
+        gambar: 'https://picsum.photos/400/300?random=${random.nextInt(1000)}',
+      );
+      
+      await DatabaseHelper.instance.createSchedule(dummySchedule);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Data dummy berhasil ditambahkan')),
+        );
+      }
+      _refreshSchedules();
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal menambah data dummy: $e')),
+        );
+      }
+    }
+  }
+
   Future<void> _deleteSchedule(String id) async {
     final confirm = await showDialog<bool>(
       context: context,
@@ -73,7 +120,13 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kelola Jadwal Pelatihan'),
-
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_to_photos),
+            tooltip: 'Generate Dummy Data',
+            onPressed: _generateDummyData,
+          ),
+        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

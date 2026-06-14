@@ -3,6 +3,7 @@ import 'package:safenesia_1/core/database/database_helper.dart';
 import 'package:safenesia_1/features/training/models/training_model.dart';
 import 'package:safenesia_1/features/training/presentation/pages/admin/admin_training_form_page.dart';
 import 'package:safenesia_1/features/training/presentation/pages/admin/admin_schedule_list_page.dart';
+import 'package:safenesia_1/core/utils/currency_formatter.dart';
 
 class AdminTrainingListPage extends StatefulWidget {
   const AdminTrainingListPage({super.key});
@@ -105,7 +106,7 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
                           training.namaPelatihan,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text('${training.bidang} • Rp ${training.hargaPromo}'),
+                        subtitle: Text('${training.bidang} • ${training.hargaPromo.toRupiah()}'),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [

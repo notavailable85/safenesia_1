@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/training/presentation/pages/order/qris_payment_page.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
+import 'package:safenesia_1/core/utils/currency_formatter.dart';
 
 // ==========================================
 // 4. HALAMAN RINGKASAN PEMESANAN (CHECKOUT)
@@ -67,7 +68,7 @@ class OrderSummaryPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Harga Satuan ($jumlahPeserta x)'),
-              Text('Rp $hargaSatuan'),
+              Text(hargaSatuan.toRupiah()),
             ],
           ),
           const SizedBox(height: 8),
@@ -79,7 +80,7 @@ class OrderSummaryPage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               Text(
-                'Rp $totalHarga',
+                totalHarga.toRupiah(),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
