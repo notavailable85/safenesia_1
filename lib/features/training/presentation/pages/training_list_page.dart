@@ -121,13 +121,20 @@ class _TrainingListPageState extends State<TrainingListPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Filter Pelatihan',
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
+                          color: AppColors.primary,
+                          textStyle: context,
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
+                      // TextStyle(
+                      //     fontSize: 18,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
                       IconButton(
                         icon: const Icon(Icons.close),
                         onPressed: () => Navigator.pop(context),
@@ -240,7 +247,10 @@ class _TrainingListPageState extends State<TrainingListPage> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Cari pelatihan...',
-                prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(vertical: 10),
               ),
@@ -287,11 +297,17 @@ class _TrainingListPageState extends State<TrainingListPage> {
                 ), // Membuat gap antar tab sekitar 16
                 indicatorPadding: EdgeInsetsGeometry.symmetric(horizontal: -10),
                 indicator: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor, // Indikator menggunakan warna scaffold agar menyatu dengan body
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  color: Theme.of(
+                    context,
+                  ).scaffoldBackgroundColor, // Indikator menggunakan warna scaffold agar menyatu dengan body
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
                 ),
-                labelColor: Theme.of(context).colorScheme.onSurface, 
-                unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
+                labelColor: Theme.of(context).colorScheme.onSurface,
+                unselectedLabelColor: Theme.of(
+                  context,
+                ).colorScheme.onPrimary.withOpacity(0.7),
                 labelStyle: GoogleFonts.inter(
                   fontSize: 14, // Perbesar fontsize
                   fontWeight: FontWeight.w500,
@@ -375,7 +391,9 @@ class _TrainingListPageState extends State<TrainingListPage> {
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
           decoration: BoxDecoration(
-            color: Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface,
+            color:
+                Theme.of(context).cardTheme.color ??
+                Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
@@ -411,7 +429,12 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       ),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Theme.of(context).colorScheme.primary.withOpacity(0.8), Theme.of(context).colorScheme.primary],
+                          colors: [
+                            Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.8),
+                            Theme.of(context).colorScheme.primary,
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -437,13 +460,17 @@ class _TrainingListPageState extends State<TrainingListPage> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primaryContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             training.sertifikasi,
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimaryContainer,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -465,7 +492,9 @@ class _TrainingListPageState extends State<TrainingListPage> {
                                 child: Text(
                                   schedule.tanggalStr,
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -504,14 +533,22 @@ class _TrainingListPageState extends State<TrainingListPage> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primaryContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3)),
+                            border: Border.all(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primary.withOpacity(0.3),
+                            ),
                           ),
                           child: Text(
                             training.hargaPromo.toRupiah(),
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimaryContainer,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),

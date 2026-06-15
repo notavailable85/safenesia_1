@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/core/theme/app_themes.dart' show AppThemes;
+import 'package:safenesia_1/features/auth/presentation/pages/splash/splash_screen.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_list_page.dart';
 
 void main() {
