@@ -22,6 +22,8 @@ class Training {
   final String instruktur;
   final String keterangan;
   final String gambarPelatihan;
+  final String? namaLokasi;
+  final String? linkPetaLokasi;
 
   Training({
     required this.idPelatihan,
@@ -47,6 +49,8 @@ class Training {
     required this.instruktur,
     required this.keterangan,
     required this.gambarPelatihan,
+    this.namaLokasi,
+    this.linkPetaLokasi,
   });
 
   Map<String, dynamic> toMap() {
@@ -74,6 +78,8 @@ class Training {
       'instruktur': instruktur,
       'keterangan': keterangan,
       'gambarPelatihan': gambarPelatihan,
+      'namaLokasi': namaLokasi,
+      'linkPetaLokasi': linkPetaLokasi,
     };
   }
 
@@ -102,6 +108,8 @@ class Training {
       instruktur: map['instruktur'] as String,
       keterangan: map['keterangan'] as String,
       gambarPelatihan: map['gambarPelatihan'] as String,
+      namaLokasi: map['namaLokasi'] as String?,
+      linkPetaLokasi: map['linkPetaLokasi'] as String?,
     );
   }
 }

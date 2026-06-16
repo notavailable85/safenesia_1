@@ -6,6 +6,8 @@ class TrainingSchedule {
   final String tanggalStart; // ISO8601
   final String tanggalEnd; // ISO8601
   final String gambar;
+  final String? namaLokasi;
+  final String? linkPetaLokasi;
   
   // Joined property
   final Training? trainingData;
@@ -16,6 +18,8 @@ class TrainingSchedule {
     required this.tanggalStart,
     required this.tanggalEnd,
     required this.gambar,
+    this.namaLokasi,
+    this.linkPetaLokasi,
     this.trainingData,
   });
 
@@ -26,6 +30,8 @@ class TrainingSchedule {
       'tanggalStart': tanggalStart,
       'tanggalEnd': tanggalEnd,
       'gambar': gambar,
+      'namaLokasi': namaLokasi,
+      'linkPetaLokasi': linkPetaLokasi,
     };
   }
 
@@ -36,6 +42,8 @@ class TrainingSchedule {
       tanggalStart: map['tanggalStart'] as String,
       tanggalEnd: map['tanggalEnd'] as String,
       gambar: map['gambar'] as String,
+      namaLokasi: map['namaLokasi'] as String?,
+      linkPetaLokasi: map['linkPetaLokasi'] as String?,
       trainingData: trainingData,
     );
   }

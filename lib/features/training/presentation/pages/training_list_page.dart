@@ -37,7 +37,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
   final List<String> _sertifikasiList = [
     'Sertifikasi Kemnaker RI',
     'Sertifikasi BNSP',
-    'Sertifikasi Internasional',
+    'Sertifikasi Safenesia',
   ];
 
   // Dynamic Months (Current + next 3)

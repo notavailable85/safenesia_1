@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/training/presentation/pages/order/order_form_page.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
 import 'package:safenesia_1/core/utils/currency_formatter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ==========================================
 // 2. HALAMAN DETAIL PELATHAN
@@ -63,7 +64,7 @@ class TrainingDetailPage extends StatelessWidget {
               children: [
                 _buildInfoBox(context, Icons.calendar_month, 'Tanggal', scheduleData.tanggalStr),
                 _buildInfoBox(context, Icons.group, 'Kuota', 'Maksimal 30 Peserta'),
-                _buildInfoBox(context, Icons.location_on, 'Metode', trainingData.metode),
+                _buildInfoBox(context, Icons.location_on, 'Lokasi', scheduleData.namaLokasi ?? trainingData.metode, url: scheduleData.linkPetaLokasi),
                 _buildInfoBox(context, Icons.payments, 'Harga', trainingData.hargaPromo.toRupiah()),
               ],
             ),
@@ -126,8 +127,8 @@ class TrainingDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoBox(BuildContext context, IconData icon, String title, String subtitle) {
-    return Container(
+  Widget _buildInfoBox(BuildContext context, IconData icon, String title, String subtitle, {String? url}) {
+    final box = Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer.withAlpha(50),
@@ -172,6 +173,23 @@ class TrainingDetailPage extends StatelessWidget {
         ],
       ),
     );
+
+    if (url != null && url.isNotEmpty) {
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () async {
+            final uri = Uri.parse(url);
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri);
+            }
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: box,
+        ),
+      );
+    }
+    return box;
   }
 
   Widget _buildSection(BuildContext context, String title, String content, IconData iconData) {

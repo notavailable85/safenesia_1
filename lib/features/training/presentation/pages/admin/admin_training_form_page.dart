@@ -47,7 +47,7 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
   ];
 
   final List<String> _sertifikasiList = [
-    'Sertifikasi Kemnaker RI', 'Sertifikasi BNSP', 'Sertifikasi Internasional'
+    'Sertifikasi Kemnaker RI', 'Sertifikasi BNSP', 'Sertifikasi Safenesia'
   ];
 
   final List<String> _statusList = ['Aktif', 'Tidak Aktif'];
