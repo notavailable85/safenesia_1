@@ -31,7 +31,7 @@
 //         appBar: AppBar(
 //           title: const Text('Daftar Pelatihan K3'),
 //           backgroundColor: Colors.blue,
-//           foregroundColor: Colors.white,
+//           
 //           bottom: const TabBar(
 //             isScrollable: true,
 //             labelColor: Colors.white,
@@ -214,7 +214,7 @@
 //               child: ElevatedButton(
 //                 style: ElevatedButton.styleFrom(
 //                   backgroundColor: Colors.blue,
-//                   foregroundColor: Colors.white,
+//                   
 //                 ),
 //                 onPressed: () {
 //                   Navigator.push(
@@ -449,7 +449,7 @@
 //             ElevatedButton(
 //               style: ElevatedButton.styleFrom(
 //                 backgroundColor: Colors.blue,
-//                 foregroundColor: Colors.white,
+//                 
 //                 padding: const EdgeInsets.all(16),
 //               ),
 //               onPressed: () {
@@ -665,7 +665,7 @@
 //           ElevatedButton(
 //             style: ElevatedButton.styleFrom(
 //               backgroundColor: Colors.green,
-//               foregroundColor: Colors.white,
+//               
 //               padding: const EdgeInsets.all(16),
 //             ),
 //             onPressed: () {
@@ -762,7 +762,7 @@
 //               ElevatedButton(
 //                 style: ElevatedButton.styleFrom(
 //                   backgroundColor: Colors.blue,
-//                   foregroundColor: Colors.white,
+//                   
 //                 ),
 //                 onPressed: () {
 //                   Navigator.pushAndRemoveUntil(

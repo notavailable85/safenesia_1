@@ -36,14 +36,26 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
   late TextEditingController _gambarPelatihanController;
 
   // Dropdown states
-  String _selectedBidang = 'Umum';
+  String _selectedBidang = 'Keahlian K3 Umum';
   String _selectedSertifikasi = 'Sertifikasi Kemnaker RI';
   String _selectedStatus = 'Aktif';
 
 
 
   final List<String> _bidangList = [
-    'Umum', 'Listrik', 'Konstruksi', 'Migas', 'Pertambangan', 'Rumah Sakit', 'Manufaktur'
+    'Keahlian K3 Umum',
+    'Sistem Manajemen K3',
+    'Listrik',
+    'Konstruksi dan Bangunan',
+    'Penanggulangan Kebakaran',
+    'Elevator dan Eskalator',
+    'Lingkungan Kerja dan Bahan Berbahaya',
+    'Bekerja Pada Ketinggian',
+    'Kesehatan Kerja',
+    'Pesawat Angkat dan Pesawat Angkut',
+    'Pesawat Tenaga dan Produksi',
+    'Pesawat Uap, Bejana Tekanan dan Tangki Timbun',
+    'Pengelasan',
   ];
 
   final List<String> _sertifikasiList = [

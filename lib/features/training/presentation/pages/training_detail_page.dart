@@ -15,10 +15,13 @@ class TrainingDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final trainingData = scheduleData.trainingData;
-    if (trainingData == null) return const Scaffold(body: Center(child: Text('Data error')));
+    if (trainingData == null)
+      return const Scaffold(body: Center(child: Text('Data error')));
 
     return Scaffold(
-      appBar: AppBar(title: Text(trainingData.namaPelatihan)),
+      appBar: AppBar(
+        title: Text(trainingData.namaPelatihan),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -27,17 +30,31 @@ class TrainingDetailPage extends StatelessWidget {
             // Foto Produk Pelatihan
             Builder(
               builder: (context) {
-                final String imageUrl = scheduleData.gambar.isNotEmpty 
-                    ? scheduleData.gambar 
+                final String imageUrl = scheduleData.gambar.isNotEmpty
+                    ? scheduleData.gambar
                     : trainingData.gambarPelatihan;
-                
+
                 if (imageUrl.isNotEmpty) {
-                  return Image.network(
-                    imageUrl,
-                    width: double.infinity,
-                    height: 200,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => _buildPlaceholderImage(context),
+                  final isNetwork = imageUrl.startsWith('http');
+                  return GestureDetector(
+                    onTap: () => _showImageDialog(context, imageUrl, isNetwork),
+                    child: isNetwork
+                        ? Image.network(
+                            imageUrl,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                _buildPlaceholderImage(context),
+                          )
+                        : Image.asset(
+                            imageUrl,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                _buildPlaceholderImage(context),
+                          ),
                   );
                 } else {
                   return _buildPlaceholderImage(context);
@@ -51,35 +68,110 @@ class TrainingDetailPage extends StatelessWidget {
             ),
             Text(
               trainingData.sertifikasi,
-              style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 2.2, // Adjust aspect ratio for info boxes
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 2.3, // Adjust aspect ratio for info boxes
               children: [
-                _buildInfoBox(context, Icons.calendar_month, 'Tanggal', scheduleData.tanggalStr),
-                _buildInfoBox(context, Icons.group, 'Kuota', 'Maksimal 30 Peserta'),
-                _buildInfoBox(context, Icons.location_on, 'Lokasi', scheduleData.namaLokasi ?? trainingData.metode, url: scheduleData.linkPetaLokasi),
-                _buildInfoBox(context, Icons.payments, 'Harga', trainingData.hargaPromo.toRupiah()),
+                _buildInfoBox(
+                  context,
+                  Icons.calendar_month,
+                  'Tanggal',
+                  scheduleData.tanggalStr,
+                ),
+                _buildInfoBox(
+                  context,
+                  Icons.group,
+                  'Kuota',
+                  'Maks. 30 Peserta',
+                ),
+                _buildInfoBox(
+                  context,
+                  Icons.location_on,
+                  'Lokasi',
+
+                  scheduleData.namaLokasi ?? trainingData.metode,
+                  url: scheduleData.linkPetaLokasi,
+                ),
+                _buildInfoBox(
+                  context,
+                  Icons.payments,
+                  'Harga',
+                  trainingData.hargaPromo.toRupiah(),
+                ),
               ],
             ),
             const Divider(height: 32),
 
-            _buildSection(context, 'Deskripsi', trainingData.deskripsi, Icons.description),
-            _buildSection(context, 'Dasar Hukum', trainingData.dasarHukum, Icons.gavel),
-            _buildSection(context, 'Tujuan', trainingData.tujuan, Icons.track_changes),
-            _buildSection(context, 'Materi Pelatihan', trainingData.materi, Icons.menu_book),
-            _buildSection(context, 'Persyaratan', trainingData.syaratAdministrasi, Icons.assignment),
-            _buildSection(context, 'Fasilitas', trainingData.fasilitas, Icons.apartment),
-            _buildSection(context, 'Metode', '${trainingData.metode}\n${trainingData.detailMetode}', Icons.model_training),
-            _buildSection(context, 'Instruktur', trainingData.instruktur, Icons.person),
-            _buildSection(context, 'Syarat & Ketentuan', trainingData.syaratKetentuan, Icons.rule),
-            _buildSection(context, 'Info Pendaftaran', trainingData.keterangan, Icons.info),
+            _buildSection(
+              context,
+              'Deskripsi',
+              trainingData.deskripsi,
+              Icons.description,
+            ),
+            _buildSection(
+              context,
+              'Dasar Hukum',
+              trainingData.dasarHukum,
+              Icons.gavel,
+            ),
+            _buildSection(
+              context,
+              'Tujuan',
+              trainingData.tujuan,
+              Icons.track_changes,
+            ),
+            _buildSection(
+              context,
+              'Materi Pelatihan',
+              trainingData.materi,
+              Icons.menu_book,
+            ),
+            _buildSection(
+              context,
+              'Persyaratan',
+              trainingData.syaratAdministrasi,
+              Icons.assignment,
+            ),
+            _buildSection(
+              context,
+              'Fasilitas',
+              trainingData.fasilitas,
+              Icons.apartment,
+            ),
+            _buildSection(
+              context,
+              'Metode',
+              '${trainingData.metode}\n${trainingData.detailMetode}',
+              Icons.model_training,
+            ),
+            _buildSection(
+              context,
+              'Instruktur',
+              trainingData.instruktur,
+              Icons.person,
+            ),
+            _buildSection(
+              context,
+              'Syarat & Ketentuan',
+              trainingData.syaratKetentuan,
+              Icons.rule,
+            ),
+            _buildSection(
+              context,
+              'Info Pendaftaran',
+              trainingData.keterangan,
+              Icons.info,
+            ),
             const SizedBox(height: 24),
           ],
         ),
@@ -99,7 +191,7 @@ class TrainingDetailPage extends StatelessWidget {
         child: SafeArea(
           child: SizedBox(
             height: 50,
-            child: ElevatedButton(
+            child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -112,12 +204,14 @@ class TrainingDetailPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OrderFormPage(scheduleData: scheduleData),
+                    builder: (context) =>
+                        OrderFormPage(scheduleData: scheduleData),
                   ),
                 );
               },
-              child: const Text(
-                'Pesan Pelatihan Sekarang',
+              icon: const Icon(Icons.shopping_cart),
+              label: const Text(
+                'Proses Pemesanan',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
@@ -127,13 +221,19 @@ class TrainingDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoBox(BuildContext context, IconData icon, String title, String subtitle, {String? url}) {
+  Widget _buildInfoBox(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subtitle, {
+    String? url,
+  }) {
     final box = Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer.withAlpha(50),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).colorScheme.primaryContainer),
+        border: Border.all(color: Colors.grey),
       ),
       child: Row(
         children: [
@@ -143,9 +243,13 @@ class TrainingDetailPage extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: Theme.of(context).colorScheme.onPrimary, size: 16),
+            child: Icon(
+              icon,
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 16,
+            ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,17 +258,20 @@ class TrainingDetailPage extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
+                const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: TextStyle(
+                    fontSize: 13,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -192,13 +299,20 @@ class TrainingDetailPage extends StatelessWidget {
     return box;
   }
 
-  Widget _buildSection(BuildContext context, String title, String content, IconData iconData) {
+  Widget _buildSection(
+    BuildContext context,
+    String title,
+    String content,
+    IconData iconData,
+  ) {
     if (content.trim().isEmpty) return const SizedBox();
     return Card(
       elevation: 0,
       margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withAlpha(128)),
+        side: const BorderSide(
+          color: Colors.grey,
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
       clipBehavior: Clip.antiAlias,
@@ -226,7 +340,43 @@ class TrainingDetailPage extends StatelessWidget {
       width: double.infinity,
       height: 200,
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: Icon(Icons.image, size: 100, color: Theme.of(context).colorScheme.onSurfaceVariant),
+      child: Icon(
+        Icons.image,
+        size: 100,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+    );
+  }
+
+  void _showImageDialog(BuildContext context, String imageUrl, bool isNetwork) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(8),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            InteractiveViewer(
+              panEnabled: true,
+              boundaryMargin: const EdgeInsets.all(20),
+              minScale: 0.5,
+              maxScale: 4,
+              child: isNetwork
+                  ? Image.network(imageUrl, fit: BoxFit.contain)
+                  : Image.asset(imageUrl, fit: BoxFit.contain),
+            ),
+            Positioned(
+              top: 10,
+              right: 10,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

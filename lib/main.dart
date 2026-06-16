@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/core/theme/app_themes.dart' show AppThemes;
+import 'package:safenesia_1/features/article/presentation/pages/article_list_page.dart';
+import 'package:safenesia_1/features/home/presentation/pages/home_page.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_list_page.dart';
 
 void main() {
@@ -14,6 +16,8 @@ class SafenesiaApp extends StatelessWidget {
     return MaterialApp(
       title: 'Safenesia App',
       theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: ThemeMode.system,
       //   colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
       //   useMaterial3: true,
       //   brightness: Brightness.light,
@@ -21,7 +25,7 @@ class SafenesiaApp extends StatelessWidget {
       //   fontFamily: GoogleFonts.poppins().fontFamily,
       //   appBarTheme: AppBarTheme(
       //     backgroundColor: AppColors.primary,
-      //     foregroundColor: Colors.white,
+      //
       //     titleTextStyle: GoogleFonts.poppins(
       //       fontSize: 16,
       //       color: Colors.white,

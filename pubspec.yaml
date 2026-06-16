@@ -93,6 +93,7 @@ flutter:
     # images
     - assets/images/logo_safenesia_horizontal.png
     - assets/images/logo_safenesia_vertical.png
+    - assets/images/flayer_pelatihan/
     # icons
     - assets/icons/icon-safenesia.png
     - assets/icons/icon_facebook.svg

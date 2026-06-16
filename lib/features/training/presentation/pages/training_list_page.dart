@@ -25,13 +25,19 @@ class _TrainingListPageState extends State<TrainingListPage> {
 
   // Categories
   final List<String> _kategoriList = [
-    'Umum',
+    'Keahlian K3 Umum',
+    'Sistem Manajemen K3',
     'Listrik',
-    'Konstruksi',
-    'Migas',
-    'Pertambangan',
-    'Rumah Sakit',
-    'Manufaktur',
+    'Konstruksi dan Bangunan',
+    'Penanggulangan Kebakaran',
+    'Elevator dan Eskalator',
+    'Lingkungan Kerja dan Bahan Berbahaya',
+    'Bekerja Pada Ketinggian',
+    'Kesehatan Kerja',
+    'Pesawat Angkat dan Pesawat Angkut',
+    'Pesawat Tenaga dan Produksi',
+    'Pesawat Uap, Bejana Tekanan dan Tangki Timbun',
+    'Pengelasan',
   ];
 
   final List<String> _sertifikasiList = [
@@ -106,6 +112,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
   void _showFilterModal() {
     showModalBottomSheet(
       context: context,
+
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -113,7 +120,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,11 +128,12 @@ class _TrainingListPageState extends State<TrainingListPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Filter Pelatihan',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
                         ),
                       ),
                       IconButton(
@@ -134,10 +142,14 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       ),
                     ],
                   ),
-                  const Divider(),
-                  const Text(
+                  const Divider(color: AppColors.primary, thickness: 1),
+                  Text(
                     'Urutkan Jadwal',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
                   ),
                   Row(
                     children: [
@@ -161,19 +173,23 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       const Text('Terjauh'),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Kategori Pelatihan',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  const SizedBox(height: 5),
+                  Text(
+                    'Bidang',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
                   ),
                   DropdownButton<String>(
                     isExpanded: true,
                     value: _selectedKategori,
-                    hint: const Text('Semua Kategori'),
+                    hint: const Text('Semua Bidang'),
                     items: [
                       const DropdownMenuItem<String>(
                         value: null,
-                        child: Text('Semua Kategori'),
+                        child: Text('Semua Bidang'),
                       ),
                       ..._kategoriList.map(
                         (k) => DropdownMenuItem(value: k, child: Text(k)),
@@ -185,9 +201,13 @@ class _TrainingListPageState extends State<TrainingListPage> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    'Kategori Sertifikasi',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    'Sertifikasi',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
                   ),
                   DropdownButton<String>(
                     isExpanded: true,
@@ -230,7 +250,6 @@ class _TrainingListPageState extends State<TrainingListPage> {
       length: _monthTabs.length,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.primary,
           title: Container(
             height: 40,
             decoration: BoxDecoration(
@@ -240,7 +259,10 @@ class _TrainingListPageState extends State<TrainingListPage> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Cari pelatihan...',
-                prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(vertical: 10),
               ),
@@ -270,12 +292,10 @@ class _TrainingListPageState extends State<TrainingListPage> {
             ),
           ],
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(65),
+            preferredSize: const Size.fromHeight(55),
             child: Container(
-              color: AppColors
-                  .primary, // Warna berbeda dari AppBar agar tidak menyatu
               padding: const EdgeInsets.symmetric(
-                vertical: 0,
+                vertical: 5,
               ), // Memberi tinggi ekstra
               child: TabBar(
                 isScrollable: true,
@@ -285,13 +305,20 @@ class _TrainingListPageState extends State<TrainingListPage> {
                 labelPadding: const EdgeInsets.symmetric(
                   horizontal: 24,
                 ), // Membuat gap antar tab sekitar 16
-                indicatorPadding: EdgeInsetsGeometry.symmetric(horizontal: -10),
-                indicator: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor, // Indikator menggunakan warna scaffold agar menyatu dengan body
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                indicatorPadding: EdgeInsetsGeometry.symmetric(
+                  horizontal: -8,
+                  vertical: 6,
                 ),
-                labelColor: Theme.of(context).colorScheme.onSurface, 
-                unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
+                indicator: BoxDecoration(
+                  color: Theme.of(
+                    context,
+                  ).scaffoldBackgroundColor, // Indikator menggunakan warna scaffold agar menyatu dengan body
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                ),
+                labelColor: Theme.of(context).colorScheme.onSurface,
+                unselectedLabelColor: Theme.of(
+                  context,
+                ).colorScheme.onPrimary.withOpacity(0.7),
                 labelStyle: GoogleFonts.inter(
                   fontSize: 14, // Perbesar fontsize
                   fontWeight: FontWeight.w500,
@@ -411,9 +438,14 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       ),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Theme.of(context).colorScheme.primary.withOpacity(0.8), Theme.of(context).colorScheme.primary],
+                          colors: [
+                            Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.8),
+                            Theme.of(context).colorScheme.primary,
+                          ],
                         ),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         training.bidang,
@@ -433,17 +465,21 @@ class _TrainingListPageState extends State<TrainingListPage> {
                         // Kiri (Sertifikasi)
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
+                            horizontal: 12,
+                            vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(8),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             training.sertifikasi,
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimaryContainer,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
@@ -465,7 +501,9 @@ class _TrainingListPageState extends State<TrainingListPage> {
                                 child: Text(
                                   schedule.tanggalStr,
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -477,7 +515,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
 
                     // Baris Ketiga (Bawah)
                     Row(
@@ -489,10 +527,10 @@ class _TrainingListPageState extends State<TrainingListPage> {
                             training.namaPelatihan,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
+                            style: GoogleFonts.poppins(
+                              color: AppColors.textPrimaryLight,
                               fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.normal,
                             ),
                           ),
                         ),
@@ -504,14 +542,22 @@ class _TrainingListPageState extends State<TrainingListPage> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3)),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primary.withOpacity(0.3),
+                            ),
                           ),
                           child: Text(
                             training.hargaPromo.toRupiah(),
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimaryContainer,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
