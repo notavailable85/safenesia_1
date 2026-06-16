@@ -19,6 +19,8 @@ class SafenesiaApp extends StatelessWidget {
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
       themeMode: ThemeMode.system,
+      // darkTheme: AppThemes.darkTheme,
+      // themeMode: ThemeMode.system,
       //   colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
       //   useMaterial3: true,
       //   brightness: Brightness.light,
@@ -26,6 +28,7 @@ class SafenesiaApp extends StatelessWidget {
       //   fontFamily: GoogleFonts.poppins().fontFamily,
       //   appBarTheme: AppBarTheme(
       //     backgroundColor: AppColors.primary,
+      //
       //
       //     titleTextStyle: GoogleFonts.poppins(
       //       fontSize: 16,
