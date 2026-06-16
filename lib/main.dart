@@ -33,7 +33,7 @@ class SafenesiaApp extends StatelessWidget {
       //     ),
       //   ),
       // ),
-      home: const TrainingListPage(),
+      home: const HomePage(),
     );
   }
 }
