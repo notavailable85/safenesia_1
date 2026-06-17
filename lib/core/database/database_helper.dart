@@ -24,7 +24,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 4, // increment version
+      version: 5, // increment version
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -45,6 +45,10 @@ class DatabaseHelper {
       await db.execute('DROP TABLE IF EXISTS training_schedules');
       await db.execute('DROP TABLE IF EXISTS trainings');
       await _createTrainingsTable(db);
+      await _createTrainingSchedulesTable(db);
+    }
+    if (oldVersion < 5) {
+      await db.execute('DROP TABLE IF EXISTS training_schedules');
       await _createTrainingSchedulesTable(db);
     }
   }
@@ -123,6 +127,8 @@ CREATE TABLE training_schedules (
   tanggalStart $textType,
   tanggalEnd $textType,
   gambar $textType,
+  namaLokasi TEXT,
+  linkPetaLokasi TEXT,
   FOREIGN KEY (idPelatihan) REFERENCES trainings (idPelatihan) ON DELETE CASCADE
 )
 ''');

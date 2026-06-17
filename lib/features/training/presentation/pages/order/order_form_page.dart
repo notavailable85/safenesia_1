@@ -22,13 +22,11 @@ class _OrderFormPageState extends State<OrderFormPage> {
 
   // Form 2 (Data Pemesan Utama)
   final _namaPemesanController = TextEditingController();
-  final _ktpPemesanController = TextEditingController();
   final _waPemesanController = TextEditingController();
   final _emailPemesanController = TextEditingController();
 
   // Form 3 (Data Peserta)
   final List<TextEditingController> _namaPesertaControllers = [];
-  final List<TextEditingController> _ktpPesertaControllers = [];
   final List<TextEditingController> _waPesertaControllers = [];
   final List<TextEditingController> _emailPesertaControllers = [];
 
@@ -41,13 +39,11 @@ class _OrderFormPageState extends State<OrderFormPage> {
   void _updatePesertaControllers() {
     while (_namaPesertaControllers.length < _jumlahPeserta) {
       _namaPesertaControllers.add(TextEditingController());
-      _ktpPesertaControllers.add(TextEditingController());
       _waPesertaControllers.add(TextEditingController());
       _emailPesertaControllers.add(TextEditingController());
     }
     while (_namaPesertaControllers.length > _jumlahPeserta) {
       _namaPesertaControllers.removeLast().dispose();
-      _ktpPesertaControllers.removeLast().dispose();
       _waPesertaControllers.removeLast().dispose();
       _emailPesertaControllers.removeLast().dispose();
     }
@@ -56,19 +52,42 @@ class _OrderFormPageState extends State<OrderFormPage> {
   @override
   void dispose() {
     _namaPemesanController.dispose();
-    _ktpPemesanController.dispose();
     _waPemesanController.dispose();
     _emailPemesanController.dispose();
-    for (var c in _namaPesertaControllers) { c.dispose(); }
-    for (var c in _ktpPesertaControllers) { c.dispose(); }
-    for (var c in _waPesertaControllers) { c.dispose(); }
-    for (var c in _emailPesertaControllers) { c.dispose(); }
+    for (var c in _namaPesertaControllers) {
+      c.dispose();
+    }
+    for (var c in _waPesertaControllers) {
+      c.dispose();
+    }
+    for (var c in _emailPesertaControllers) {
+      c.dispose();
+    }
     super.dispose();
   }
 
-  InputDecoration _buildInputDecoration(String label) {
+  bool _isSubmitting = false;
+
+  String? _validateEmail(String? v) {
+    if (v == null || v.isEmpty) return 'Wajib diisi';
+    if (!v.contains('@') || !v.contains('.')) return 'Email tidak valid';
+    return null;
+  }
+
+  String? _validatePhone(String? v) {
+    if (v == null || v.isEmpty) return 'Wajib diisi';
+    if (v.length < 9) return 'No WA terlalu pendek';
+    if (!RegExp(r'^[0-9]+$').hasMatch(v)) return 'Hanya boleh angka';
+    return null;
+  }
+
+  InputDecoration _buildInputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
+      labelStyle: const TextStyle(fontSize: 14),
+      floatingLabelStyle: const TextStyle(fontSize: 12),
+      isDense: true,
+      prefixIcon: Icon(icon, color: Theme.of(context).colorScheme.primary),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       filled: true,
       fillColor: Theme.of(context).colorScheme.surface,
@@ -89,23 +108,30 @@ class _OrderFormPageState extends State<OrderFormPage> {
             Text(
               'Tipe & Jumlah Peserta',
               style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             const SizedBox(height: 12),
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant)),
+                borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(
+                  color: Colors.grey,
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     DropdownButtonFormField<String>(
                       initialValue: _jenisPeserta,
-                      decoration: _buildInputDecoration('Jenis Peserta'),
+                      decoration: _buildInputDecoration(
+                        'Jenis Peserta',
+                        Icons.group,
+                      ),
                       items: ['Pribadi', 'Perusahaan']
                           .map(
                             (t) => DropdownMenuItem(value: t, child: Text(t)),
@@ -116,7 +142,10 @@ class _OrderFormPageState extends State<OrderFormPage> {
                     const SizedBox(height: 20),
                     DropdownButtonFormField<int>(
                       initialValue: _jumlahPeserta,
-                      decoration: _buildInputDecoration('Jumlah Peserta (Maksimal 10)'),
+                      decoration: _buildInputDecoration(
+                        'Jumlah Peserta (Maksimal 10)',
+                        Icons.numbers,
+                      ),
                       items: List.generate(
                         10,
                         (i) => DropdownMenuItem(
@@ -143,11 +172,12 @@ class _OrderFormPageState extends State<OrderFormPage> {
               children: [
                 Expanded(
                   child: Text(
-                    'Kontak Pemesan Utama',
+                    'Data Pemesan',
                     style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
               ],
@@ -155,37 +185,39 @@ class _OrderFormPageState extends State<OrderFormPage> {
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant)),
+                borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(
+                  color: Colors.grey,
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     TextFormField(
                       controller: _namaPemesanController,
-                      decoration: _buildInputDecoration('Nama Lengkap'),
-                      validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _ktpPemesanController,
-                      decoration: _buildInputDecoration('Nomor KTP'),
-                      keyboardType: TextInputType.number,
-                      validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                      decoration: _buildInputDecoration(
+                        'Nama Lengkap',
+                        Icons.person,
+                      ),
+                      validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _waPemesanController,
-                      decoration: _buildInputDecoration('No. WhatsApp'),
+                      decoration: _buildInputDecoration(
+                        'No. WhatsApp',
+                        Icons.phone,
+                      ),
                       keyboardType: TextInputType.phone,
-                      validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                      validator: _validatePhone,
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _emailPemesanController,
-                      decoration: _buildInputDecoration('Email'),
+                      decoration: _buildInputDecoration('Email', Icons.email),
                       keyboardType: TextInputType.emailAddress,
-                      validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                      validator: _validateEmail,
                     ),
                   ],
                 ),
@@ -195,11 +227,12 @@ class _OrderFormPageState extends State<OrderFormPage> {
 
             // --- FORM 3: DETAIL PESERTA ---
             Text(
-              'Detail Setiap Peserta (Wajib Diisi)',
+              'Data Peserta (Wajib Diisi)',
               style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             const SizedBox(height: 12),
             Row(
@@ -207,20 +240,30 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 Expanded(
                   child: OutlinedButton.icon(
                     icon: const Icon(Icons.person, size: 16),
-                    label: const Text('Isi Data Saya (Peserta 1)', style: TextStyle(fontSize: 12)),
+                    label: const Text(
+                      'Isi Data Saya',
+                      style: TextStyle(fontSize: 12),
+                    ),
                     style: OutlinedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                       foregroundColor: Theme.of(context).colorScheme.primary,
-                      side: BorderSide(color: Theme.of(context).colorScheme.primary),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      side: const BorderSide(
+                        color: Colors.grey,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     onPressed: () {
                       setState(() {
                         if (_jumlahPeserta > 0) {
-                          _namaPesertaControllers[0].text = _namaPemesanController.text;
-                          _ktpPesertaControllers[0].text = _ktpPemesanController.text;
-                          _waPesertaControllers[0].text = _waPemesanController.text;
-                          _emailPesertaControllers[0].text = _emailPemesanController.text;
+                          _namaPesertaControllers[0].text =
+                              _namaPemesanController.text;
+                          _waPesertaControllers[0].text =
+                              _waPemesanController.text;
+                          _emailPesertaControllers[0].text =
+                              _emailPemesanController.text;
                         }
                       });
                     },
@@ -230,22 +273,27 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 Expanded(
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                       foregroundColor: Colors.red,
-                      side: const BorderSide(color: Colors.red),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      side: const BorderSide(color: Colors.grey),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     onPressed: () {
                       setState(() {
                         if (_jumlahPeserta > 0) {
                           _namaPesertaControllers[0].clear();
-                          _ktpPesertaControllers[0].clear();
                           _waPesertaControllers[0].clear();
                           _emailPesertaControllers[0].clear();
                         }
                       });
                     },
-                    child: const Text('Kosongkan', style: TextStyle(fontSize: 12)),
+                    child: const Text(
+                      'Kosongkan',
+                      style: TextStyle(fontSize: 12),
+                    ),
                   ),
                 ),
               ],
@@ -257,72 +305,113 @@ class _OrderFormPageState extends State<OrderFormPage> {
               itemCount: _jumlahPeserta,
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
+                final bool isComplete =
+                    _namaPesertaControllers[index].text.isNotEmpty &&
+                    _waPesertaControllers[index].text.isNotEmpty &&
+                    _emailPesertaControllers[index].text.isNotEmpty;
+                final String namaPeserta = _namaPesertaControllers[index].text;
+                final String titleText = namaPeserta.isNotEmpty
+                    ? namaPeserta
+                    : 'Peserta ${index + 1}';
+
                 return Card(
+                  color: isComplete
+                      ? Colors.green.withOpacity(0.1)
+                      : Colors.red.withOpacity(0.1),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+                    side: const BorderSide(
+                      color: Colors.grey,
+                    ),
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: ExpansionTile(
+                    leading: Icon(
+                      Icons.person,
+                      color: isComplete ? Colors.green : Colors.red,
+                    ),
                     initiallyExpanded: index == 0,
                     title: Text(
-                      'Peserta ${index + 1}',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      titleText,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     children: [
                       TextFormField(
                         controller: _namaPesertaControllers[index],
-                        decoration: _buildInputDecoration('Nama Lengkap Peserta'),
-                        validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _ktpPesertaControllers[index],
-                        decoration: _buildInputDecoration('Nomor KTP'),
-                        keyboardType: TextInputType.number,
-                        validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                        decoration: _buildInputDecoration(
+                          'Nama Lengkap',
+                          Icons.person,
+                        ),
+                        validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
+                        onChanged: (val) => setState(() {}),
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _waPesertaControllers[index],
-                        decoration: _buildInputDecoration('No. WhatsApp'),
+                        decoration: _buildInputDecoration(
+                          'No. WhatsApp',
+                          Icons.phone,
+                        ),
                         keyboardType: TextInputType.phone,
-                        validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                        validator: _validatePhone,
+                        onChanged: (val) => setState(() {}),
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _emailPesertaControllers[index],
-                        decoration: _buildInputDecoration('Email'),
+                        decoration: _buildInputDecoration('Email', Icons.email),
                         keyboardType: TextInputType.emailAddress,
-                        validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                        validator: _validateEmail,
+                        onChanged: (val) => setState(() {}),
                       ),
                     ],
                   ),
                 );
               },
             ),
-            const SizedBox(height: 40),
-            ElevatedButton(
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0D000000), // 5% black
+              blurRadius: 10,
+              offset: Offset(0, -5),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                elevation: 2,
               ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   // Build data list from controllers
-                  List<Map<String, String>> daftarPeserta = List.generate(_jumlahPeserta, (i) => {
-                    'nama': _namaPesertaControllers[i].text,
-                    'ktp': _ktpPesertaControllers[i].text,
-                    'wa': _waPesertaControllers[i].text,
-                    'email': _emailPesertaControllers[i].text,
-                  });
+                  List<Map<String, String>> daftarPeserta = List.generate(
+                    _jumlahPeserta,
+                    (i) => {
+                      'nama_lengkap': _namaPesertaControllers[i].text,
+                      'wa': _waPesertaControllers[i].text,
+                      'email': _emailPesertaControllers[i].text,
+                    },
+                  );
 
                   Navigator.push(
                     context,
@@ -346,16 +435,21 @@ class _OrderFormPageState extends State<OrderFormPage> {
                   );
                 }
               },
-              child: const Text(
-                'Lanjut Ke Ringkasan Pemesanan',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Selanjutnya',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(Icons.arrow_forward),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-          ],
+          ),
         ),
       ),
     );
   }
 }
-

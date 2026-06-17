@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
 import 'package:safenesia_1/features/training/models/training_model.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
+import 'package:safenesia_1/features/training/models/training_location_model.dart';
 
 class AdminScheduleFormPage extends StatefulWidget {
   final TrainingSchedule? schedule;
@@ -17,6 +18,8 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
 
   List<Training> _masterTrainings = [];
   String? _selectedIdPelatihan;
+  String? _selectedLokasi;
+  String? _linkPetaLokasi;
 
   late TextEditingController _gambarController;
 
@@ -33,6 +36,8 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
     if (widget.schedule != null) {
       _tanggalStart = DateTime.tryParse(widget.schedule!.tanggalStart) ?? DateTime.now();
       _tanggalEnd = DateTime.tryParse(widget.schedule!.tanggalEnd) ?? DateTime.now().add(const Duration(days: 3));
+      _selectedLokasi = widget.schedule!.namaLokasi;
+      _linkPetaLokasi = widget.schedule!.linkPetaLokasi;
     }
     
     _loadMasterTrainings();
@@ -96,6 +101,8 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
         tanggalStart: _tanggalStart.toIso8601String(),
         tanggalEnd: _tanggalEnd.toIso8601String(),
         gambar: _gambarController.text,
+        namaLokasi: _selectedLokasi,
+        linkPetaLokasi: _linkPetaLokasi,
       );
 
       if (isUpdating) {
@@ -195,6 +202,30 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(height: 16),
+
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: _selectedLokasi,
+                decoration: const InputDecoration(labelText: 'Pilih Lokasi', border: OutlineInputBorder()),
+                items: [
+                  const DropdownMenuItem<String>(value: null, child: Text('Sesuai Metode Pelatihan')),
+                  ...TrainingLocation.dummyLocations.map((loc) {
+                    return DropdownMenuItem(value: loc.namaLokasi, child: Text(loc.namaLokasi));
+                  }),
+                ],
+                onChanged: (val) {
+                  setState(() {
+                    _selectedLokasi = val;
+                    if (val != null) {
+                      final loc = TrainingLocation.dummyLocations.firstWhere((l) => l.namaLokasi == val);
+                      _linkPetaLokasi = loc.petaLokasi;
+                    } else {
+                      _linkPetaLokasi = null;
+                    }
+                  });
+                },
               ),
               const SizedBox(height: 16),
 

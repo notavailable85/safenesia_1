@@ -26,91 +26,253 @@ class OrderSummaryPage extends StatelessWidget {
     int totalHarga = hargaSatuan * jumlahPeserta;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Konfirmasi Pemesanan')),
+      appBar: AppBar(title: const Text('Ringkasan Pemesanan')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Info Pelatihan
-          Card(
-            child: ListTile(
-              title: Text(
-                scheduleData.trainingData!.namaPelatihan,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(
-                '${scheduleData.trainingData!.sertifikasi}\nTipe: $jenisPeserta\nJadwal: ${scheduleData.tanggalStr}',
-              ),
+          Text(
+            'Booking Anda',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           const SizedBox(height: 16),
 
-          // Daftar Peserta
-          const Text(
-            'Daftar Peserta:',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          ...daftarPeserta.map(
-            (p) => ListTile(
-              leading: const Icon(Icons.person),
-              title: Text(p['nama']!),
-              subtitle: Text('KTP: ${p['ktp']} | WA: ${p['wa']}'),
+          // Bagian 1: Info Pelatihan
+          Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
             ),
-          ),
-          const Divider(height: 32),
-
-          // Rincian Harga
-          const Text(
-            'Rincian Pembayaran:',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Harga Satuan ($jumlahPeserta x)'),
-              Text(hargaSatuan.toRupiah()),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Total Pembayaran',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              Text(
-                totalHarga.toRupiah(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.green,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 32),
-
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              foregroundColor: Colors.white,
+            child: Padding(
               padding: const EdgeInsets.all(16),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => QrisPaymentPage(totalBayar: totalHarga),
-                ),
-              );
-            },
-            child: const Text(
-              'Lanjut Ke Pembayaran QRIS',
-              style: TextStyle(fontSize: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      scheduleData.trainingData!.gambarPelatihan,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: 80,
+                          height: 80,
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.image, color: Colors.grey),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          scheduleData.trainingData!.namaPelatihan,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(Icons.verified, size: 14, color: Theme.of(context).colorScheme.primary),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                scheduleData.trainingData!.sertifikasi,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.calendar_today, size: 14, color: Colors.grey),
+                            const SizedBox(width: 4),
+                            Text(
+                              scheduleData.tanggalStr,
+                              style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
+          const SizedBox(height: 24),
+
+          // Bagian 2: Daftar Peserta
+          Row(
+            children: [
+              Icon(Icons.group, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 8),
+              Text(
+                'Daftar Peserta ($jumlahPeserta Peserta)',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+            ),
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: daftarPeserta.length,
+              separatorBuilder: (context, index) => const Divider(height: 1),
+              itemBuilder: (context, index) {
+                final p = daftarPeserta[index];
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                    child: Icon(Icons.person, color: Theme.of(context).colorScheme.onPrimaryContainer),
+                  ),
+                  title: Text(
+                    p['nama_lengkap'] ?? 'Tanpa Nama',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(p['wa'] ?? '-'),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Bagian 3: Rincian Harga
+          Row(
+            children: [
+              Icon(Icons.receipt_long, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 8),
+              const Text(
+                'Rincian Harga',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              scheduleData.trainingData!.namaPelatihan,
+                              style: const TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '$jumlahPeserta x ${hargaSatuan.toRupiah()}',
+                              style: const TextStyle(color: Colors.grey, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        totalHarga.toRupiah(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
         ],
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0D000000), // 5% black
+              blurRadius: 10,
+              offset: Offset(0, -5),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Total Harga',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  Text(
+                    totalHarga.toRupiah(),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QrisPaymentPage(
+                          totalBayar: totalHarga,
+                          namaPelatihan: scheduleData.trainingData!.namaPelatihan,
+                          jumlahPeserta: jumlahPeserta,
+                          hargaSatuan: hargaSatuan,
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Bayar',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

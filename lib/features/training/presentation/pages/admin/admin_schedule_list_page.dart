@@ -52,26 +52,35 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
       final trainingId = randomTraining.idPelatihan;
       
       final now = DateTime.now();
-      final startDaysOffset = random.nextInt(30);
-      final startDate = now.add(Duration(days: startDaysOffset));
-      final durationDays = 2 + random.nextInt(4);
-      final endDate = startDate.add(Duration(days: durationDays));
       
-      final dummyId = 'dummy_schedule_${now.millisecondsSinceEpoch}_${random.nextInt(1000)}';
-      
-      final dummySchedule = TrainingSchedule(
-        idJadwal: dummyId,
-        idPelatihan: trainingId,
-        tanggalStart: startDate.toIso8601String(),
-        tanggalEnd: endDate.toIso8601String(),
-        gambar: 'https://picsum.photos/400/300?random=${random.nextInt(1000)}',
-      );
-      
-      await DatabaseHelper.instance.createSchedule(dummySchedule);
+      // Generate untuk 4 bulan (Bulan ini, dan 3 bulan ke depan)
+      for (int i = 0; i < 4; i++) {
+        final targetMonth = now.month + i;
+        final targetYear = now.year + (targetMonth > 12 ? (targetMonth - 1) ~/ 12 : 0);
+        final actualMonth = targetMonth > 12 ? (targetMonth - 1) % 12 + 1 : targetMonth;
+        
+        // Pilih tanggal acak antara tanggal 1 sampai 20
+        final startDay = random.nextInt(20) + 1;
+        final startDate = DateTime(targetYear, actualMonth, startDay);
+        final durationDays = 2 + random.nextInt(4); // durasi 2 sampai 5 hari
+        final endDate = startDate.add(Duration(days: durationDays));
+        
+        final dummyId = 'dummy_schedule_${now.millisecondsSinceEpoch}_${random.nextInt(1000)}';
+        
+        final dummySchedule = TrainingSchedule(
+          idJadwal: dummyId,
+          idPelatihan: trainingId,
+          tanggalStart: startDate.toIso8601String(),
+          tanggalEnd: endDate.toIso8601String(),
+          gambar: 'https://picsum.photos/400/300?random=${random.nextInt(1000)}',
+        );
+        
+        await DatabaseHelper.instance.createSchedule(dummySchedule);
+      }
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data dummy berhasil ditambahkan')),
+          const SnackBar(content: Text('4 Data dummy jadwal (berurutan 4 bulan) berhasil ditambahkan')),
         );
       }
       _refreshSchedules();
