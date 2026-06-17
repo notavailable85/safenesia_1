@@ -61,25 +61,30 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            child: Icon(Icons.person, color: Colors.blue.shade700),
-          ),
-        ),
-        title: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        titleSpacing: 16,
+        automaticallyImplyLeading: false,
+        title: Row(
           children: [
-            Text(
-              'Budi Santoso',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Icon(
+                Icons.person,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
-            Text(
-              'budi.santoso@email.com',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+            const SizedBox(width: 12),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Azhar Ridwan',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'azharridwan@gmail.com',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                ),
+              ],
             ),
           ],
         ),

@@ -37,7 +37,7 @@ class CertSummaryPage extends StatelessWidget {
           Card(
             margin: const EdgeInsets.only(top: 8, bottom: 16),
             child: ListTile(
-              leading: const Icon(Icons.description, color: Colors.indigo),
+              leading: Icon(Icons.description, color: Theme.of(context).colorScheme.primary),
               title: Text(
                 certData.title,
                 style: const TextStyle(fontWeight: FontWeight.bold),

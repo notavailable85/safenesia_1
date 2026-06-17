@@ -37,13 +37,13 @@ class _CertDetailPageState extends State<CertDetailPage> {
                     width: double.infinity,
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.indigo.shade50,
+                      color: Theme.of(context).colorScheme.primaryContainer.withAlpha(50),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.verified,
                       size: 80,
-                      color: Colors.indigo,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -90,7 +90,7 @@ class _CertDetailPageState extends State<CertDetailPage> {
                   ),
                   Card(
                     color: _withConsultation
-                        ? Colors.indigo.shade50
+                        ? Theme.of(context).colorScheme.primaryContainer.withAlpha(50)
                         : Colors.white,
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: CheckboxListTile(
@@ -99,7 +99,7 @@ class _CertDetailPageState extends State<CertDetailPage> {
                       ),
                       subtitle: Text('Biaya tambahan: Rp $_consultationFee'),
                       value: _withConsultation,
-                      activeColor: Colors.indigo,
+                      activeColor: Theme.of(context).colorScheme.primary,
                       onChanged: (bool? value) {
                         setState(() {
                           _withConsultation = value ?? false;
@@ -147,8 +147,6 @@ class _CertDetailPageState extends State<CertDetailPage> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigo,
-                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 12,
@@ -188,10 +186,10 @@ class _CertDetailPageState extends State<CertDetailPage> {
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.indigo,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           const SizedBox(height: 4),

@@ -3,6 +3,7 @@ import 'package:safenesia_1/core/theme/app_themes.dart' show AppThemes;
 import 'package:safenesia_1/features/auth/presentation/pages/splash/splash_screen.dart';
 import 'package:safenesia_1/features/article/presentation/pages/article_list_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/home_page.dart';
+import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_list_page.dart';
 
 void main() {
@@ -37,7 +38,7 @@ class SafenesiaApp extends StatelessWidget {
       //     ),
       //   ),
       // ),
-      home: const HomePage(),
+      home: const SplashScreen(),
     );
   }
 }

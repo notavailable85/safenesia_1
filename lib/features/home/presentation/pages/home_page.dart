@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/article/presentation/pages/article_list_page.dart';
 import 'package:safenesia_1/features/career/career_page.dart';
+import 'package:safenesia_1/features/certification/presentation/pages/certification_list_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/detail_page.dart';
 import 'package:safenesia_1/features/notification/notification_page.dart';
 import 'package:safenesia_1/features/regulation/regulation_page.dart';
 import 'package:safenesia_1/features/search/search_page.dart';
+import 'package:safenesia_1/features/training/presentation/pages/training_list_page.dart';
+import 'package:safenesia_1/core/database/database_helper.dart';
+import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
+import 'package:safenesia_1/features/training/presentation/pages/training_detail_page.dart';
 
 // ==========================================
 // 1. HALAMAN UTAMA (HOME PAGE)
@@ -18,6 +24,38 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _selectedFeature = 'Pelatihan K3';
+  int _currentBannerIndex = 0;
+
+  List<TrainingSchedule> _schedules = [];
+  bool _isLoadingSchedules = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSchedules();
+  }
+
+  Future<void> _loadSchedules() async {
+    try {
+      final data = await DatabaseHelper.instance.readAllSchedulesWithTraining();
+      if (mounted) {
+        setState(() {
+          _schedules = data;
+          _isLoadingSchedules = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoadingSchedules = false);
+      }
+    }
+  }
+
+  final List<String> _bannerImages = [
+    'assets/images/flayer_pelatihan/flayer_ahli_k3_umum.png',
+    'assets/images/flayer_pelatihan/flayer_auditor_smk3.png',
+    'assets/images/flayer_pelatihan/flayer_petugas_p3k.png',
+  ];
 
   final List<Map<String, dynamic>> _features = [
     {'title': 'Pelatihan K3', 'icon': Icons.school, 'color': Colors.blue},
@@ -59,19 +97,15 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Budi Santoso',
+              'Azhar Ridwan',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const Text(
-              'budi.santoso@email.com',
+              'azharridwan@gmail.com',
               style: TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue.shade800,
-                foregroundColor: Colors.white,
-              ),
               onPressed: () {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -133,6 +167,16 @@ class _HomePageState extends State<HomePage> {
   void _handleGridTap(String title) {
     if (title == 'Fitur Lainnya') {
       _showFiturLainnyaPopup();
+    } else if (title == 'Pelatihan K3') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (c) => const TrainingListPage()),
+      );
+    } else if (title == 'Sertifikasi ISO/SMK3') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (c) => const CertListPage()),
+      );
     } else if (title == 'Regulasi K3') {
       Navigator.push(
         context,
@@ -158,40 +202,37 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue.shade800,
-        foregroundColor: Colors.white,
-        titleSpacing: 0,
-        leading: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            child: Icon(Icons.person, color: Colors.blue),
-          ),
-        ),
+        titleSpacing: 16,
+        automaticallyImplyLeading: false,
         title: GestureDetector(
           onTap: _showMembershipPopup,
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Text(
-                'Budi Santoso',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.person,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
-              Text(
-                'budi.santoso@email.com',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+              const SizedBox(width: 12), // <-- Jarak pasti antara foto dan teks
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Azhar Ridwan',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'azharridwan@gmail.com',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                  ),
+                ],
               ),
             ],
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (c) => const NotificationPage()),
-            ),
-          ),
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () => Navigator.push(
@@ -199,10 +240,62 @@ class _HomePageState extends State<HomePage> {
               MaterialPageRoute(builder: (c) => const SearchPage()),
             ),
           ),
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (c) => const NotificationPage()),
+            ),
+          ),
         ],
       ),
       body: ListView(
         children: [
+          // SLIDER BANNER
+          Container(
+            height: 180,
+            color: Colors.white,
+            child: PageView.builder(
+              itemCount: _bannerImages.length,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentBannerIndex = index;
+                });
+              },
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(_bannerImages[index], fit: BoxFit.cover),
+                  ),
+                );
+              },
+            ),
+          ),
+          // INDIKATOR SLIDER
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                _bannerImages.length,
+                (index) => Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                  width: _currentBannerIndex == index ? 16.0 : 8.0,
+                  height: 8.0,
+                  decoration: BoxDecoration(
+                    color: _currentBannerIndex == index
+                        ? Theme.of(context).colorScheme.primary
+                        : Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
           // KONTAINER 1: GRID FITUR (4x2)
           Container(
             padding: const EdgeInsets.all(16),
@@ -210,9 +303,12 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Layanan Utama',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                Text(
+                  'Fitur Utama',
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 GridView.builder(
@@ -269,8 +365,8 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Pilihan $_selectedFeature',
-                  style: const TextStyle(
+                  'Kategori $_selectedFeature',
+                  style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -288,27 +384,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildDynamicContent() {
     switch (_selectedFeature) {
       case 'Pelatihan K3':
-        return _buildTabs(
-          ['Kemnaker', 'BNSP', 'Awareness'],
-          [
-            _buildList([
-              'Ahli K3 Umum',
-              'Petugas P3K',
-              'K3 Ketinggian',
-              'K3 Listrik',
-              'K3 Kimia',
-            ], (t) => _navDetailPelatihan(t)),
-            _buildList([
-              'Auditor SMK3',
-              'Ahli K3 Konstruksi',
-            ], (t) => _navDetailPelatihan(t)),
-            _buildList([
-              'Basic Safety',
-              'Ergonomi Perkantoran',
-              'First Aid',
-            ], (t) => _navDetailPelatihan(t)),
-          ],
-        );
+        return _buildTrainingCatalog();
       case 'Sertifikasi ISO/SMK3':
         return _buildTabs(
           ['ISO', 'SMK3'],
@@ -353,6 +429,135 @@ class _HomePageState extends State<HomePage> {
       default:
         return const SizedBox.shrink();
     }
+  }
+
+  Widget _buildTrainingCatalog() {
+    if (_isLoadingSchedules) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(32.0),
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (_schedules.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(32.0),
+          child: Text('Tidak ada jadwal pelatihan.'),
+        ),
+      );
+    }
+
+    final displaySchedules = _schedules.take(10).toList();
+
+    return Column(
+      children: [
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: displaySchedules.length,
+          itemBuilder: (context, index) {
+            final schedule = displaySchedules[index];
+            final training = schedule.trainingData;
+            if (training == null) return const SizedBox();
+
+            return Card(
+              margin: const EdgeInsets.only(bottom: 12),
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(12),
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    training.gambarPelatihan,
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                title: Text(
+                  training.namaPelatihan,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.verified,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            training.sertifikasi,
+                            style: const TextStyle(fontSize: 12),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.calendar_month,
+                          size: 14,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            schedule.tanggalStr,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          TrainingDetailPage(scheduleData: schedule),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TrainingListPage(),
+                ),
+              );
+            },
+            child: const Text('Lihat Lainnya'),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildTabs(List<String> tabTitles, List<Widget> tabViews) {

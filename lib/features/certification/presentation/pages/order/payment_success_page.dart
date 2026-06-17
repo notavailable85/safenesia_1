@@ -36,8 +36,6 @@ class CertSuccessPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigo,
-                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.all(16),
                   ),
                   onPressed: () {

@@ -3,6 +3,7 @@ import 'package:safenesia_1/features/training/presentation/pages/order/order_for
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
 import 'package:safenesia_1/core/utils/currency_formatter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
 
 // ==========================================
 // 2. HALAMAN DETAIL PELATHAN
@@ -30,14 +31,18 @@ class TrainingDetailPage extends StatelessWidget {
             // Foto Produk Pelatihan
             Builder(
               builder: (context) {
-                final String imageUrl = scheduleData.gambar.isNotEmpty
+                final String rawUrl = scheduleData.gambar.isNotEmpty
                     ? scheduleData.gambar
-                    : trainingData.gambarPelatihan;
+                    : (trainingData.gambarPelatihan.isNotEmpty ? trainingData.gambarPelatihan : '');
+                
+                final String imageUrl = rawUrl.trim();
 
                 if (imageUrl.isNotEmpty) {
-                  final isNetwork = imageUrl.startsWith('http');
+                  final isNetwork = imageUrl.startsWith('http') || imageUrl.startsWith('https');
+                  final isFile = imageUrl.startsWith('/') || imageUrl.startsWith('file://') || imageUrl.contains(':\\');
+                  
                   return GestureDetector(
-                    onTap: () => _showImageDialog(context, imageUrl, isNetwork),
+                    onTap: () => _showImageDialog(context, imageUrl, isNetwork, isFile: isFile),
                     child: isNetwork
                         ? Image.network(
                             imageUrl,
@@ -47,14 +52,34 @@ class TrainingDetailPage extends StatelessWidget {
                             errorBuilder: (context, error, stackTrace) =>
                                 _buildPlaceholderImage(context),
                           )
-                        : Image.asset(
-                            imageUrl,
-                            width: double.infinity,
-                            height: 200,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                _buildPlaceholderImage(context),
-                          ),
+                        : isFile
+                            ? Image.file(
+                                File(imageUrl.replaceFirst('file://', '')),
+                                width: double.infinity,
+                                height: 200,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    _buildPlaceholderImage(context),
+                              )
+                            : Image.asset(
+                                imageUrl,
+                                width: double.infinity,
+                                height: 200,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                      width: double.infinity,
+                                      height: 200,
+                                      color: Colors.red.shade100,
+                                      alignment: Alignment.center,
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        'Gagal memuat gambar:\n$imageUrl\nError: $error',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(color: Colors.red, fontSize: 12),
+                                      ),
+                                    ),
+                              ),
                   );
                 } else {
                   return _buildPlaceholderImage(context);
@@ -348,7 +373,7 @@ class TrainingDetailPage extends StatelessWidget {
     );
   }
 
-  void _showImageDialog(BuildContext context, String imageUrl, bool isNetwork) {
+  void _showImageDialog(BuildContext context, String imageUrl, bool isNetwork, {bool isFile = false}) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -364,7 +389,9 @@ class TrainingDetailPage extends StatelessWidget {
               maxScale: 4,
               child: isNetwork
                   ? Image.network(imageUrl, fit: BoxFit.contain)
-                  : Image.asset(imageUrl, fit: BoxFit.contain),
+                  : isFile
+                      ? Image.file(File(imageUrl.replaceFirst('file://', '')), fit: BoxFit.contain)
+                      : Image.asset(imageUrl, fit: BoxFit.contain),
             ),
             Positioned(
               top: 10,

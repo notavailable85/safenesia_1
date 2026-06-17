@@ -93,7 +93,20 @@ flutter:
     # images
     - assets/images/logo_safenesia_horizontal.png
     - assets/images/logo_safenesia_vertical.png
-    - assets/images/flayer_pelatihan/
+    - assets/images/flayer_pelatihan/flayer_ahli_k3_elevator_dan_eskalator.png
+    - assets/images/flayer_pelatihan/flayer_ahli_k3_listrik.png
+    - assets/images/flayer_pelatihan/flayer_ahli_k3_muda_lingkungan_kerja.png
+    - assets/images/flayer_pelatihan/flayer_ahli_k3_papa.png
+    - assets/images/flayer_pelatihan/flayer_ahli_k3_ptp.png
+    - assets/images/flayer_pelatihan/flayer_ahli_k3_pubt.png
+    - assets/images/flayer_pelatihan/flayer_ahli_k3_umum.png
+    - assets/images/flayer_pelatihan/flayer_ahli_muda_k3_konstruksi.png
+    - assets/images/flayer_pelatihan/flayer_auditor_smk3.png
+    - assets/images/flayer_pelatihan/flayer_juru_las_kelas_1.png
+    - assets/images/flayer_pelatihan/flayer_k3_rumah_sakit.png
+    - assets/images/flayer_pelatihan/flayer_petugas_p3k.png
+    - assets/images/flayer_pelatihan/flayer_petugas_peran_kebakaran_kelas_d.png
+    - assets/images/flayer_pelatihan/flayer_tenaga_kerja_bangunan_tinggi_tingkat_2.png
     # icons
     - assets/icons/icon-safenesia.png
     - assets/icons/icon_facebook.svg

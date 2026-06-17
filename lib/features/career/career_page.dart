@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // ==========================================
 // 4. ARTIKEL, REGULASI, & KARIR PAGES
@@ -71,11 +72,39 @@ class _KarirPageState extends State<KarirPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Karir K3'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Daftar Lowongan'),
-              Tab(text: 'Tersimpan'),
-            ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(55),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: TabBar(
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                dividerColor: Colors.transparent,
+                labelPadding: const EdgeInsets.symmetric(horizontal: 24),
+                indicatorPadding: const EdgeInsets.symmetric(
+                  horizontal: -8,
+                  vertical: 6,
+                ),
+                indicator: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                ),
+                labelColor: Theme.of(context).colorScheme.onSurface,
+                unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
+                labelStyle: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+                unselectedLabelStyle: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+                tabs: const [
+                  Tab(text: 'Daftar Lowongan'),
+                  Tab(text: 'Tersimpan'),
+                ],
+              ),
+            ),
           ),
         ),
         body: TabBarView(
@@ -97,7 +126,7 @@ class _KarirPageState extends State<KarirPage> {
                       ),
                       const SizedBox(width: 8),
                       IconButton(
-                        icon: const Icon(Icons.tune, color: Colors.blue),
+                        icon: Icon(Icons.tune, color: Theme.of(context).colorScheme.primary),
                         onPressed: () => _showFilter(context),
                       ),
                     ],
@@ -146,9 +175,9 @@ class _KarirPageState extends State<KarirPage> {
                     'HSE Officer',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  const Text(
+                  Text(
                     'Bidang: Manufaktur | PT Maju Jaya',
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -176,7 +205,7 @@ class _KarirPageState extends State<KarirPage> {
             ),
             Icon(
               isSaved ? Icons.bookmark : Icons.bookmark_border,
-              color: Colors.blue,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ],
         ),

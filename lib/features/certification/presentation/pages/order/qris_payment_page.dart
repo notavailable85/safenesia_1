@@ -90,8 +90,6 @@ class CertPaymentQrisPage extends StatelessWidget {
               // Bypass Simulasi Sukses
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo,
-                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 16,

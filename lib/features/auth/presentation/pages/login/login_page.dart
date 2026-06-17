@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:safenesia_1/features/auth/presentation/pages/login/dummy_home_page.dart';
+import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/forgot_password/forgot_password_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/register/register_page.dart';
 
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const DummyHomePage()),
+        MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
       );
     }
   }
@@ -294,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const DummyHomePage(),
+                                  builder: (context) => const MainNavigationScreen(),
                                 ),
                               );
                             }

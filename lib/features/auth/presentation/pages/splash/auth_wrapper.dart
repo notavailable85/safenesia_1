@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safenesia_1/features/auth/presentation/pages/login/dummy_home_page.dart';
+import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/login/login_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/splash/onboarding_page.dart';
 
@@ -24,7 +24,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
     if (isFirstTime) {
       return const OnboardingPage();
     } else if (isLoggedIn) {
-      return const DummyHomePage();
+      return const MainNavigationScreen();
     } else {
       return const LoginPage();
     }

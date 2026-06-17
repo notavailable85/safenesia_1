@@ -133,8 +133,6 @@ class _CertFormPageState extends State<CertFormPage> {
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.indigo,
-                foregroundColor: Colors.white,
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: () {

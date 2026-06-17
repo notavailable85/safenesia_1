@@ -6,6 +6,8 @@ import 'package:safenesia_1/features/training/models/training_schedule_model.dar
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
+  static const _databaseName = "safenesia.db";
+  static const _databaseVersion = 7;
 
   static Database? _database;
 
@@ -14,7 +16,7 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('safenesia_db.db'); // Changed database name to be more generic, though might cause loss of old data, so let's keep it safenesia_articles.db for simplicity or increment version. Let's keep safenesia_articles.db and update version to 2
+    _database = await _initDB(_databaseName);
     return _database!;
   }
 
@@ -24,7 +26,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 5, // increment version
+      version: _databaseVersion,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -49,6 +51,12 @@ class DatabaseHelper {
     }
     if (oldVersion < 5) {
       await db.execute('DROP TABLE IF EXISTS training_schedules');
+      await _createTrainingSchedulesTable(db);
+    }
+    if (oldVersion < 7) {
+      await db.execute('DROP TABLE IF EXISTS training_schedules');
+      await db.execute('DROP TABLE IF EXISTS trainings');
+      await _createTrainingsTable(db);
       await _createTrainingSchedulesTable(db);
     }
   }
@@ -107,7 +115,9 @@ CREATE TABLE trainings (
   syaratKetentuan $textType,
   instruktur $textType,
   keterangan $textType,
-  gambarPelatihan $textType
+  gambarPelatihan $textType,
+  namaLokasi TEXT,
+  linkPetaLokasi TEXT
 )
 ''');
 
@@ -137,21 +147,21 @@ CREATE TABLE training_schedules (
     final now = DateTime.now();
     await db.insert('training_schedules', {
       'idJadwal': 's1',
-      'idPelatihan': 'KKRI-101-AK3UOL', // Ahli K3 Umum Online
+      'idPelatihan': '1', // Ahli K3 Umum Online
       'tanggalStart': DateTime(now.year, now.month, 12).toIso8601String(),
       'tanggalEnd': DateTime(now.year, now.month, 24).toIso8601String(),
       'gambar': '',
     });
     await db.insert('training_schedules', {
       'idJadwal': 's2',
-      'idPelatihan': 'KKRI-105-PPKD', // PMK Kelas D
+      'idPelatihan': '5', // PMK Kelas D
       'tanggalStart': DateTime(now.year, now.month + 1, 18).toIso8601String(),
       'tanggalEnd': DateTime(now.year, now.month + 1, 21).toIso8601String(),
       'gambar': '',
     });
     await db.insert('training_schedules', {
       'idJadwal': 's3',
-      'idPelatihan': 'KKRI-106-AK3EE', // K3 EE
+      'idPelatihan': '6', // K3 EE
       'tanggalStart': DateTime(now.year, now.month + 2, 5).toIso8601String(),
       'tanggalEnd': DateTime(now.year, now.month + 2, 17).toIso8601String(),
       'gambar': '',

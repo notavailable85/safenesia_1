@@ -62,11 +62,22 @@ class _TrainingListPageState extends State<TrainingListPage> {
 
   Future<void> _refreshTrainings() async {
     setState(() => _isLoading = true);
-    final data = await DatabaseHelper.instance.readAllSchedulesWithTraining();
-    setState(() {
-      _schedules = data;
-      _isLoading = false;
-    });
+    try {
+      final data = await DatabaseHelper.instance.readAllSchedulesWithTraining();
+      if (mounted) {
+        setState(() {
+          _schedules = data;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Terjadi kesalahan memuat jadwal: $e')),
+        );
+      }
+    }
   }
 
   String _getMonthName(int month) {

@@ -26,8 +26,6 @@ class _CertListPageState extends State<CertListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Daftar Sertifikasi'),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
       ),
       body: Column(
         children: [

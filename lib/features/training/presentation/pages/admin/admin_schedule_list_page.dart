@@ -72,7 +72,7 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
           idPelatihan: trainingId,
           tanggalStart: startDate.toIso8601String(),
           tanggalEnd: endDate.toIso8601String(),
-          gambar: 'https://picsum.photos/400/300?random=${random.nextInt(1000)}',
+          gambar: '',
         );
         
         await DatabaseHelper.instance.createSchedule(dummySchedule);
