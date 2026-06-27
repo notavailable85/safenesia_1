@@ -251,7 +251,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               await googleSignIn.signIn();
 
                           if (googleUser == null) {
-                            if (mounted) {
+                            if (context.mounted) {
                               setState(() {
                                 _isLoadingGoogle = false;
                               });
@@ -267,7 +267,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           );
                           await prefs.setString('user_email', googleUser.email);
 
-                          if (mounted) {
+                          if (context.mounted) {
                             setState(() {
                               _isLoadingGoogle = false;
                             });
@@ -288,7 +288,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             );
                           }
                         } catch (error) {
-                          if (mounted) {
+                          if (context.mounted) {
                             setState(() {
                               _isLoadingGoogle = false;
                             });

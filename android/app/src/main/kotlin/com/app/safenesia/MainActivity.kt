@@ -1,4 +1,4 @@
-package com.example.safenesia_1
+package com.app.safenesia
 
 import io.flutter.embedding.android.FlutterActivity
 

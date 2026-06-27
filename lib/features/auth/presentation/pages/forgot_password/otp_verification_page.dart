@@ -49,8 +49,9 @@ class OTPVerificationPage extends StatelessWidget {
                       ),
                     ),
                     onChanged: (value) {
-                      if (value.length == 1 && index < 3)
+                      if (value.length == 1 && index < 3) {
                         FocusScope.of(context).nextFocus();
+                      }
                     },
                   ),
                 ),

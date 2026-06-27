@@ -258,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             if (googleUser == null) {
                               // Pengguna membatalkan proses login
-                              if (mounted) {
+                              if (context.mounted) {
                                 setState(() {
                                   _isLoadingGoogle = false;
                                 });
@@ -278,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
                               googleUser.email,
                             );
 
-                            if (mounted) {
+                            if (context.mounted) {
                               setState(() {
                                 _isLoadingGoogle = false;
                               });
@@ -299,7 +299,7 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             }
                           } catch (error) {
-                            if (mounted) {
+                            if (context.mounted) {
                               setState(() {
                                 _isLoadingGoogle = false;
                               });

@@ -86,8 +86,9 @@ class _CertFormPageState extends State<CertFormPage> {
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value!.isEmpty) return 'Email wajib diisi';
-                        if (!value.contains('@'))
+                        if (!value.contains('@')) {
                           return 'Format email tidak valid';
+                        }
                         return null;
                       },
                     ),
