@@ -66,7 +66,6 @@ class _OrderFormPageState extends State<OrderFormPage> {
     super.dispose();
   }
 
-  bool _isSubmitting = false;
 
   String? _validateEmail(String? v) {
     if (v == null || v.isEmpty) return 'Wajib diisi';
