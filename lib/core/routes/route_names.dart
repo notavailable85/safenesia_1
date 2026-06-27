@@ -1,4 +1,3 @@
-import 'package:safenesia_1/features/auth/presentation/pages/forgot_password/otp_verification_page.dart';
 
 class RouteNames {
   RouteNames._();

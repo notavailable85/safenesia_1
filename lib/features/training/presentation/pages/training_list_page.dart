@@ -99,24 +99,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
     return months[month];
   }
 
-  String _getShortMonthName(int month) {
-    const months = [
-      '',
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'Mei',
-      'Jun',
-      'Jul',
-      'Ags',
-      'Sep',
-      'Okt',
-      'Nov',
-      'Des',
-    ];
-    return months[month];
-  }
+
 
   // Dummy Data has been removed and replaced with SQLite integration.
 

@@ -617,10 +617,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _navDetailPelatihan(String title) => Navigator.push(
-    context,
-    MaterialPageRoute(builder: (c) => DetailPelatihanPage(title: title)),
-  );
   void _navDetailSertifikasi(String title) => Navigator.push(
     context,
     MaterialPageRoute(builder: (c) => DetailSertifikasiPage(title: title)),

@@ -64,7 +64,6 @@ class DatabaseHelper {
   Future _createDB(Database db, int version) async {
     const idType = 'TEXT PRIMARY KEY';
     const textType = 'TEXT NOT NULL';
-    const intType = 'INTEGER NOT NULL';
 
     await db.execute('''
 CREATE TABLE articles (
@@ -195,7 +194,12 @@ CREATE TABLE training_schedules (
 
   Future<int> update(Article article) async {
     final db = await instance.database;
-    return db.update('articles', article.toMap(), where: 'id = ?', whereArgs: [article.id]);
+    return db.update(
+      'articles',
+      article.toMap(),
+      where: 'id = ?',
+      whereArgs: [article.id],
+    );
   }
 
   Future<int> delete(String id) async {
@@ -213,7 +217,11 @@ CREATE TABLE training_schedules (
 
   Future<Training?> readTraining(String id) async {
     final db = await instance.database;
-    final maps = await db.query('trainings', where: 'idPelatihan = ?', whereArgs: [id]);
+    final maps = await db.query(
+      'trainings',
+      where: 'idPelatihan = ?',
+      whereArgs: [id],
+    );
     if (maps.isNotEmpty) {
       return Training.fromMap(maps.first);
     } else {
@@ -230,14 +238,27 @@ CREATE TABLE training_schedules (
 
   Future<int> updateTraining(Training training) async {
     final db = await instance.database;
-    return db.update('trainings', training.toMap(), where: 'idPelatihan = ?', whereArgs: [training.idPelatihan]);
+    return db.update(
+      'trainings',
+      training.toMap(),
+      where: 'idPelatihan = ?',
+      whereArgs: [training.idPelatihan],
+    );
   }
 
   Future<int> deleteTraining(String id) async {
     final db = await instance.database;
     // Also delete associated schedules
-    await db.delete('training_schedules', where: 'idPelatihan = ?', whereArgs: [id]);
-    return await db.delete('trainings', where: 'idPelatihan = ?', whereArgs: [id]);
+    await db.delete(
+      'training_schedules',
+      where: 'idPelatihan = ?',
+      whereArgs: [id],
+    );
+    return await db.delete(
+      'trainings',
+      where: 'idPelatihan = ?',
+      whereArgs: [id],
+    );
   }
 
   // ================= TRAINING SCHEDULE METHODS =================
@@ -250,17 +271,26 @@ CREATE TABLE training_schedules (
 
   Future<int> updateSchedule(TrainingSchedule schedule) async {
     final db = await instance.database;
-    return db.update('training_schedules', schedule.toMap(), where: 'idJadwal = ?', whereArgs: [schedule.idJadwal]);
+    return db.update(
+      'training_schedules',
+      schedule.toMap(),
+      where: 'idJadwal = ?',
+      whereArgs: [schedule.idJadwal],
+    );
   }
 
   Future<int> deleteSchedule(String id) async {
     final db = await instance.database;
-    return await db.delete('training_schedules', where: 'idJadwal = ?', whereArgs: [id]);
+    return await db.delete(
+      'training_schedules',
+      where: 'idJadwal = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<List<TrainingSchedule>> readAllSchedulesWithTraining() async {
     final db = await instance.database;
-    
+
     // Perform SQL JOIN to get Schedule + Training details
     final List<Map<String, dynamic>> result = await db.rawQuery('''
       SELECT s.*, t.* 
