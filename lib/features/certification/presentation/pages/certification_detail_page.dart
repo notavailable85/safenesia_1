@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safenesia_1/features/certification/presentation/pages/certification_model.dart';
+import 'package:safenesia_1/features/certification/models/certification_model.dart';
 import 'package:safenesia_1/features/certification/presentation/pages/order/order_form_page.dart';
 
 // ==========================================

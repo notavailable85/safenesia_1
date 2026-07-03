@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "307202046098",
+    "project_id": "project-safenesia",
+    "storage_bucket": "project-safenesia.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307202046098:android:4f87d5ee65f82de6918e4b",
+        "android_client_info": {
+          "package_name": "com.example.safenesia_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSh7alNzPBdO1HsGPMQifzf90vHZ4HzWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

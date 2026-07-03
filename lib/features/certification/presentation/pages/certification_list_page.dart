@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/certification/presentation/pages/certification_detail_page.dart';
-import 'package:safenesia_1/features/certification/presentation/pages/certification_model.dart';
+import 'package:safenesia_1/features/certification/models/certification_model.dart';
 
 // ==========================================
 // 1. HALAMAN DAFTAR SERTIFIKASI

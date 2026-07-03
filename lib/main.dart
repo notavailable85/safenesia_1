@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/core/theme/app_themes.dart' show AppThemes;
 import 'package:safenesia_1/features/auth/presentation/pages/splash/splash_screen.dart';
@@ -5,8 +6,10 @@ import 'package:safenesia_1/features/article/presentation/pages/article_list_pag
 import 'package:safenesia_1/features/home/presentation/pages/home_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_list_page.dart';
+import 'package:safenesia_1/firebase_options.dart';
 
-void main() {
+void main() async{
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const SafenesiaApp());
 }
 
