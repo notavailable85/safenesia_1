@@ -7,6 +7,7 @@ import 'package:safenesia_1/features/profile/presentation/pages/information/abou
 import 'package:safenesia_1/features/profile/presentation/pages/information/support_center_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_password_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_profile_page.dart';
+import 'package:safenesia_1/features/admin/presentation/pages/admin_dashboard_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ==========================================
@@ -257,6 +258,24 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
               ],
+            ),
+          ),
+
+          // KONTAINER ADMIN
+          const Text(
+            'Admin',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+          ),
+          Card(
+            margin: const EdgeInsets.only(top: 8, bottom: 32),
+            child: ListTile(
+              leading: const Icon(Icons.admin_panel_settings, color: Colors.blue),
+              title: const Text('Admin Dashboard', style: TextStyle(fontWeight: FontWeight.bold)),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (c) => const AdminDashboardPage()),
+              ),
             ),
           ),
 

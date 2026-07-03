@@ -351,13 +351,35 @@ CREATE TABLE training_schedules (
   }
 
   // ================= CERTIFICATION METHODS =================
+  Future<CertModel> createCertification(CertModel cert) async {
+    final db = await instance.database;
+    await db.insert('certifications', cert.toMap());
+    return cert;
+  }
+
   Future<List<CertModel>> readAllCertifications() async {
     final db = await instance.database;
     final result = await db.query('certifications');
     return result.map((json) => CertModel.fromMap(json)).toList();
   }
 
+  Future<int> updateCertification(CertModel cert) async {
+    final db = await instance.database;
+    return db.update('certifications', cert.toMap(), where: 'id = ?', whereArgs: [cert.id]);
+  }
+
+  Future<int> deleteCertification(String id) async {
+    final db = await instance.database;
+    return await db.delete('certifications', where: 'id = ?', whereArgs: [id]);
+  }
+
   // ================= CAREER METHODS =================
+  Future<CareerModel> createCareer(CareerModel career) async {
+    final db = await instance.database;
+    await db.insert('careers', career.toMap());
+    return career;
+  }
+
   Future<List<CareerModel>> readAllCareers() async {
     final db = await instance.database;
     final result = await db.query('careers');
@@ -374,18 +396,55 @@ CREATE TABLE training_schedules (
     );
   }
 
+  Future<int> deleteCareer(String id) async {
+    final db = await instance.database;
+    return await db.delete('careers', where: 'id = ?', whereArgs: [id]);
+  }
+
   // ================= NOTIFICATION METHODS =================
+  Future<NotificationModel> createNotification(NotificationModel notification) async {
+    final db = await instance.database;
+    await db.insert('notifications', notification.toMap());
+    return notification;
+  }
+
   Future<List<NotificationModel>> readAllNotifications() async {
     final db = await instance.database;
     final result = await db.query('notifications');
     return result.map((json) => NotificationModel.fromMap(json)).toList();
   }
 
+  Future<int> updateNotification(NotificationModel notification) async {
+    final db = await instance.database;
+    return db.update('notifications', notification.toMap(), where: 'id = ?', whereArgs: [notification.id]);
+  }
+
+  Future<int> deleteNotification(String id) async {
+    final db = await instance.database;
+    return await db.delete('notifications', where: 'id = ?', whereArgs: [id]);
+  }
+
   // ================= REGULATION METHODS =================
+  Future<RegulationModel> createRegulation(RegulationModel regulation) async {
+    final db = await instance.database;
+    await db.insert('regulations', regulation.toMap());
+    return regulation;
+  }
+
   Future<List<RegulationModel>> readAllRegulations() async {
     final db = await instance.database;
     final result = await db.query('regulations');
     return result.map((json) => RegulationModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateRegulation(RegulationModel regulation) async {
+    final db = await instance.database;
+    return db.update('regulations', regulation.toMap(), where: 'id = ?', whereArgs: [regulation.id]);
+  }
+
+  Future<int> deleteRegulation(String id) async {
+    final db = await instance.database;
+    return await db.delete('regulations', where: 'id = ?', whereArgs: [id]);
   }
 
   Future close() async {
