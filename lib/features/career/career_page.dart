@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:safenesia_1/features/career/models/career_model.dart';
+import 'package:safenesia_1/core/database/database_helper.dart';
 
 // ==========================================
 // 4. ARTIKEL, REGULASI, & KARIR PAGES
@@ -11,6 +13,20 @@ class KarirPage extends StatefulWidget {
 }
 
 class _KarirPageState extends State<KarirPage> {
+  late Future<List<CareerModel>> _careersFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshCareers();
+  }
+
+  void _refreshCareers() {
+    setState(() {
+      _careersFuture = DatabaseHelper.instance.readAllCareers();
+    });
+  }
+
   void _showFilter(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -133,18 +149,51 @@ class _KarirPageState extends State<KarirPage> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: 4,
-                    itemBuilder: (c, i) => _buildJobCard(false),
+                  child: FutureBuilder<List<CareerModel>>(
+                    future: _careersFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text('Tidak ada lowongan.'));
+                      }
+                      
+                      final careers = snapshot.data!;
+                      return ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: careers.length,
+                        itemBuilder: (c, i) => _buildJobCard(careers[i]),
+                      );
+                    },
                   ),
                 ),
               ],
             ),
-            ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: 2,
-              itemBuilder: (c, i) => _buildJobCard(true),
+            FutureBuilder<List<CareerModel>>(
+              future: _careersFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('Tidak ada lowongan tersimpan.'));
+                }
+                
+                final savedCareers = snapshot.data!.where((c) => c.isSaved == 1).toList();
+                
+                if (savedCareers.isEmpty) {
+                  return const Center(child: Text('Tidak ada lowongan tersimpan.'));
+                }
+                
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: savedCareers.length,
+                  itemBuilder: (c, i) => _buildJobCard(savedCareers[i]),
+                );
+              },
             ),
           ],
         ),
@@ -152,7 +201,8 @@ class _KarirPageState extends State<KarirPage> {
     );
   }
 
-  Widget _buildJobCard(bool isSaved) {
+  Widget _buildJobCard(CareerModel career) {
+    bool isSaved = career.isSaved == 1;
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
@@ -171,41 +221,57 @@ class _KarirPageState extends State<KarirPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'HSE Officer',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  Text(
+                    career.title,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    'Bidang: Manufaktur | PT Maju Jaya',
+                    'Bidang: ${career.field} | ${career.company}',
                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                   const SizedBox(height: 8),
                   Row(
-                    children: const [
-                      Icon(Icons.location_on, size: 14, color: Colors.grey),
-                      SizedBox(width: 4),
+                    children: [
+                      const Icon(Icons.location_on, size: 14, color: Colors.grey),
+                      const SizedBox(width: 4),
                       Text(
-                        'Jakarta',
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                        career.location,
+                        style: const TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                     ],
                   ),
                   Row(
-                    children: const [
-                      Icon(Icons.monetization_on, size: 14, color: Colors.grey),
-                      SizedBox(width: 4),
+                    children: [
+                      const Icon(Icons.monetization_on, size: 14, color: Colors.grey),
+                      const SizedBox(width: 4),
                       Text(
-                        'Rp 8 Jt - Rp 12 Jt',
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                        'Rp ${career.salaryMin ~/ 1000000} Jt - Rp ${career.salaryMax ~/ 1000000} Jt',
+                        style: const TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            Icon(
-              isSaved ? Icons.bookmark : Icons.bookmark_border,
-              color: Theme.of(context).colorScheme.primary,
+            IconButton(
+              icon: Icon(
+                isSaved ? Icons.bookmark : Icons.bookmark_border,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              onPressed: () async {
+                final updatedCareer = CareerModel(
+                  id: career.id,
+                  title: career.title,
+                  company: career.company,
+                  field: career.field,
+                  location: career.location,
+                  salaryMin: career.salaryMin,
+                  salaryMax: career.salaryMax,
+                  isSaved: isSaved ? 0 : 1,
+                );
+                await DatabaseHelper.instance.updateCareer(updatedCareer);
+                _refreshCareers();
+              },
             ),
           ],
         ),

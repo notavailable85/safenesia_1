@@ -1,6 +1,3 @@
-// ==========================================
-// MODEL DATA DUMMY
-// ==========================================
 class CertModel {
   final String id;
   final String title;
@@ -15,6 +12,26 @@ class CertModel {
     required this.level,
     required this.basePrice,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'category': category,
+      'level': level,
+      'basePrice': basePrice,
+    };
+  }
+
+  factory CertModel.fromMap(Map<String, dynamic> map) {
+    return CertModel(
+      id: map['id'] as String,
+      title: map['title'] as String,
+      category: map['category'] as String,
+      level: map['level'] as String,
+      basePrice: map['basePrice'] as int,
+    );
+  }
 }
 
 final List<CertModel> dummyCertifications = [

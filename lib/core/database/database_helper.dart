@@ -3,11 +3,14 @@ import 'package:path/path.dart';
 import 'package:safenesia_1/features/article/models/article_model.dart';
 import 'package:safenesia_1/features/training/models/training_model.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
-
+import 'package:safenesia_1/features/certification/models/certification_model.dart';
+import 'package:safenesia_1/features/career/models/career_model.dart';
+import 'package:safenesia_1/features/notification/models/notification_model.dart';
+import 'package:safenesia_1/features/regulation/models/regulation_model.dart';
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static const _databaseName = "safenesia.db";
-  static const _databaseVersion = 7;
+  static const _databaseVersion = 8;
 
   static Database? _database;
 
@@ -59,6 +62,12 @@ class DatabaseHelper {
       await _createTrainingsTable(db);
       await _createTrainingSchedulesTable(db);
     }
+    if (oldVersion < 8) {
+      await _createCertificationsTable(db);
+      await _createCareersTable(db);
+      await _createNotificationsTable(db);
+      await _createRegulationsTable(db);
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -83,6 +92,70 @@ CREATE TABLE articles (
     // Prepopulate with dummy data
     for (var article in dummyArticles) {
       await db.insert('articles', article.toMap());
+    }
+    await _createCertificationsTable(db);
+    await _createCareersTable(db);
+    await _createNotificationsTable(db);
+    await _createRegulationsTable(db);
+  }
+
+  Future _createCertificationsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE certifications (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  category TEXT NOT NULL,
+  level TEXT NOT NULL,
+  basePrice INTEGER NOT NULL
+)
+''');
+    for (var cert in dummyCertifications) {
+      await db.insert('certifications', cert.toMap());
+    }
+  }
+
+  Future _createCareersTable(Database db) async {
+    await db.execute('''
+CREATE TABLE careers (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  company TEXT NOT NULL,
+  field TEXT NOT NULL,
+  location TEXT NOT NULL,
+  salaryMin INTEGER NOT NULL,
+  salaryMax INTEGER NOT NULL,
+  isSaved INTEGER NOT NULL
+)
+''');
+    for (var career in dummyCareers) {
+      await db.insert('careers', career.toMap());
+    }
+  }
+
+  Future _createNotificationsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE notifications (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  subtitle TEXT NOT NULL,
+  type TEXT NOT NULL
+)
+''');
+    for (var notif in dummyNotifications) {
+      await db.insert('notifications', notif.toMap());
+    }
+  }
+
+  Future _createRegulationsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE regulations (
+  id TEXT PRIMARY KEY,
+  category TEXT NOT NULL,
+  title TEXT NOT NULL
+)
+''');
+    for (var reg in dummyRegulations) {
+      await db.insert('regulations', reg.toMap());
     }
   }
 
@@ -277,8 +350,47 @@ CREATE TABLE training_schedules (
     }).toList();
   }
 
+  // ================= CERTIFICATION METHODS =================
+  Future<List<CertModel>> readAllCertifications() async {
+    final db = await instance.database;
+    final result = await db.query('certifications');
+    return result.map((json) => CertModel.fromMap(json)).toList();
+  }
+
+  // ================= CAREER METHODS =================
+  Future<List<CareerModel>> readAllCareers() async {
+    final db = await instance.database;
+    final result = await db.query('careers');
+    return result.map((json) => CareerModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateCareer(CareerModel career) async {
+    final db = await instance.database;
+    return db.update(
+      'careers',
+      career.toMap(),
+      where: 'id = ?',
+      whereArgs: [career.id],
+    );
+  }
+
+  // ================= NOTIFICATION METHODS =================
+  Future<List<NotificationModel>> readAllNotifications() async {
+    final db = await instance.database;
+    final result = await db.query('notifications');
+    return result.map((json) => NotificationModel.fromMap(json)).toList();
+  }
+
+  // ================= REGULATION METHODS =================
+  Future<List<RegulationModel>> readAllRegulations() async {
+    final db = await instance.database;
+    final result = await db.query('regulations');
+    return result.map((json) => RegulationModel.fromMap(json)).toList();
+  }
+
   Future close() async {
     final db = await instance.database;
     db.close();
   }
 }
+

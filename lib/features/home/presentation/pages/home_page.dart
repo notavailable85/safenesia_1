@@ -11,6 +11,7 @@ import 'package:safenesia_1/features/training/presentation/pages/training_list_p
 import 'package:safenesia_1/core/database/database_helper.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_detail_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ==========================================
 // 1. HALAMAN UTAMA (HOME PAGE)
@@ -29,10 +30,24 @@ class _HomePageState extends State<HomePage> {
   List<TrainingSchedule> _schedules = [];
   bool _isLoadingSchedules = true;
 
+  String _userName = 'Pengguna';
+  String _userEmail = '';
+
   @override
   void initState() {
     super.initState();
     _loadSchedules();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        _userName = prefs.getString('user_name') ?? 'Pengguna';
+        _userEmail = prefs.getString('user_email') ?? '';
+      });
+    }
   }
 
   Future<void> _loadSchedules() async {
@@ -96,13 +111,13 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Azhar Ridwan',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              _userName,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const Text(
-              'azharridwan@gmail.com',
-              style: TextStyle(color: Colors.grey),
+            Text(
+              _userEmail,
+              style: const TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -216,16 +231,16 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(width: 12), // <-- Jarak pasti antara foto dan teks
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Azhar Ridwan',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    _userName,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'azharridwan@gmail.com',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                    _userEmail,
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),

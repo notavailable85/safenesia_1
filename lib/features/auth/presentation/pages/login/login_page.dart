@@ -88,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
 
     bool userFound = false;
     bool passwordCorrect = false;
+    String? foundUserName;
 
     if (usersStr != null) {
       final List<dynamic> registeredUsers = jsonDecode(usersStr);
@@ -96,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
           userFound = true;
           if (user['password'] == password) {
             passwordCorrect = true;
+            foundUserName = user['name'];
             break;
           }
         }
@@ -110,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
         userFound = true;
         if (fallbackPassword == password) {
           passwordCorrect = true;
+          foundUserName = 'Pengguna';
         }
       }
     }
@@ -123,6 +126,11 @@ class _LoginPageState extends State<LoginPage> {
       _showError('wrong_password');
       return;
     }
+
+    // Simpan data sesi ke SharedPreferences
+    await prefs.setString('login_method', 'manual');
+    await prefs.setString('user_name', foundUserName ?? 'Pengguna');
+    await prefs.setString('user_email', identifier);
 
     // Login berhasil
     if (mounted) {

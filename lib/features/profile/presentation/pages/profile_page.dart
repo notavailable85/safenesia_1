@@ -7,6 +7,7 @@ import 'package:safenesia_1/features/profile/presentation/pages/information/abou
 import 'package:safenesia_1/features/profile/presentation/pages/information/support_center_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_password_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_profile_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ==========================================
 // 1. HALAMAN UTAMA AKUN
@@ -20,6 +21,24 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   bool isBiometricEnabled = false;
+  String _userName = 'Pengguna';
+  String _userEmail = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        _userName = prefs.getString('user_name') ?? 'Pengguna';
+        _userEmail = prefs.getString('user_email') ?? '';
+      });
+    }
+  }
 
   void _showBiometricDialog() {
     showDialog(
@@ -73,16 +92,16 @@ class _AccountPageState extends State<AccountPage> {
               ),
             ),
             const SizedBox(width: 12),
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Azhar Ridwan',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  _userName,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'azharridwan@gmail.com',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                  _userEmail,
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
               ],
             ),
