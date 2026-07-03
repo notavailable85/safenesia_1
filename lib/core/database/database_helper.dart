@@ -7,10 +7,12 @@ import 'package:safenesia_1/features/certification/models/certification_model.da
 import 'package:safenesia_1/features/career/models/career_model.dart';
 import 'package:safenesia_1/features/notification/models/notification_model.dart';
 import 'package:safenesia_1/features/regulation/models/regulation_model.dart';
+import 'package:safenesia_1/features/auth/models/user_model.dart';
+
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static const _databaseName = "safenesia.db";
-  static const _databaseVersion = 8;
+  static const _databaseVersion = 9;
 
   static Database? _database;
 
@@ -68,6 +70,9 @@ class DatabaseHelper {
       await _createNotificationsTable(db);
       await _createRegulationsTable(db);
     }
+    if (oldVersion < 9) {
+      await _createUsersTable(db);
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -97,6 +102,30 @@ CREATE TABLE articles (
     await _createCareersTable(db);
     await _createNotificationsTable(db);
     await _createRegulationsTable(db);
+    await _createUsersTable(db);
+  }
+
+  Future _createUsersTable(Database db) async {
+    await db.execute('''
+CREATE TABLE users (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  password TEXT NOT NULL,
+  phoneNumber TEXT NOT NULL,
+  role TEXT NOT NULL
+)
+''');
+    
+    // Insert default admin
+    await db.insert('users', {
+      'id': 'admin-1',
+      'name': 'Administrator',
+      'email': 'admin@gmail.com',
+      'password': 'password123',
+      'phoneNumber': '08123456789',
+      'role': 'admin',
+    });
   }
 
   Future _createCertificationsTable(Database db) async {
@@ -445,6 +474,29 @@ CREATE TABLE training_schedules (
   Future<int> deleteRegulation(String id) async {
     final db = await instance.database;
     return await db.delete('regulations', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ================= USER METHODS =================
+  Future<UserModel> createUser(UserModel user) async {
+    final db = await instance.database;
+    await db.insert('users', user.toMap());
+    return user;
+  }
+
+  Future<List<UserModel>> readAllUsers() async {
+    final db = await instance.database;
+    final result = await db.query('users');
+    return result.map((json) => UserModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateUser(UserModel user) async {
+    final db = await instance.database;
+    return db.update('users', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
+  }
+
+  Future<int> deleteUser(String id) async {
+    final db = await instance.database;
+    return await db.delete('users', where: 'id = ?', whereArgs: [id]);
   }
 
   Future close() async {

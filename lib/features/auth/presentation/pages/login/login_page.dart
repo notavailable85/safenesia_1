@@ -131,6 +131,8 @@ class _LoginPageState extends State<LoginPage> {
     await prefs.setString('login_method', 'manual');
     await prefs.setString('user_name', foundUserName ?? 'Pengguna');
     await prefs.setString('user_email', identifier);
+    await prefs.setBool('is_logged_in', true);
+    await prefs.setInt('last_active_time', DateTime.now().millisecondsSinceEpoch);
 
     // Login berhasil
     if (mounted) {
@@ -285,6 +287,8 @@ class _LoginPageState extends State<LoginPage> {
                               'user_email',
                               googleUser.email,
                             );
+                            await prefs.setBool('is_logged_in', true);
+                            await prefs.setInt('last_active_time', DateTime.now().millisecondsSinceEpoch);
 
                             if (mounted) {
                               setState(() {

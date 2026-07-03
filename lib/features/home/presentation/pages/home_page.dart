@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/article/presentation/pages/article_list_page.dart';
@@ -32,6 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   String _userName = 'Pengguna';
   String _userEmail = '';
+  String? _userAvatarPath;
 
   @override
   void initState() {
@@ -46,6 +48,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _userName = prefs.getString('user_name') ?? 'Pengguna';
         _userEmail = prefs.getString('user_email') ?? '';
+        _userAvatarPath = prefs.getString('user_avatar_path');
       });
     }
   }
@@ -225,10 +228,13 @@ class _HomePageState extends State<HomePage> {
             children: [
               CircleAvatar(
                 backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.person,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                backgroundImage: _userAvatarPath != null ? FileImage(File(_userAvatarPath!)) : null,
+                child: _userAvatarPath == null
+                    ? Icon(
+                        Icons.person,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                    : null,
               ),
               const SizedBox(width: 12), // <-- Jarak pasti antara foto dan teks
               Column(

@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:safenesia_1/features/auth/presentation/pages/splash/auth_wrapper.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/activities/my_certificate_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/activities/my_document_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/activities/my_training_page.dart';
@@ -24,6 +26,7 @@ class _AccountPageState extends State<AccountPage> {
   bool isBiometricEnabled = false;
   String _userName = 'Pengguna';
   String _userEmail = '';
+  String? _userAvatarPath;
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _AccountPageState extends State<AccountPage> {
       setState(() {
         _userName = prefs.getString('user_name') ?? 'Pengguna';
         _userEmail = prefs.getString('user_email') ?? '';
+        _userAvatarPath = prefs.getString('user_avatar_path');
       });
     }
   }
@@ -87,10 +91,13 @@ class _AccountPageState extends State<AccountPage> {
           children: [
             CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(
-                Icons.person,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              backgroundImage: _userAvatarPath != null ? FileImage(File(_userAvatarPath!)) : null,
+              child: _userAvatarPath == null
+                  ? Icon(
+                      Icons.person,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : null,
             ),
             const SizedBox(width: 12),
             Column(
@@ -189,10 +196,13 @@ class _AccountPageState extends State<AccountPage> {
                   leading: const Icon(Icons.edit),
                   title: const Text('Edit Profil'),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (c) => const EditProfilePage()),
-                  ),
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (c) => const EditProfilePage()),
+                    );
+                    _loadUserData(); // Reload after editing
+                  },
                 ),
                 const Divider(height: 1),
                 ListTile(
@@ -291,8 +301,17 @@ class _AccountPageState extends State<AccountPage> {
               'Keluar (Logout)',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
-            onPressed: () {
-              // Aksi Logout
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('is_logged_in', false);
+              
+              if (mounted) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (c) => const AuthWrapper()),
+                  (route) => false,
+                );
+              }
             },
           ),
           const SizedBox(height: 32),

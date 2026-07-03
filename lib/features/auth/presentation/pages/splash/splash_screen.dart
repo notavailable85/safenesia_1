@@ -18,8 +18,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Simulasi loading selama 3 detik, lalu pindah ke AuthWrapper
-    Future.delayed(const Duration(milliseconds: 10000), () {
+    // Simulasi loading selama 2.5 detik, lalu pindah ke AuthWrapper
+    Future.delayed(const Duration(milliseconds: 2500), () {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,

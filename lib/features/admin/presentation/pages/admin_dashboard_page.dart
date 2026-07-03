@@ -6,6 +6,7 @@ import 'package:safenesia_1/features/admin/presentation/pages/admin_notification
 import 'package:safenesia_1/features/admin/presentation/pages/admin_regulation_list_page.dart';
 import 'package:safenesia_1/features/admin/presentation/pages/admin_schedule_list_page.dart';
 import 'package:safenesia_1/features/admin/presentation/pages/admin_training_list_page.dart';
+import 'package:safenesia_1/features/admin/presentation/pages/admin_user_list_page.dart';
 
 class AdminDashboardPage extends StatelessWidget {
   const AdminDashboardPage({super.key});
@@ -72,6 +73,13 @@ class AdminDashboardPage extends StatelessWidget {
             icon: Icons.gavel,
             color: Colors.teal,
             page: const AdminRegulationListPage(),
+          ),
+          _buildDashboardCard(
+            context,
+            title: 'Users',
+            icon: Icons.people,
+            color: Colors.deepPurple,
+            page: const AdminUserListPage(),
           ),
         ],
       ),
