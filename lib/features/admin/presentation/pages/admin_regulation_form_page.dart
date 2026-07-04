@@ -58,8 +58,8 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.regulation == null ? 'Add Regulation' : 'Edit Regulation'),
-        backgroundColor: Colors.teal,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: Form(
         key: _formKey,
@@ -115,8 +115,8 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
             const SizedBox(height: 32),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: saveRegulation,

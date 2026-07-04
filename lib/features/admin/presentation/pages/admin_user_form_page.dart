@@ -57,8 +57,8 @@ class _AdminUserFormPageState extends State<AdminUserFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.user == null ? 'Add User' : 'Edit User'),
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: Form(
         key: _formKey,
@@ -109,8 +109,8 @@ class _AdminUserFormPageState extends State<AdminUserFormPage> {
             const SizedBox(height: 32),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: saveUser,

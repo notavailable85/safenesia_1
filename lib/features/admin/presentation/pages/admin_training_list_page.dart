@@ -41,8 +41,8 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Trainings'),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -105,7 +105,7 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
                   },
                 ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           await Navigator.push(

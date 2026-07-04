@@ -52,8 +52,8 @@ class _AdminCertificationFormPageState extends State<AdminCertificationFormPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.certification == null ? 'Add Certification' : 'Edit Certification'),
-        backgroundColor: Colors.purple,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: Form(
         key: _formKey,
@@ -91,8 +91,8 @@ class _AdminCertificationFormPageState extends State<AdminCertificationFormPage>
             const SizedBox(height: 32),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: saveCertification,

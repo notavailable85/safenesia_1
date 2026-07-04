@@ -12,6 +12,7 @@ import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/theme_setting_page.dart';
 import 'package:safenesia_1/features/admin/presentation/pages/admin_dashboard_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:safenesia_1/core/utils/user_state.dart';
 
 // ==========================================
 // 1. HALAMAN UTAMA AKUN
@@ -33,6 +34,13 @@ class _AccountPageState extends State<AccountPage> {
   void initState() {
     super.initState();
     _loadUserData();
+    UserState.profileUpdatedNotifier.addListener(_loadUserData);
+  }
+
+  @override
+  void dispose() {
+    UserState.profileUpdatedNotifier.removeListener(_loadUserData);
+    super.dispose();
   }
 
   Future<void> _loadUserData() async {

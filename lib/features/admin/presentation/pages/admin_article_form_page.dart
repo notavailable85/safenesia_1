@@ -67,8 +67,8 @@ class _AdminArticleFormPageState extends State<AdminArticleFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.article == null ? 'Add Article' : 'Edit Article'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: Form(
         key: _formKey,
@@ -112,8 +112,8 @@ class _AdminArticleFormPageState extends State<AdminArticleFormPage> {
             const SizedBox(height: 32),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: addOrUpdateArticle,

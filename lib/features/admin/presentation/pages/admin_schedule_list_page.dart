@@ -41,8 +41,8 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Schedules'),
-        backgroundColor: Colors.orange,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -105,7 +105,7 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
                   },
                 ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           await Navigator.push(

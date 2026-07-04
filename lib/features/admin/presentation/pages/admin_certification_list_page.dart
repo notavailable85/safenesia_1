@@ -41,8 +41,8 @@ class _AdminCertificationListPageState extends State<AdminCertificationListPage>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Certifications'),
-        backgroundColor: Colors.purple,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -105,7 +105,7 @@ class _AdminCertificationListPageState extends State<AdminCertificationListPage>
                   },
                 ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.purple,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           await Navigator.push(

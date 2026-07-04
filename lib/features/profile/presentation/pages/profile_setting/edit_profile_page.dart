@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:safenesia_1/core/utils/user_state.dart';
 
 // ==========================================
 // SUB-HALAMAN KONTAINER 2
@@ -51,6 +52,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
     
     if (mounted) {
+      UserState.notifyProfileUpdated(); // Notify other pages to update
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profil berhasil diperbarui')),
       );

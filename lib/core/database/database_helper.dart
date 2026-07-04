@@ -13,7 +13,7 @@ import 'package:safenesia_1/features/auth/models/user_model.dart';
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static const _databaseName = "safenesia.db";
-  static const _databaseVersion = 11;
+  static const _databaseVersion = 12;
 
   static Database? _database;
 
@@ -80,6 +80,10 @@ class DatabaseHelper {
     }
     if (oldVersion < 11) {
       await _createInspectionsTable(db);
+    }
+    if (oldVersion < 12) {
+      await db.execute('DROP TABLE IF EXISTS careers');
+      await _createCareersTable(db);
     }
   }
 
@@ -160,9 +164,17 @@ CREATE TABLE careers (
   company TEXT NOT NULL,
   field TEXT NOT NULL,
   location TEXT NOT NULL,
+  jobType TEXT NOT NULL,
+  experienceLevel TEXT NOT NULL,
   salaryMin INTEGER NOT NULL,
   salaryMax INTEGER NOT NULL,
-  isSaved INTEGER NOT NULL
+  description TEXT NOT NULL,
+  requirements TEXT NOT NULL,
+  benefits TEXT NOT NULL,
+  postedDate TEXT NOT NULL,
+  companyLogoUrl TEXT NOT NULL,
+  isSaved INTEGER NOT NULL,
+  isApplied INTEGER NOT NULL
 )
 ''');
     for (var career in dummyCareers) {

@@ -51,8 +51,8 @@ class _AdminNotificationFormPageState extends State<AdminNotificationFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.notification == null ? 'Add Notification' : 'Edit Notification'),
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: Form(
         key: _formKey,
@@ -87,8 +87,8 @@ class _AdminNotificationFormPageState extends State<AdminNotificationFormPage> {
             const SizedBox(height: 32),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: saveNotification,

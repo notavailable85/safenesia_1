@@ -41,8 +41,8 @@ class _AdminArticleListPageState extends State<AdminArticleListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Articles'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -105,7 +105,7 @@ class _AdminArticleListPageState extends State<AdminArticleListPage> {
                   },
                 ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           await Navigator.push(

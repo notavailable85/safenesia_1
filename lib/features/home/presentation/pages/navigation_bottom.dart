@@ -3,6 +3,7 @@ import 'package:safenesia_1/features/career/career_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/home_page.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_list_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_page.dart';
+import 'package:safenesia_1/features/chat_ai/presentation/pages/chat_ai_page.dart';
 
 // ==========================================
 // 0. MAIN NAVIGATION (BOTTOM NAV BAR)
@@ -22,12 +23,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(), // Chat AI
   ];
 
   final List<Widget> _pages = [
     const HomePage(),
     const TrainingListPage(),
     const KarirPage(),
+    const ChatAiPage(), // New Tab
     const AccountPage(),
   ];
 
@@ -102,7 +105,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           _buildNavItem(0, Icons.home_rounded, 'Home', selectedColor, unselectedColor),
           _buildNavItem(1, Icons.school_rounded, 'Pelatihan', selectedColor, unselectedColor),
           _buildNavItem(2, Icons.work_rounded, 'Karir', selectedColor, unselectedColor),
-          _buildNavItem(3, Icons.person_rounded, 'Akun', selectedColor, unselectedColor),
+          _buildNavItem(3, Icons.smart_toy_rounded, 'AI Chat', selectedColor, unselectedColor),
+          _buildNavItem(4, Icons.person_rounded, 'Akun', selectedColor, unselectedColor),
         ],
       ),
     );

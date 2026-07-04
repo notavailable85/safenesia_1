@@ -88,7 +88,18 @@ class _OrderFormPageState extends State<OrderFormPage> {
       floatingLabelStyle: const TextStyle(fontSize: 12),
       isDense: true,
       prefixIcon: Icon(icon, color: Theme.of(context).colorScheme.primary),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade400),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0),
+      ),
       filled: true,
       fillColor: Theme.of(context).colorScheme.surface,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -182,6 +193,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 ),
               ],
             ),
+            const SizedBox(height: 12),
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
@@ -246,7 +258,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                     ),
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.surface,
-                      foregroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Colors.green,
                       side: const BorderSide(
                         color: Colors.grey,
                       ),
@@ -271,7 +283,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: OutlinedButton(
+                  child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       foregroundColor: Colors.red,
@@ -290,7 +302,8 @@ class _OrderFormPageState extends State<OrderFormPage> {
                         }
                       });
                     },
-                    child: const Text(
+                    icon: const Icon(Icons.delete, size: 16),
+                    label: const Text(
                       'Kosongkan',
                       style: TextStyle(fontSize: 12),
                     ),
@@ -339,7 +352,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                         fontSize: 16,
                       ),
                     ),
-                    childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    childrenPadding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                     children: [
                       TextFormField(
                         controller: _namaPesertaControllers[index],
@@ -350,7 +363,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                         validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
                         onChanged: (val) => setState(() {}),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: _waPesertaControllers[index],
                         decoration: _buildInputDecoration(
@@ -361,7 +374,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                         validator: _validatePhone,
                         onChanged: (val) => setState(() {}),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: _emailPesertaControllers[index],
                         decoration: _buildInputDecoration('Email', Icons.email),

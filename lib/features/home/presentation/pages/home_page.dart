@@ -12,10 +12,15 @@ import 'package:safenesia_1/features/training/presentation/pages/training_list_p
 import 'package:safenesia_1/core/database/database_helper.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_detail_page.dart';
+import 'dart:ui' as ui;
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:safenesia_1/features/inspection/presentation/pages/inspection_order_page.dart';
 import 'package:safenesia_1/features/inspection/presentation/pages/inspection_history_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:safenesia_1/core/utils/user_state.dart';
+import 'package:gal/gal.dart';
 // ==========================================
 // 1. HALAMAN UTAMA (HOME PAGE)
 // ==========================================
@@ -36,12 +41,20 @@ class _HomePageState extends State<HomePage> {
   String _userName = 'Pengguna';
   String _userEmail = '';
   String? _userAvatarPath;
+  final GlobalKey _cardKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _loadSchedules();
     _loadUserData();
+    UserState.profileUpdatedNotifier.addListener(_loadUserData);
+  }
+
+  @override
+  void dispose() {
+    UserState.profileUpdatedNotifier.removeListener(_loadUserData);
+    super.dispose();
   }
 
   Future<void> _loadUserData() async {
@@ -99,41 +112,250 @@ class _HomePageState extends State<HomePage> {
   void _showMembershipPopup() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        contentPadding: const EdgeInsets.all(24),
-        content: Column(
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.workspace_premium, color: Colors.amber, size: 60),
-            const SizedBox(height: 16),
-            const Text(
-              'MEMBER PLATINUM',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.amber,
+            // KARTU PLATINUM
+            RepaintBoundary(
+              key: _cardKey,
+              child: AspectRatio(
+                aspectRatio: 1.586, // Rasio presisi kartu kredit (85.6mm x 53.98mm)
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFFE2E2E2),
+                      Color(0xFFC9D6FF), // Sedikit kilauan biru es khas platinum
+                      Color(0xFFE2E2E2),
+                      Color(0xFF9E9E9E),
+                      Color(0xFFF5F7FA), // Perak cerah
+                    ],
+                    stops: [0.0, 0.3, 0.5, 0.8, 1.0],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 15),
+                    ),
+                  ],
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.8),
+                    width: 1.5,
+                  ),
+                ),
+                child: Stack(
+                  children: [
+                    // Baris Atas: Contactless Icon & Logo
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.contactless, color: Color(0xFF555555), size: 28),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Text(
+                              'SAFENESIA',
+                              style: TextStyle(
+                                color: Color(0xFF222222),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                                fontStyle: FontStyle.italic,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                            Text(
+                              'PLATINUM',
+                              style: TextStyle(
+                                color: const Color(0xFF222222).withOpacity(0.7),
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    
+                    // Chip EMV
+                    Positioned(
+                      top: 50,
+                      left: 0,
+                      child: Container(
+                        width: 42,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFE6C27A), Color(0xFFD4AF37), Color(0xFF996515)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          border: Border.all(color: Colors.black12, width: 0.5),
+                        ),
+                        child: const Icon(Icons.memory, color: Colors.black54, size: 24),
+                      ),
+                    ),
+                    
+                    // Nomor Kartu Embossed Style
+                    const Positioned(
+                      bottom: 45,
+                      left: 0,
+                      child: Text(
+                        '5412  7512  3412  9000',
+                        style: TextStyle(
+                          color: Color(0xFF222222),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 2,
+                          fontFamily: 'Courier',
+                          shadows: [Shadow(color: Colors.white70, blurRadius: 1, offset: Offset(1, 1))],
+                        ),
+                      ),
+                    ),
+                    
+                    // Nama Member
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'CARDHOLDER',
+                            style: TextStyle(
+                              color: const Color(0xFF222222).withOpacity(0.5),
+                              fontSize: 8,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                          Text(
+                            _userName.toUpperCase(),
+                            style: const TextStyle(
+                              color: Color(0xFF222222),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    // Valid Thru
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'VALID THRU',
+                            style: TextStyle(
+                              color: const Color(0xFF222222).withOpacity(0.5),
+                              fontSize: 8,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                          const Text(
+                            '12/29',
+                            style: TextStyle(
+                              color: Color(0xFF222222),
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                              fontFamily: 'Courier',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              _userName,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            Text(
-              _userEmail,
-              style: const TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
+            // Tombol Unduh Kartu
             ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Kartu Membership diunduh')),
-                );
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black87,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                elevation: 4,
+              ),
+              onPressed: () async {
+                try {
+                  // Tampilkan loading dialog sebentar
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (c) => const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                  );
+                  
+                  // Meminta izin storage dengan gal
+                  final hasAccess = await Gal.hasAccess(toAlbum: true);
+                  if (!hasAccess) {
+                    final request = await Gal.requestAccess(toAlbum: true);
+                    if (!request) {
+                      if (mounted) {
+                        Navigator.pop(context); // Tutup loading
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Izin penyimpanan diperlukan untuk mengunduh kartu')),
+                        );
+                      }
+                      return;
+                    }
+                  }
+
+                  // Tangkap gambar dari RepaintBoundary
+                  RenderRepaintBoundary boundary = _cardKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+                  ui.Image image = await boundary.toImage(pixelRatio: 3.0); // Kualitas tinggi
+                  final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+                  final pngBytes = byteData!.buffer.asUint8List();
+
+                  // Simpan ke galeri menggunakan gal
+                  await Gal.putImageBytes(
+                    pngBytes,
+                    name: 'Safenesia_Membercard_${DateTime.now().millisecondsSinceEpoch}',
+                  );
+                  
+                  if (!mounted) return;
+                  Navigator.pop(context); // Tutup loading
+                  
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Kartu berhasil diunduh dan masuk ke galeri!')),
+                  );
+                  
+                } catch (e) {
+                  if (mounted) {
+                    Navigator.pop(context); // Tutup loading
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Gagal mengunduh kartu: $e')),
+                    );
+                  }
+                }
               },
-              icon: const Icon(Icons.download),
-              label: const Text('Unduh Kartu'),
+              icon: const Icon(Icons.download, size: 24),
+              label: const Text(
+                'Unduh Kartu',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
             ),
           ],
         ),
@@ -142,45 +364,84 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showFiturLainnyaPopup() {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Fitur Lainnya',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Wrap(
-          spacing: 20,
-          runSpacing: 20,
-          children: [
-            _buildPopupItem(Icons.headset_mic, 'Konsultasi'),
-            _buildPopupItem(Icons.store, 'Toko Safety'),
-            _buildPopupItem(Icons.event, 'Webinar'),
-            _buildPopupItem(Icons.forum, 'Komunitas'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Tutup'),
-          ),
-        ],
+      isScrollControlled: true,
+      useRootNavigator: true,
+      constraints: const BoxConstraints(maxWidth: double.infinity),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
+      builder: (context) {
+        return SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16, 
+              right: 16, 
+              top: 12, 
+              bottom: 32 + MediaQuery.of(context).padding.bottom
+            ),
+            child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Drag handle
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const Text(
+                'Fitur Lainnya',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 24),
+              Wrap(
+                spacing: 16,
+                runSpacing: 24,
+                alignment: WrapAlignment.center,
+                children: [
+                  _buildPopupItem(Icons.headset_mic, 'Konsultasi K3', Colors.blue),
+                  _buildPopupItem(Icons.report_problem, 'Lapor Insiden', Colors.red),
+                  _buildPopupItem(Icons.checklist_rtl, 'Inspeksi Harian', Colors.teal),
+                  _buildPopupItem(Icons.calculate, 'Kalkulator Risiko', Colors.orange),
+                  _buildPopupItem(Icons.store, 'Toko Safety', Colors.green),
+                  _buildPopupItem(Icons.event, 'Webinar K3', Colors.purple),
+                  _buildPopupItem(Icons.forum, 'Komunitas K3', Colors.indigo),
+                  _buildPopupItem(Icons.newspaper, 'Berita Terkini', Colors.blueGrey),
+                ],
+              ),
+            ],
+          ),
+        ),
+        );
+      },
     );
   }
 
-  Widget _buildPopupItem(IconData icon, String title) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CircleAvatar(
-          radius: 25,
-          backgroundColor: Colors.blue.shade50,
-          child: Icon(icon, color: Colors.blue),
-        ),
-        const SizedBox(height: 8),
-        Text(title, style: const TextStyle(fontSize: 12)),
-      ],
+  Widget _buildPopupItem(IconData icon, String title, [Color color = Colors.blue]) {
+    return SizedBox(
+      width: 75,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: color.withOpacity(0.1),
+            child: Icon(icon, color: color),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+          ),
+        ],
+      ),
     );
   }
 
@@ -229,9 +490,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         titleSpacing: 16,
         automaticallyImplyLeading: false,
-        title: GestureDetector(
-          onTap: _showMembershipPopup,
-          child: Row(
+        title: Row(
             children: [
               CircleAvatar(
                 backgroundColor: Colors.white,
@@ -267,21 +526,32 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (c) => const SearchPage()),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (c) => const NotificationPage()),
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (c) => const SearchPage()),
+                ),
+                child: const Icon(Icons.search),
+              ),
+              const SizedBox(width: 5),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (c) => const NotificationPage()),
+                ),
+                child: const Icon(Icons.notifications),
+              ),
+              const SizedBox(width: 5),
+              GestureDetector(
+                onTap: _showMembershipPopup,
+                child: const Icon(Icons.credit_card),
+              ),
+              const SizedBox(width: 12),
+            ],
           ),
         ],
       ),
@@ -300,11 +570,42 @@ class _HomePageState extends State<HomePage> {
                 });
               },
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(_bannerImages[index], fit: BoxFit.cover),
+                return GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                        backgroundColor: Colors.transparent,
+                        insetPadding: const EdgeInsets.all(16),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.asset(
+                                _bannerImages[index],
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: IconButton(
+                                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(_bannerImages[index], fit: BoxFit.cover),
+                    ),
                   ),
                 );
               },
@@ -313,7 +614,7 @@ class _HomePageState extends State<HomePage> {
           // INDIKATOR SLIDER
           Container(
             color: Colors.transparent,
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: EdgeInsets.zero,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
@@ -332,10 +633,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          const SizedBox(height: 30),
 
           // KONTAINER 1: GRID FITUR (4x2)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
             color: Colors.transparent,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,61 +650,64 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 8,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 0.85,
-                  ),
-                  itemBuilder: (context, index) {
-                    final feature = _features[index];
-                    return InkWell(
-                      onTap: () => _handleGridTap(feature['title']),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(14),
-                            decoration: BoxDecoration(
-                              color: feature['color'].withOpacity(0.08),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Icon(
-                              feature['icon'],
-                              color: feature['color'],
-                              size: 28,
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final itemWidth = (constraints.maxWidth - (3 * 12)) / 4;
+                    return Wrap(
+                      spacing: 12,
+                      runSpacing: 16,
+                      alignment: WrapAlignment.start,
+                      children: List.generate(8, (index) {
+                        final feature = _features[index];
+                        return SizedBox(
+                          width: itemWidth,
+                          child: InkWell(
+                            onTap: () => _handleGridTap(feature['title']),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                    color: feature['color'].withOpacity(0.08),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Icon(
+                                    feature['icon'],
+                                    color: feature['color'],
+                                    size: 28,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  feature['title'],
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            feature['title'],
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
+                        );
+                      }),
                     );
-                  },
+                  }
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 30),
 
           // KONTAINER 2: KONTEN DINAMIS
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Kategori $_selectedFeature',
+                  _selectedFeature == 'Pelatihan K3' ? 'Pelatihan Terdekat' : 'Kategori $_selectedFeature',
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -506,11 +811,28 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    final displaySchedules = _schedules.take(10).toList();
+    final now = DateTime.now();
+    final sortedSchedules = List<TrainingSchedule>.from(_schedules);
+    sortedSchedules.sort((a, b) {
+      DateTime dateA;
+      DateTime dateB;
+      try { dateA = DateTime.parse(a.tanggalStart); } catch (e) { dateA = DateTime.fromMillisecondsSinceEpoch(0); }
+      try { dateB = DateTime.parse(b.tanggalStart); } catch (e) { dateB = DateTime.fromMillisecondsSinceEpoch(0); }
+      
+      // Hitung selisih waktu mutlak dari sekarang (terdekat berarti selisihnya paling kecil)
+      final diffA = dateA.difference(now).abs();
+      final diffB = dateB.difference(now).abs();
+      
+      return diffA.compareTo(diffB);
+    });
+    
+    // Ambil 5 jadwal yang posisinya secara waktu paling dekat dengan hari ini
+    final displaySchedules = sortedSchedules.take(5).toList();
 
     return Column(
       children: [
         ListView.builder(
+          padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: displaySchedules.length,
@@ -522,6 +844,7 @@ class _HomePageState extends State<HomePage> {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Card(
+                margin: EdgeInsets.zero,
                 child: ListTile(
                 contentPadding: const EdgeInsets.all(12),
                 leading: ClipRRect(
@@ -599,10 +922,9 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ),
-        const SizedBox(height: 16),
         SizedBox(
           width: double.infinity,
-          child: OutlinedButton(
+          child: FilledButton(
             onPressed: () {
               Navigator.push(
                 context,

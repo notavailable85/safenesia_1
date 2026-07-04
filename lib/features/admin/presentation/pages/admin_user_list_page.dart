@@ -41,8 +41,8 @@ class _AdminUserListPageState extends State<AdminUserListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Users'),
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -56,7 +56,7 @@ class _AdminUserListPageState extends State<AdminUserListPage> {
                     return Card(
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: Colors.deepPurple.shade100,
+                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                           child: const Icon(Icons.person, color: Colors.deepPurple),
                         ),
                         title: Text(user.name),
@@ -108,7 +108,7 @@ class _AdminUserListPageState extends State<AdminUserListPage> {
                   },
                 ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           await Navigator.push(

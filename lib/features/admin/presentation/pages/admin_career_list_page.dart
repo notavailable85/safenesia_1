@@ -31,7 +31,7 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
     refreshCareers();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Career deleted')),
+        const SnackBar(content: Text('Lowongan berhasil dihapus')),
       );
     }
   }
@@ -40,14 +40,14 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Careers'),
-        backgroundColor: Colors.brown,
-        foregroundColor: Colors.white,
+        title: const Text('Kelola Karir K3'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : careers.isEmpty
-              ? const Center(child: Text('No Careers found'))
+              ? const Center(child: Text('Belum ada data karir'))
               : ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: careers.length,
@@ -55,9 +55,22 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
                     final career = careers[index];
                     return Card(
                       child: ListTile(
-                        leading: const Icon(Icons.work, color: Colors.brown),
-                        title: Text(career.title),
-                        subtitle: Text('${career.company} - ${career.location}'),
+                        leading: CircleAvatar(
+                          backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                          child: Icon(Icons.work, color: Theme.of(context).colorScheme.primary),
+                        ),
+                        title: Text(career.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${career.company} - ${career.location}'),
+                            Text(
+                              '${career.jobType} • ${career.experienceLevel}',
+                              style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        isThreeLine: true,
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -79,19 +92,19 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
                                 showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
-                                    title: const Text('Delete Career'),
-                                    content: const Text('Are you sure you want to delete this career?'),
+                                    title: const Text('Hapus Lowongan'),
+                                    content: const Text('Apakah Anda yakin ingin menghapus lowongan ini?'),
                                     actions: [
                                       TextButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: const Text('Cancel'),
+                                        child: const Text('Batal'),
                                       ),
                                       TextButton(
                                         onPressed: () {
                                           Navigator.pop(context);
                                           deleteCareer(career.id);
                                         },
-                                        child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                        child: const Text('Hapus', style: TextStyle(color: Colors.red)),
                                       ),
                                     ],
                                   ),
@@ -105,8 +118,8 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
                   },
                 ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.brown,
-        child: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
         onPressed: () async {
           await Navigator.push(
             context,
@@ -120,3 +133,4 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
     );
   }
 }
+

@@ -41,8 +41,8 @@ class _AdminNotificationListPageState extends State<AdminNotificationListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Notifications'),
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -105,7 +105,7 @@ class _AdminNotificationListPageState extends State<AdminNotificationListPage> {
                   },
                 ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           await Navigator.push(

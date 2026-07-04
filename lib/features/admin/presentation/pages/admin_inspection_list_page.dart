@@ -111,8 +111,8 @@ class _AdminInspectionListPageState extends State<AdminInspectionListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Riksa Uji'),
-        backgroundColor: Colors.orange,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
