@@ -36,7 +36,7 @@
 
 //       // -- Konfigurasi Global Font & Text --
 //       // Jika menggunakan Google Fonts (misal: Poppins)
-//       textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+//       textTheme: GoogleFonts.interTextTheme().copyWith(
 //         displayLarge: const TextStyle(
 //           color: textPrimaryColor,
 //           fontWeight: FontWeight.bold,

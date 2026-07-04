@@ -408,7 +408,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.only(left: 12, top: 12, right: 12, bottom: 100),
       itemCount: filteredSchedules.length,
       itemBuilder: (context, index) {
         final schedule = filteredSchedules[index];
@@ -545,7 +545,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                             training.namaPelatihan,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.inter(
                               color: AppColors.textPrimaryLight,
                               fontSize: 16,
                               fontWeight: FontWeight.normal,

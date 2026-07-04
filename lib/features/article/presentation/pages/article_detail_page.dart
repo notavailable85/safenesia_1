@@ -127,7 +127,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                   const SizedBox(height: 16),
                   Text(
                     widget.article.title,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),

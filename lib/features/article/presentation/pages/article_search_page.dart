@@ -54,14 +54,32 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
           autofocus: true,
           decoration: const InputDecoration(
             hintText: 'Cari artikel...',
-            border: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(color: Colors.white54, width: 1),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(color: Colors.white54, width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(color: Colors.white, width: 1.5),
+            ),
+            filled: true,
+            fillColor: Colors.white12,
             hintStyle: TextStyle(color: Colors.white70),
+            suffixIcon: Icon(
+              Icons.search,
+              color: Colors.white70,
+              size: 20,
+            ),
           ),
           style: const TextStyle(color: Colors.white, fontSize: 18),
           onChanged: _onSearchChanged,
         ),
-        backgroundColor: Colors.blue.shade800,
-        foregroundColor: Colors.white,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -110,7 +128,7 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
                           article.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -120,7 +138,7 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
                           child: Text(
                             article.category,
                             style: TextStyle(
-                              color: Colors.blue.shade800,
+                              color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
                             ),

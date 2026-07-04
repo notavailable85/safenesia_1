@@ -55,6 +55,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       canPop: false,
       onPopInvoked: _onPopInvoked,
       child: Scaffold(
+        extendBody: true, // Allow content to scroll behind the floating nav bar
         body: IndexedStack(
           index: _selectedIndex,
           children: _pages.asMap().entries.map((entry) {
@@ -64,28 +65,97 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             );
           }).toList(),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: (index) {
-            if (index == _selectedIndex) {
-              _navigatorKeys[index].currentState!.popUntil(
-                (route) => route.isFirst,
-              );
-            } else {
-              setState(() => _selectedIndex = index);
-            }
-          },
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'Pelatihan K3',
+        bottomNavigationBar: _buildModernBottomNavBar(),
+      ),
+    );
+  }
+
+  Widget _buildModernBottomNavBar() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final primaryColor = theme.primaryColor;
+    final navTheme = theme.bottomNavigationBarTheme;
+    final bgColor = navTheme.backgroundColor ?? Colors.white;
+    final selectedColor = navTheme.selectedItemColor ?? Colors.white;
+    final unselectedColor = navTheme.unselectedItemColor ?? Colors.white70;
+
+    return Container(
+      padding: EdgeInsets.only(
+        left: 12,
+        right: 12,
+        top: 8, // Dikurangi agar tinggi keseluruhan ~54px
+        bottom: 8 + MediaQuery.of(context).padding.bottom,
+      ),
+      decoration: BoxDecoration(
+        color: bgColor,
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? Colors.black26 : primaryColor.withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, -2), // Shadow points upwards
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavItem(0, Icons.home_rounded, 'Home', selectedColor, unselectedColor),
+          _buildNavItem(1, Icons.school_rounded, 'Pelatihan', selectedColor, unselectedColor),
+          _buildNavItem(2, Icons.work_rounded, 'Karir', selectedColor, unselectedColor),
+          _buildNavItem(3, Icons.person_rounded, 'Akun', selectedColor, unselectedColor),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(int index, IconData icon, String label, Color selectedColor, Color unselectedColor) {
+    final isSelected = _selectedIndex == index;
+
+    return GestureDetector(
+      onTap: () {
+        if (index == 0) {
+          _navigatorKeys[0].currentState?.popUntil((route) => route.isFirst);
+          if (_selectedIndex != 0) setState(() => _selectedIndex = 0);
+        } else if (index == _selectedIndex) {
+          _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+        } else {
+          setState(() => _selectedIndex = index);
+        }
+      },
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? selectedColor.withOpacity(0.2) : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? selectedColor : unselectedColor,
+              size: 22,
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Karir'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Akun'),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.easeOutCubic,
+              child: isSelected
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          color: selectedColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
           ],
         ),
       ),

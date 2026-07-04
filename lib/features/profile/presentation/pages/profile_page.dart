@@ -9,6 +9,7 @@ import 'package:safenesia_1/features/profile/presentation/pages/information/abou
 import 'package:safenesia_1/features/profile/presentation/pages/information/support_center_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_password_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_profile_page.dart';
+import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/theme_setting_page.dart';
 import 'package:safenesia_1/features/admin/presentation/pages/admin_dashboard_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -105,11 +106,19 @@ class _AccountPageState extends State<AccountPage> {
               children: [
                 Text(
                   _userName,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 Text(
                   _userEmail,
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white70,
+                  ),
                 ),
               ],
             ),
@@ -117,7 +126,7 @@ class _AccountPageState extends State<AccountPage> {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
         children: [
           // KONTAINER 1
           const Text(
@@ -202,6 +211,18 @@ class _AccountPageState extends State<AccountPage> {
                       MaterialPageRoute(builder: (c) => const EditProfilePage()),
                     );
                     _loadUserData(); // Reload after editing
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.color_lens),
+                  title: const Text('Tema Aplikasi'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (c) => const ThemeSettingPage()),
+                    );
                   },
                 ),
                 const Divider(height: 1),

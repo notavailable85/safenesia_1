@@ -7,6 +7,7 @@ import 'package:safenesia_1/features/admin/presentation/pages/admin_regulation_l
 import 'package:safenesia_1/features/admin/presentation/pages/admin_schedule_list_page.dart';
 import 'package:safenesia_1/features/admin/presentation/pages/admin_training_list_page.dart';
 import 'package:safenesia_1/features/admin/presentation/pages/admin_user_list_page.dart';
+import 'package:safenesia_1/features/admin/presentation/pages/admin_inspection_list_page.dart';
 
 class AdminDashboardPage extends StatelessWidget {
   const AdminDashboardPage({super.key});
@@ -20,7 +21,7 @@ class AdminDashboardPage extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: GridView.count(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
         crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
@@ -80,6 +81,13 @@ class AdminDashboardPage extends StatelessWidget {
             icon: Icons.people,
             color: Colors.deepPurple,
             page: const AdminUserListPage(),
+          ),
+          _buildDashboardCard(
+            context,
+            title: 'Inspections',
+            icon: Icons.precision_manufacturing,
+            color: Colors.orange,
+            page: const AdminInspectionListPage(),
           ),
         ],
       ),

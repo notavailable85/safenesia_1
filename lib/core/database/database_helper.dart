@@ -7,12 +7,13 @@ import 'package:safenesia_1/features/certification/models/certification_model.da
 import 'package:safenesia_1/features/career/models/career_model.dart';
 import 'package:safenesia_1/features/notification/models/notification_model.dart';
 import 'package:safenesia_1/features/regulation/models/regulation_model.dart';
+import 'package:safenesia_1/features/inspection/models/inspection_model.dart';
 import 'package:safenesia_1/features/auth/models/user_model.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static const _databaseName = "safenesia.db";
-  static const _databaseVersion = 9;
+  static const _databaseVersion = 11;
 
   static Database? _database;
 
@@ -73,6 +74,13 @@ class DatabaseHelper {
     if (oldVersion < 9) {
       await _createUsersTable(db);
     }
+    if (oldVersion < 10) {
+      await db.execute('DROP TABLE IF EXISTS regulations');
+      await _createRegulationsTable(db);
+    }
+    if (oldVersion < 11) {
+      await _createInspectionsTable(db);
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -102,6 +110,7 @@ CREATE TABLE articles (
     await _createCareersTable(db);
     await _createNotificationsTable(db);
     await _createRegulationsTable(db);
+    await _createInspectionsTable(db);
     await _createUsersTable(db);
   }
 
@@ -180,7 +189,12 @@ CREATE TABLE notifications (
 CREATE TABLE regulations (
   id TEXT PRIMARY KEY,
   category TEXT NOT NULL,
-  title TEXT NOT NULL
+  title TEXT NOT NULL,
+  nomor TEXT NOT NULL,
+  tahun TEXT NOT NULL,
+  deskripsi TEXT NOT NULL,
+  fileUrl TEXT NOT NULL,
+  isSaved INTEGER NOT NULL
 )
 ''');
     for (var reg in dummyRegulations) {
@@ -497,6 +511,46 @@ CREATE TABLE training_schedules (
   Future<int> deleteUser(String id) async {
     final db = await instance.database;
     return await db.delete('users', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ================= INSPECTION METHODS =================
+  Future _createInspectionsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE inspections (
+  id TEXT PRIMARY KEY,
+  companyName TEXT NOT NULL,
+  equipmentType TEXT NOT NULL,
+  location TEXT NOT NULL,
+  scheduledDate TEXT NOT NULL,
+  notes TEXT NOT NULL,
+  status TEXT NOT NULL
+)
+''');
+    for (var ins in dummyInspections) {
+      await db.insert('inspections', ins.toMap());
+    }
+  }
+
+  Future<InspectionModel> createInspection(InspectionModel inspection) async {
+    final db = await instance.database;
+    await db.insert('inspections', inspection.toMap());
+    return inspection;
+  }
+
+  Future<List<InspectionModel>> readAllInspections() async {
+    final db = await instance.database;
+    final result = await db.query('inspections', orderBy: 'ROWID DESC');
+    return result.map((json) => InspectionModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateInspection(InspectionModel inspection) async {
+    final db = await instance.database;
+    return db.update('inspections', inspection.toMap(), where: 'id = ?', whereArgs: [inspection.id]);
+  }
+
+  Future<int> deleteInspection(String id) async {
+    final db = await instance.database;
+    return await db.delete('inspections', where: 'id = ?', whereArgs: [id]);
   }
 
   Future close() async {

@@ -12,6 +12,8 @@ import 'package:safenesia_1/features/training/presentation/pages/training_list_p
 import 'package:safenesia_1/core/database/database_helper.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_detail_page.dart';
+import 'package:safenesia_1/features/inspection/presentation/pages/inspection_order_page.dart';
+import 'package:safenesia_1/features/inspection/presentation/pages/inspection_history_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ==========================================
@@ -210,6 +212,11 @@ class _HomePageState extends State<HomePage> {
         context,
         MaterialPageRoute(builder: (c) => const KarirPage()),
       );
+    } else if (title == 'Riksa Uji Alat') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (c) => const InspectionOrderPage()),
+      );
     } else {
       // Mengubah state Kontainer 2 (Maksimal 5 item yang tampil)
       setState(() => _selectedFeature = title);
@@ -242,11 +249,19 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     _userName,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                   Text(
                     _userEmail,
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white70,
+                    ),
                   ),
                 ],
               ),
@@ -271,11 +286,12 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: ListView(
+        padding: const EdgeInsets.only(bottom: 100),
         children: [
           // SLIDER BANNER
           Container(
             height: 180,
-            color: Colors.white,
+            color: Colors.transparent,
             child: PageView.builder(
               itemCount: _bannerImages.length,
               onPageChanged: (index) {
@@ -296,7 +312,7 @@ class _HomePageState extends State<HomePage> {
           ),
           // INDIKATOR SLIDER
           Container(
-            color: Colors.white,
+            color: Colors.transparent,
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -319,14 +335,14 @@ class _HomePageState extends State<HomePage> {
 
           // KONTAINER 1: GRID FITUR (4x2)
           Container(
-            padding: const EdgeInsets.all(16),
-            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: Colors.transparent,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Fitur Utama',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -349,10 +365,10 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: feature['color'].withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
+                              color: feature['color'].withOpacity(0.08),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             child: Icon(
                               feature['icon'],
@@ -377,7 +393,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          const Divider(thickness: 4, color: Color(0xFFF3F4F6)),
+          const SizedBox(height: 16),
 
           // KONTAINER 2: KONTEN DINAMIS
           Container(
@@ -387,7 +403,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   'Kategori $_selectedFeature',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -423,13 +439,32 @@ class _HomePageState extends State<HomePage> {
           ],
         );
       case 'Riksa Uji Alat':
-        return _buildList([
-          'Riksa Uji Crane',
-          'Riksa Uji Boiler',
-          'Riksa Uji Lift',
-          'Riksa Uji Genset',
-          'Riksa Uji Penyalur Petir',
-        ], (t) => _navDetailRiksaUji(t));
+        return Column(
+          children: [
+            _buildList([
+              'Pesan Riksa Uji Crane',
+              'Pesan Riksa Uji Boiler',
+              'Pesan Riksa Uji Lift',
+              'Pesan Riksa Uji Genset',
+              'Pesan Riksa Uji Penyalur Petir',
+            ], (t) => _navDetailRiksaUji(t)),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const InspectionHistoryPage(),
+                    ),
+                  );
+                },
+                child: const Text('Lihat Riwayat Pesanan'),
+              ),
+            ),
+          ],
+        );
       case 'Perpanjangan':
         return Column(
           children: [
@@ -484,9 +519,10 @@ class _HomePageState extends State<HomePage> {
             final training = schedule.trainingData;
             if (training == null) return const SizedBox();
 
-            return Card(
-              margin: const EdgeInsets.only(bottom: 12),
-              child: ListTile(
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Card(
+                child: ListTile(
                 contentPadding: const EdgeInsets.all(12),
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
@@ -559,6 +595,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
+              ),
             );
           },
         ),
@@ -603,12 +640,14 @@ class _HomePageState extends State<HomePage> {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length > 5 ? 5 : items.length, // Maksimal 5
-      itemBuilder: (context, i) => Card(
-        margin: const EdgeInsets.only(bottom: 8),
-        child: ListTile(
+      itemBuilder: (context, i) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Card(
+          child: ListTile(
           title: Text(items[i]),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => onTap(items[i]),
+        ),
         ),
       ),
     );
@@ -620,9 +659,10 @@ class _HomePageState extends State<HomePage> {
     String price,
     VoidCallback onTap,
   ) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Card(
+        child: ListTile(
         contentPadding: const EdgeInsets.all(16),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
@@ -634,6 +674,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         onTap: onTap,
+      ),
       ),
     );
   }
@@ -648,7 +689,7 @@ class _HomePageState extends State<HomePage> {
   );
   void _navDetailRiksaUji(String title) => Navigator.push(
     context,
-    MaterialPageRoute(builder: (c) => DetailRiksaUjiPage(title: title)),
+    MaterialPageRoute(builder: (c) => const InspectionOrderPage()),
   );
   void _navDetailPerpanjangan(String title) => Navigator.push(
     context,

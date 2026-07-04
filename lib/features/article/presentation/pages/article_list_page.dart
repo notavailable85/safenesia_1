@@ -37,7 +37,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
       appBar: AppBar(
         title: Text(
           'Artikel K3',
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontWeight: FontWeight.w600),
         ),
         actions: [
           IconButton(
@@ -204,7 +204,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
                                   const SizedBox(height: 8),
                                   Text(
                                     article.title,
-                                    style: GoogleFonts.poppins(
+                                    style: GoogleFonts.inter(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),

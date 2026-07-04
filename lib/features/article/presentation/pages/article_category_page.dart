@@ -88,7 +88,7 @@ class ArticleCategoryPage extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     category,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
                       color: color,
                     ),

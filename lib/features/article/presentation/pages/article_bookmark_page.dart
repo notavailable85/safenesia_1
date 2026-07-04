@@ -94,7 +94,7 @@ class _ArticleBookmarkPageState extends State<ArticleBookmarkPage> {
                           article.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),

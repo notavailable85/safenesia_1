@@ -162,7 +162,7 @@ class _KarirPageState extends State<KarirPage> {
                       
                       final careers = snapshot.data!;
                       return ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
                         itemCount: careers.length,
                         itemBuilder: (c, i) => _buildJobCard(careers[i]),
                       );
@@ -189,7 +189,7 @@ class _KarirPageState extends State<KarirPage> {
                 }
                 
                 return ListView.builder(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
                   itemCount: savedCareers.length,
                   itemBuilder: (c, i) => _buildJobCard(savedCareers[i]),
                 );

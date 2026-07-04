@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/regulation/models/regulation_model.dart';
+import 'package:safenesia_1/features/regulation/presentation/pages/regulation_detail_page.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
 
-// ==========================================
-// 4. ARTIKEL, REGULASI, & KARIR PAGES
-// ==========================================
 class RegulasiPage extends StatefulWidget {
   const RegulasiPage({super.key});
 
@@ -13,65 +12,259 @@ class RegulasiPage extends StatefulWidget {
 }
 
 class _RegulasiPageState extends State<RegulasiPage> {
-  late Future<List<RegulationModel>> _regulationsFuture;
+  List<RegulationModel> _allRegulations = [];
+  List<RegulationModel> _filteredRegulations = [];
+  bool _isLoading = true;
+  String _searchQuery = '';
+  String _selectedCategory = 'Semua';
+  List<String> _categories = ['Semua'];
 
   @override
   void initState() {
     super.initState();
-    _regulationsFuture = DatabaseHelper.instance.readAllRegulations();
+    _loadRegulations();
+  }
+
+  Future<void> _loadRegulations() async {
+    final regulations = await DatabaseHelper.instance.readAllRegulations();
+    
+    // Extract unique categories
+    final Set<String> cats = {'Semua'};
+    for (var reg in regulations) {
+      cats.add(reg.category);
+    }
+
+    setState(() {
+      _allRegulations = regulations;
+      _filteredRegulations = regulations;
+      _categories = cats.toList();
+      _isLoading = false;
+    });
+  }
+
+  void _filterData() {
+    setState(() {
+      _filteredRegulations = _allRegulations.where((reg) {
+        final matchesCategory = _selectedCategory == 'Semua' || reg.category == _selectedCategory;
+        final query = _searchQuery.toLowerCase();
+        final matchesSearch = query.isEmpty || 
+                              reg.title.toLowerCase().contains(query) || 
+                              reg.nomor.toLowerCase().contains(query) || 
+                              reg.tahun.toLowerCase().contains(query);
+        return matchesCategory && matchesSearch;
+      }).toList();
+    });
+  }
+
+  void _onSearchChanged(String query) {
+    _searchQuery = query;
+    _filterData();
+  }
+
+  void _onCategorySelected(String category) {
+    _selectedCategory = category;
+    _filterData();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Regulasi K3')),
-      body: FutureBuilder<List<RegulationModel>>(
-        future: _regulationsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Tidak ada regulasi.'));
-          }
-
-          final regulations = snapshot.data!;
-          
-          // Group by category
-          final Map<String, List<RegulationModel>> grouped = {};
-          for (var reg in regulations) {
-            if (!grouped.containsKey(reg.category)) {
-              grouped[reg.category] = [];
-            }
-            grouped[reg.category]!.add(reg);
-          }
-
-          final categories = grouped.keys.toList();
-
-          return ListView.builder(
-            itemCount: categories.length,
-            itemBuilder: (context, i) {
-              final category = categories[i];
-              final categoryRegulations = grouped[category]!;
-              
-              return ExpansionTile(
-                title: Text(
-                  category,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                children: categoryRegulations.map((reg) => ListTile(
-                  leading: const Icon(Icons.picture_as_pdf, color: Colors.red),
-                  title: Text(reg.title),
-                  onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Menampilkan PDF ${reg.title}...')),
-                  ),
-                )).toList(),
-              );
-            },
-          );
-        },
+      appBar: AppBar(
+        title: TextField(
+          decoration: const InputDecoration(
+            hintText: 'Cari regulasi...',
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(color: Colors.white54, width: 1),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(color: Colors.white54, width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderSide: BorderSide(color: Colors.white, width: 1.5),
+            ),
+            filled: true,
+            fillColor: Colors.white12,
+            hintStyle: TextStyle(color: Colors.white70),
+            suffixIcon: Icon(
+              Icons.search,
+              color: Colors.white70,
+              size: 20,
+            ),
+          ),
+          style: const TextStyle(color: Colors.white, fontSize: 16),
+          onChanged: _onSearchChanged,
+        ),
       ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                // Horizontal Categories
+                Container(
+                  height: 50,
+                  margin: const EdgeInsets.only(top: 12, bottom: 8),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: _categories.length,
+                    itemBuilder: (context, index) {
+                      final category = _categories[index];
+                      final isSelected = category == _selectedCategory;
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          label: Text(category),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            if (selected) _onCategorySelected(category);
+                          },
+                          backgroundColor: theme.scaffoldBackgroundColor,
+                          selectedColor: theme.primaryColor,
+                          labelStyle: TextStyle(
+                            color: isSelected ? Colors.white : theme.textTheme.bodyMedium?.color,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                // List of Regulations
+                Expanded(
+                  child: _filteredRegulations.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.gavel, size: 80, color: Colors.grey.shade300),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Regulasi tidak ditemukan',
+                                style: TextStyle(color: Colors.grey.shade500),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
+                          itemCount: _filteredRegulations.length,
+                          itemBuilder: (context, index) {
+                            final reg = _filteredRegulations[index];
+                            return Card(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(16),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RegulationDetailPage(regulation: reg),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // Icon PDF
+                                      Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: const Icon(Icons.picture_as_pdf, color: Colors.red, size: 32),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      // Content
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              reg.title,
+                                              style: GoogleFonts.inter(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Text(
+                                              '${reg.nomor} - Tahun ${reg.tahun}',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.grey.shade600,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                              decoration: BoxDecoration(
+                                                color: theme.primaryColor.withOpacity(0.1),
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                              child: Text(
+                                                reg.category,
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: theme.primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      // Bookmark
+                                      IconButton(
+                                        icon: Icon(
+                                          reg.isSaved == 1 ? Icons.bookmark : Icons.bookmark_border,
+                                          color: reg.isSaved == 1 ? Colors.orange : Colors.grey.shade400,
+                                        ),
+                                        onPressed: () async {
+                                          // Toggle bookmark
+                                          final newReg = RegulationModel(
+                                            id: reg.id,
+                                            category: reg.category,
+                                            title: reg.title,
+                                            nomor: reg.nomor,
+                                            tahun: reg.tahun,
+                                            deskripsi: reg.deskripsi,
+                                            fileUrl: reg.fileUrl,
+                                            isSaved: reg.isSaved == 1 ? 0 : 1,
+                                          );
+                                          await DatabaseHelper.instance.updateRegulation(newReg);
+                                          _loadRegulations(); // Refresh
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ],
+            ),
     );
   }
 }

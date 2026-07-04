@@ -154,7 +154,7 @@ class _RegisterPageState extends State<RegisterPage> {
           children: [
             Text(
               'Buat Akun Baru',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.inter(
                 textStyle: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,

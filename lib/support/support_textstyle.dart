@@ -3,7 +3,7 @@
 
 // Text(
 //   'Flutter Developer',
-//   style: GoogleFonts.poppins(
+//   style: GoogleFonts.inter(
 //     fontSize: 24.0,
 //     fontWeight: FontWeight.bold,
 //     fontStyle: FontStyle.italic,

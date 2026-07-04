@@ -15,12 +15,20 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
   final _formKey = GlobalKey<FormState>();
   late String title;
   late String category;
+  late String nomor;
+  late String tahun;
+  late String deskripsi;
+  late String fileUrl;
 
   @override
   void initState() {
     super.initState();
     title = widget.regulation?.title ?? '';
     category = widget.regulation?.category ?? '';
+    nomor = widget.regulation?.nomor ?? '';
+    tahun = widget.regulation?.tahun ?? '';
+    deskripsi = widget.regulation?.deskripsi ?? '';
+    fileUrl = widget.regulation?.fileUrl ?? '';
   }
 
   void saveRegulation() async {
@@ -29,6 +37,10 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
         id: widget.regulation?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
         title: title,
         category: category,
+        nomor: nomor,
+        tahun: tahun,
+        deskripsi: deskripsi,
+        fileUrl: fileUrl,
       );
 
       if (widget.regulation != null) {
@@ -66,6 +78,39 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
               decoration: const InputDecoration(labelText: 'Category', border: OutlineInputBorder()),
               validator: (value) => value == null || value.isEmpty ? 'Required' : null,
               onChanged: (value) => category = value,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    initialValue: nomor,
+                    decoration: const InputDecoration(labelText: 'Nomor (e.g. UU No 1)', border: OutlineInputBorder()),
+                    onChanged: (value) => nomor = value,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    initialValue: tahun,
+                    decoration: const InputDecoration(labelText: 'Tahun', border: OutlineInputBorder()),
+                    onChanged: (value) => tahun = value,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              initialValue: deskripsi,
+              maxLines: 3,
+              decoration: const InputDecoration(labelText: 'Deskripsi', border: OutlineInputBorder()),
+              onChanged: (value) => deskripsi = value,
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              initialValue: fileUrl,
+              decoration: const InputDecoration(labelText: 'URL File PDF', border: OutlineInputBorder()),
+              onChanged: (value) => fileUrl = value,
             ),
             const SizedBox(height: 32),
             ElevatedButton(

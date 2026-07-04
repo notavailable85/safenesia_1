@@ -164,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 30),
               Text(
                 'Selamat Datang!',
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.inter(
                   textStyle: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,

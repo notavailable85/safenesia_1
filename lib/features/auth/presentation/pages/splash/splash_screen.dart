@@ -74,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
         AppSizes.gapH16,
         Text(
           'Hi, Safetizen!',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.inter(
             textStyle: TextStyle(
               color: AppColors.primaryDark,
               fontSize: 14,
