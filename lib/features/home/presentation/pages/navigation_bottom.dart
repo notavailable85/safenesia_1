@@ -56,7 +56,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: _onPopInvoked,
+      onPopInvokedWithResult: (didPop, dynamic result) => _onPopInvoked(didPop),
       child: Scaffold(
         extendBody: false,
         body: IndexedStack(
@@ -93,7 +93,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         color: bgColor,
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black26 : primaryColor.withOpacity(0.3),
+            color: isDark ? Colors.black26 : primaryColor.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, -2), // Shadow points upwards
           ),
@@ -132,7 +132,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         curve: Curves.easeOutCubic,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? selectedColor.withOpacity(0.2) : Colors.transparent,
+          color: isSelected ? selectedColor.withValues(alpha: 0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(

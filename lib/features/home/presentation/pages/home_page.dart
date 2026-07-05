@@ -14,8 +14,6 @@ import 'package:safenesia_1/features/training/models/training_schedule_model.dar
 import 'package:safenesia_1/features/training/presentation/pages/training_detail_page.dart';
 import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:safenesia_1/features/inspection/presentation/pages/inspection_order_page.dart';
 import 'package:safenesia_1/features/inspection/presentation/pages/inspection_history_page.dart';
 import 'package:safenesia_1/core/widgets/custom_download_button.dart';
@@ -60,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
-    if (mounted) {
+    if (context.mounted) {
       setState(() {
         _userName = prefs.getString('user_name') ?? 'Pengguna';
         _userEmail = prefs.getString('user_email') ?? '';
@@ -72,14 +70,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadSchedules() async {
     try {
       final data = await DatabaseHelper.instance.readAllSchedulesWithTraining();
-      if (mounted) {
+      if (context.mounted) {
         setState(() {
           _schedules = data;
           _isLoadingSchedules = false;
         });
       }
     } catch (e) {
-      if (mounted) {
+      if (context.mounted) {
         setState(() => _isLoadingSchedules = false);
       }
     }
@@ -143,13 +141,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.4),
+                      color: Colors.black.withValues(alpha: 0.4),
                       blurRadius: 20,
                       offset: const Offset(0, 15),
                     ),
                   ],
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     width: 1.5,
                   ),
                 ),
@@ -177,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                             Text(
                               'PLATINUM',
                               style: TextStyle(
-                                color: const Color(0xFF222222).withOpacity(0.7),
+                                color: const Color(0xFF222222).withValues(alpha: 0.7),
                                 fontSize: 8,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 2,
@@ -235,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'CARDHOLDER',
                             style: TextStyle(
-                              color: const Color(0xFF222222).withOpacity(0.5),
+                              color: const Color(0xFF222222).withValues(alpha: 0.5),
                               fontSize: 8,
                               letterSpacing: 1,
                             ),
@@ -263,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'VALID THRU',
                             style: TextStyle(
-                              color: const Color(0xFF222222).withOpacity(0.5),
+                              color: const Color(0xFF222222).withValues(alpha: 0.5),
                               fontSize: 8,
                               letterSpacing: 1,
                             ),
@@ -306,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                   if (!hasAccess) {
                     final request = await Gal.requestAccess(toAlbum: true);
                     if (!request) {
-                      if (mounted) {
+                      if (context.mounted) {
                         Navigator.pop(context); // Tutup loading
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Izin penyimpanan diperlukan untuk mengunduh kartu')),
@@ -328,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                     name: 'Safenesia_Membercard_${DateTime.now().millisecondsSinceEpoch}',
                   );
                   
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.pop(context); // Tutup loading
                   
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -336,7 +334,7 @@ class _HomePageState extends State<HomePage> {
                   );
                   
                 } catch (e) {
-                  if (mounted) {
+                  if (context.mounted) {
                     Navigator.pop(context); // Tutup loading
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Gagal mengunduh kartu: $e')),
@@ -425,7 +423,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         CircleAvatar(
           radius: 25,
-          backgroundColor: color.withOpacity(0.1),
+          backgroundColor: color.withValues(alpha: 0.1),
           child: Icon(icon, color: color),
         ),
         const SizedBox(height: 8),
@@ -662,7 +660,7 @@ class _HomePageState extends State<HomePage> {
                                 Container(
                                   padding: const EdgeInsets.all(14),
                                   decoration: BoxDecoration(
-                                    color: feature['color'].withOpacity(0.08),
+                                    color: feature['color'].withValues(alpha: 0.08),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Icon(
@@ -1014,10 +1012,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _navDetailPelatihan(String title) => Navigator.push(
-    context,
-    MaterialPageRoute(builder: (c) => DetailPelatihanPage(title: title)),
-  );
+
   void _navDetailSertifikasi(String title) => Navigator.push(
     context,
     MaterialPageRoute(builder: (c) => DetailSertifikasiPage(title: title)),

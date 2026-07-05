@@ -31,7 +31,7 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
 
   Future<void> _saveColor() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('app_theme_color', appThemeNotifier.value.value);
+    await prefs.setInt('app_theme_color', appThemeNotifier.value.toARGB32());
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Warna Tema berhasil diubah')),
@@ -153,7 +153,7 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
                     enabledThumbRadius: 14.0,
                     elevation: 4.0,
                   ),
-                  overlayColor: Colors.white.withOpacity(0.3),
+                  overlayColor: Colors.white.withValues(alpha: 0.3),
                 ),
                 child: Slider(
                   value: _currentHue,

@@ -203,24 +203,21 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
               _buildTextField(_kodePelatihanController, 'Kode Pelatihan'),
               _buildTextField(_kodeBidangController, 'Kode Bidang'),
               
-              DropdownButtonFormField<String>(
-                value: _selectedBidang,
+              DropdownButtonFormField(initialValue: _selectedBidang,
                 decoration: const InputDecoration(labelText: 'Bidang / Kategori', border: OutlineInputBorder()),
                 items: _bidangList.map((String b) => DropdownMenuItem(value: b, child: Text(b))).toList(),
                 onChanged: (val) => setState(() => _selectedBidang = val!),
               ),
               const SizedBox(height: 16),
 
-              DropdownButtonFormField<String>(
-                value: _selectedSertifikasi,
+              DropdownButtonFormField(initialValue: _selectedSertifikasi,
                 decoration: const InputDecoration(labelText: 'Sertifikasi', border: OutlineInputBorder()),
                 items: _sertifikasiList.map((String s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
                 onChanged: (val) => setState(() => _selectedSertifikasi = val!),
               ),
               const SizedBox(height: 16),
 
-              DropdownButtonFormField<String>(
-                value: _selectedStatus,
+              DropdownButtonFormField(initialValue: _selectedStatus,
                 decoration: const InputDecoration(labelText: 'Status', border: OutlineInputBorder()),
                 items: _statusList.map((String s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
                 onChanged: (val) => setState(() => _selectedStatus = val!),

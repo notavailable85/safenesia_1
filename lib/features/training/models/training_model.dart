@@ -117,26 +117,8 @@ class Training {
 
 // Data Dummy Awal
 List<Training> getDummyTrainings() {
-  final now = DateTime.now();
-
-  String getShortMonthName(int month) {
-    const months = [
-      '',
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'Mei',
-      'Jun',
-      'Jul',
-      'Ags',
-      'Sep',
-      'Okt',
-      'Nov',
-      'Des',
-    ];
-    return months[month];
-  }
+  
+  
 
   return [
     // ahli k3 umum

@@ -94,7 +94,7 @@ class _SearchPageState extends State<SearchPage> {
                           label: Text(p),
                           backgroundColor: Theme.of(
                             context,
-                          ).primaryColor.withOpacity(0.1),
+                          ).primaryColor.withValues(alpha: 0.1),
                           side: BorderSide.none,
                         ),
                       )

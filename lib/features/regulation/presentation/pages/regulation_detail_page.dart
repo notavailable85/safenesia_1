@@ -80,7 +80,7 @@ class RegulationDetailPage extends StatelessWidget {
                   : regulation.deskripsi,
               style: theme.textTheme.bodyLarge?.copyWith(
                 height: 1.5,
-                color: theme.textTheme.bodyLarge?.color?.withOpacity(0.8),
+                color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.8),
               ),
             ),
             const SizedBox(height: 32),

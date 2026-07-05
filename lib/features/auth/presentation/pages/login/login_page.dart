@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -138,12 +137,11 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     // Login berhasil
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-      );
-    }
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (c) => const MainNavigationScreen()),
+    );
   }
 
   @override
@@ -236,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(
                       color: Theme.of(
                         context,
-                      ).colorScheme.onSurface.withOpacity(0.5),
+                      ).colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ),
                 ),
@@ -271,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             if (googleUser == null) {
                               // Pengguna membatalkan proses login
-                              if (mounted) {
+                              if (context.mounted) {
                                 setState(() {
                                   _isLoadingGoogle = false;
                                 });
@@ -296,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                               DateTime.now().millisecondsSinceEpoch,
                             );
 
-                            if (mounted) {
+                            if (context.mounted) {
                               setState(() {
                                 _isLoadingGoogle = false;
                               });
@@ -318,7 +316,7 @@ class _LoginPageState extends State<LoginPage> {
                               );
                             }
                           } catch (error) {
-                            if (mounted) {
+                            if (context.mounted) {
                               setState(() {
                                 _isLoadingGoogle = false;
                               });

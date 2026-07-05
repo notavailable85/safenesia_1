@@ -45,32 +45,32 @@ class _AdminInspectionListPageState extends State<AdminInspectionListPage> {
   void _showStatusDialog(InspectionModel ins) {
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (dialogContext) {
         return AlertDialog(
           title: const Text('Update Status'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: ['Pending', 'On Progress', 'Completed', 'Rejected']
                 .map(
-                  (status) => RadioListTile<String>(
+                  (status) => ListTile(
                     title: Text(status),
-                    value: status,
-                    groupValue: ins.status,
-                    onChanged: (val) async {
-                      if (val != null) {
-                        final updated = InspectionModel(
-                          id: ins.id,
-                          companyName: ins.companyName,
-                          equipmentType: ins.equipmentType,
-                          location: ins.location,
-                          scheduledDate: ins.scheduledDate,
-                          notes: ins.notes,
-                          status: val,
-                        );
-                        await DatabaseHelper.instance.updateInspection(updated);
-                        Navigator.pop(context);
-                        _loadData();
-                      }
+                    trailing: ins.status == status
+                        ? const Icon(Icons.check, color: Colors.blue)
+                        : null,
+                    onTap: () async {
+                      final updated = InspectionModel(
+                        id: ins.id,
+                        companyName: ins.companyName,
+                        equipmentType: ins.equipmentType,
+                        location: ins.location,
+                        scheduledDate: ins.scheduledDate,
+                        notes: ins.notes,
+                        status: status,
+                      );
+                      await DatabaseHelper.instance.updateInspection(updated);
+                      if (!dialogContext.mounted) return;
+                      Navigator.pop(dialogContext);
+                      _loadData();
                     },
                   ),
                 )

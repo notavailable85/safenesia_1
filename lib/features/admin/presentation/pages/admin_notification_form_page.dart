@@ -75,7 +75,7 @@ class _AdminNotificationFormPageState extends State<AdminNotificationFormPage> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: type,
+              initialValue: type,
               decoration: const InputDecoration(labelText: 'Type', border: OutlineInputBorder()),
               items: notificationTypes.map((t) {
                 return DropdownMenuItem(value: t, child: Text(t));

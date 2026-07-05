@@ -87,24 +87,24 @@ class AppThemes {
       // Pengaturan Tombol Global (ElevatedButton)
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) return disabledColor;
-            if (states.contains(MaterialState.pressed)) return pressedColor;
-            if (states.contains(MaterialState.hovered)) return hoverColor;
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) return disabledColor;
+            if (states.contains(WidgetState.pressed)) return pressedColor;
+            if (states.contains(WidgetState.hovered)) return hoverColor;
             return customPrimary; // Normal
           }),
-          foregroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) return disabledTextColor;
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) return disabledTextColor;
             return Colors.white;
           }),
-          elevation: MaterialStateProperty.all(0),
-          padding: MaterialStateProperty.all(
+          elevation: WidgetStateProperty.all(0),
+          padding: WidgetStateProperty.all(
             const EdgeInsets.symmetric(vertical: AppSizes.md, horizontal: AppSizes.lg),
           ),
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
-          textStyle: MaterialStateProperty.all(
+          textStyle: WidgetStateProperty.all(
             GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
           ),
         ),
@@ -113,14 +113,14 @@ class AppThemes {
       // Segmented Button Theme
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-            if (states.contains(MaterialState.selected)) {
+          backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.selected)) {
               return customPrimary;
             }
             return null;
           }),
-          foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-            if (states.contains(MaterialState.selected)) {
+          foregroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.selected)) {
               return Colors.white;
             }
             return null;
@@ -252,24 +252,24 @@ class AppThemes {
 
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) return disabledColor;
-            if (states.contains(MaterialState.pressed)) return pressedColor;
-            if (states.contains(MaterialState.hovered)) return hoverColor;
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) return disabledColor;
+            if (states.contains(WidgetState.pressed)) return pressedColor;
+            if (states.contains(WidgetState.hovered)) return hoverColor;
             return customPrimary;
           }),
-          foregroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) return disabledTextColor;
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) return disabledTextColor;
             return Colors.white;
           }),
-          elevation: MaterialStateProperty.all(0),
-          padding: MaterialStateProperty.all(
+          elevation: WidgetStateProperty.all(0),
+          padding: WidgetStateProperty.all(
             const EdgeInsets.symmetric(vertical: AppSizes.md, horizontal: AppSizes.lg),
           ),
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
-          textStyle: MaterialStateProperty.all(
+          textStyle: WidgetStateProperty.all(
             GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
           ),
         ),
@@ -277,14 +277,14 @@ class AppThemes {
 
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-            if (states.contains(MaterialState.selected)) {
+          backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.selected)) {
               return customPrimary;
             }
             return null;
           }),
-          foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-            if (states.contains(MaterialState.selected)) {
+          foregroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.selected)) {
               return Colors.white;
             }
             return Colors.white; // Unselected is white in dark mode

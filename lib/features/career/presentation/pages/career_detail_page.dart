@@ -136,7 +136,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
             // Header Section
             Container(
               padding: const EdgeInsets.all(24),
-              color: primaryColor.withOpacity(0.05),
+              color: primaryColor.withValues(alpha: 0.05),
               child: Row(
                 children: [
                   Container(
@@ -147,7 +147,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         )
@@ -256,7 +256,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               offset: const Offset(0, -4),
               blurRadius: 10,
             )

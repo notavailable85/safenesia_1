@@ -94,7 +94,6 @@ class DatabaseHelper {
   Future _createDB(Database db, int version) async {
     const idType = 'TEXT PRIMARY KEY';
     const textType = 'TEXT NOT NULL';
-    const intType = 'INTEGER NOT NULL';
 
     await db.execute('''
 CREATE TABLE articles (

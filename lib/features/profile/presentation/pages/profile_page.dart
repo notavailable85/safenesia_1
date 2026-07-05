@@ -45,7 +45,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
-    if (mounted) {
+    if (context.mounted) {
       setState(() {
         _userName = prefs.getString('user_name') ?? 'Pengguna';
         _userEmail = prefs.getString('user_email') ?? '';
@@ -334,7 +334,7 @@ class _AccountPageState extends State<AccountPage> {
               final prefs = await SharedPreferences.getInstance();
               await prefs.setBool('is_logged_in', false);
               
-              if (mounted) {
+              if (context.mounted) {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (c) => const AuthWrapper()),

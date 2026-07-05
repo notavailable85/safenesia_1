@@ -56,7 +56,7 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
                     return Card(
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                          backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                           child: Icon(Icons.work, color: Theme.of(context).colorScheme.primary),
                         ),
                         title: Text(career.title, style: const TextStyle(fontWeight: FontWeight.bold)),

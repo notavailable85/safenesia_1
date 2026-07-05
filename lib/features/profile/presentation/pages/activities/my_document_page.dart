@@ -34,8 +34,7 @@ class _MyDocumentsPageState extends State<MyDocumentsPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              DropdownButtonFormField<String>(
-                value: selectedType,
+              DropdownButtonFormField(initialValue: selectedType,
                 items: docTypes
                     .map((t) => DropdownMenuItem(value: t, child: Text(t)))
                     .toList(),

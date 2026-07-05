@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:safenesia_1/core/constants/app_assets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -113,15 +112,14 @@ class _RegisterPageState extends State<RegisterPage> {
     await prefs.setString('registered_email', email);
     await prefs.setString('registered_password', password);
 
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Registrasi berhasil! Silakan login.')),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const VerifyEmailPage()),
-      );
-    }
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Registrasi berhasil! Silakan login.')),
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (c) => const VerifyEmailPage()),
+    );
   }
 
   @override
@@ -161,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Text(
               'Lengkapi form di bawah ini untuk mendaftar',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
             ),
             const SizedBox(height: 32),
@@ -227,7 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Text(
                   'ATAU', 
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5)
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)
                   ),
                 ),
               ),
@@ -259,7 +257,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               await googleSignIn.signIn();
 
                           if (googleUser == null) {
-                            if (mounted) {
+                            if (context.mounted) {
                               setState(() {
                                 _isLoadingGoogle = false;
                               });
@@ -275,7 +273,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           );
                           await prefs.setString('user_email', googleUser.email);
 
-                          if (mounted) {
+                          if (context.mounted) {
                             setState(() {
                               _isLoadingGoogle = false;
                             });
@@ -296,7 +294,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             );
                           }
                         } catch (error) {
-                          if (mounted) {
+                          if (context.mounted) {
                             setState(() {
                               _isLoadingGoogle = false;
                             });

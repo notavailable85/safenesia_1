@@ -22,8 +22,9 @@ class TrainingDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final trainingData = scheduleData.trainingData;
-    if (trainingData == null)
+    if (trainingData == null) {
       return const Scaffold(body: Center(child: Text('Data error')));
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text(trainingData.namaPelatihan)),

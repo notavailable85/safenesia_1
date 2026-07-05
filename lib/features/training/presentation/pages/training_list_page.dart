@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:safenesia_1/core/constants/app_colors.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_detail_page.dart';
 
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
@@ -107,24 +106,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
     return months[month];
   }
 
-  String _getShortMonthName(int month) {
-    const months = [
-      '',
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'Mei',
-      'Jun',
-      'Jul',
-      'Ags',
-      'Sep',
-      'Okt',
-      'Nov',
-      'Des',
-    ];
-    return months[month];
-  }
+  
 
   // Dummy Data has been removed and replaced with SQLite integration.
 
@@ -158,7 +140,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       height: 5,
                       margin: const EdgeInsets.only(bottom: 24),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
@@ -178,7 +160,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.05),
+                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
                           shape: BoxShape.circle,
                         ),
                         child: IconButton(
@@ -215,7 +197,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                           }
                         },
                         selectedColor: Theme.of(context).colorScheme.primary,
-                        backgroundColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.05),
+                        backgroundColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
                         labelStyle: TextStyle(
                           color: isSelected 
                               ? Theme.of(context).colorScheme.onPrimary 
@@ -246,12 +228,12 @@ class _TrainingListPageState extends State<TrainingListPage> {
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     isExpanded: true,
-                    value: _selectedKategori,
+                    initialValue: _selectedKategori,
                     icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).colorScheme.onSurfaceVariant),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.05),
+                      fillColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -290,12 +272,12 @@ class _TrainingListPageState extends State<TrainingListPage> {
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     isExpanded: true,
-                    value: _selectedSertifikasi,
+                    initialValue: _selectedSertifikasi,
                     icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).colorScheme.onSurfaceVariant),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.05),
+                      fillColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -334,12 +316,12 @@ class _TrainingListPageState extends State<TrainingListPage> {
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     isExpanded: true,
-                    value: _selectedMetode,
+                    initialValue: _selectedMetode,
                     icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).colorScheme.onSurfaceVariant),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.05),
+                      fillColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -435,7 +417,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       BoxShadow(
                         color: Theme.of(context).brightness == Brightness.dark
                             ? Colors.black26
-                            : Theme.of(context).primaryColor.withOpacity(0.3),
+                            : Theme.of(context).primaryColor.withValues(alpha: 0.3),
                         blurRadius: 15,
                         offset: const Offset(
                           0,
@@ -468,7 +450,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                         .white, // Teks putih saat aktif karena indikator primary
                     unselectedLabelColor: Theme.of(
                       context,
-                    ).colorScheme.onSurface.withOpacity(0.6),
+                    ).colorScheme.onSurface.withValues(alpha: 0.6),
                     labelStyle: GoogleFonts.inter(
                       fontSize: 14, // Perbesar fontsize
                       fontWeight: FontWeight.w500,
@@ -568,11 +550,11 @@ class _TrainingListPageState extends State<TrainingListPage> {
             border: Border.all(
               color: Theme.of(
                 context,
-              ).colorScheme.outlineVariant.withOpacity(0.3),
+              ).colorScheme.outlineVariant.withValues(alpha: 0.3),
             ),
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).shadowColor.withOpacity(0.04),
+                color: Theme.of(context).shadowColor.withValues(alpha: 0.04),
                 blurRadius: 15,
                 offset: const Offset(0, 5),
               ),
@@ -670,7 +652,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       thickness: 1,
                       color: Theme.of(
                         context,
-                      ).colorScheme.outlineVariant.withOpacity(0.2),
+                      ).colorScheme.outlineVariant.withValues(alpha: 0.2),
                     ),
                     const SizedBox(height: 14),
 

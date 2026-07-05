@@ -26,7 +26,7 @@ class ForgotPasswordPage extends StatelessWidget {
             Text(
               'Masukkan email yang terdaftar, kami akan mengirimkan kode OTP untuk mereset password Anda.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
             ),
             const SizedBox(height: 32),

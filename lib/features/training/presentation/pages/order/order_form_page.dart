@@ -157,8 +157,7 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
     super.dispose();
   }
 
-  bool _isSubmitting = false;
-
+  
   String? _validateEmail(String? v) {
     if (v == null || v.isEmpty) return 'Wajib diisi';
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -429,8 +428,8 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
 
                 return Card(
                   color: isComplete
-                      ? Colors.green.withOpacity(0.1)
-                      : Colors.red.withOpacity(0.1),
+                      ? Colors.green.withValues(alpha: 0.1)
+                      : Colors.red.withValues(alpha: 0.1),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),

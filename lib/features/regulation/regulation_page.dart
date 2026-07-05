@@ -161,7 +161,7 @@ class _RegulasiPageState extends State<RegulasiPage> {
                                       Container(
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
-                                          color: Colors.red.withOpacity(0.1),
+                                          color: Colors.red.withValues(alpha: 0.1),
                                           borderRadius: BorderRadius.circular(12),
                                         ),
                                         child: const Icon(Icons.picture_as_pdf, color: Colors.red, size: 32),
@@ -194,7 +194,7 @@ class _RegulasiPageState extends State<RegulasiPage> {
                                             Container(
                                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                               decoration: BoxDecoration(
-                                                color: theme.primaryColor.withOpacity(0.1),
+                                                color: theme.primaryColor.withValues(alpha: 0.1),
                                                 borderRadius: BorderRadius.circular(12),
                                               ),
                                               child: Text(

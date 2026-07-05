@@ -115,7 +115,7 @@ class _KarirPageState extends State<KarirPage> {
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 labelColor: Theme.of(context).colorScheme.onSurface,
-                unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
+                unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.7),
                 labelStyle: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -150,7 +150,7 @@ class _KarirPageState extends State<KarirPage> {
                       const SizedBox(width: 8),
                       Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: IconButton(

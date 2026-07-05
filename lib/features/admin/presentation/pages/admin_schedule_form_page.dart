@@ -147,7 +147,7 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
           child: ListView(
             children: [
               DropdownButtonFormField<String>(
-                value: _selectedIdPelatihan,
+                initialValue: _selectedIdPelatihan,
                 decoration: const InputDecoration(labelText: 'Pilih Pelatihan', border: OutlineInputBorder()),
                 items: _masterTrainings.map((t) {
                   return DropdownMenuItem(value: t.idPelatihan, child: Text(t.namaPelatihan));
@@ -207,7 +207,7 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
 
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedLokasi,
+                initialValue: _selectedLokasi,
                 decoration: const InputDecoration(labelText: 'Pilih Lokasi', border: OutlineInputBorder()),
                 items: [
                   const DropdownMenuItem<String>(value: null, child: Text('Sesuai Metode Pelatihan')),

@@ -97,8 +97,7 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
                 onChanged: (val) => companyName = val,
               ),
               const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: equipmentType,
+              DropdownButtonFormField(initialValue: equipmentType,
                 isExpanded: true,
                 decoration: const InputDecoration(
                   labelText: 'Jenis Alat',

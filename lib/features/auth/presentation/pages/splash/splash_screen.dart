@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/splash/auth_wrapper.dart';
 
 import '../../../../../core/constants/constants.dart';
@@ -75,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Text(
           'Hi, Safetizen!',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
       ],

@@ -144,7 +144,7 @@ class _ChatAiPageState extends State<ChatAiPage> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundColor: Colors.white.withOpacity(0.2),
+              backgroundColor: Colors.white.withValues(alpha: 0.2),
               radius: 16,
               child: const Icon(Icons.smart_toy_rounded, size: 20, color: Colors.white),
             ),
@@ -182,7 +182,7 @@ class _ChatAiPageState extends State<ChatAiPage> {
                     children: [
                       if (!isUser) ...[
                         CircleAvatar(
-                          backgroundColor: primaryColor.withOpacity(0.1),
+                          backgroundColor: primaryColor.withValues(alpha: 0.1),
                           radius: 16,
                           child: Icon(Icons.smart_toy_rounded, size: 18, color: primaryColor),
                         ),
@@ -201,7 +201,7 @@ class _ChatAiPageState extends State<ChatAiPage> {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 5,
                                 offset: const Offset(0, 2),
                               )
@@ -257,7 +257,7 @@ class _ChatAiPageState extends State<ChatAiPage> {
               color: theme.scaffoldBackgroundColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 )

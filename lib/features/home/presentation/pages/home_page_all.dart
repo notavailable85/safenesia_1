@@ -289,7 +289,7 @@
 //                           Container(
 //                             padding: const EdgeInsets.all(12),
 //                             decoration: BoxDecoration(
-//                               color: feature['color'].withOpacity(0.1),
+//                               color: feature['color'].withValues(alpha: 0.1),
 //                               borderRadius: BorderRadius.circular(12),
 //                             ),
 //                             child: Icon(

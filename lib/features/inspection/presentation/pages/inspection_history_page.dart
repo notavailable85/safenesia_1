@@ -80,7 +80,7 @@ class _InspectionHistoryPageState extends State<InspectionHistoryPage> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: _getStatusColor(ins.status).withOpacity(0.1),
+                                    color: _getStatusColor(ins.status).withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(

@@ -96,8 +96,7 @@ class _AdminUserFormPageState extends State<AdminUserFormPage> {
               onChanged: (value) => phoneNumber = value,
             ),
             const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: role,
+            DropdownButtonFormField(initialValue: role,
               decoration: const InputDecoration(labelText: 'Role', border: OutlineInputBorder()),
               items: roles.map((r) {
                 return DropdownMenuItem(value: r, child: Text(r));

@@ -129,7 +129,7 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: jobType,
+                    initialValue: jobType,
                     decoration: const InputDecoration(labelText: 'Tipe Pekerjaan', border: OutlineInputBorder()),
                     items: ['Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance']
                         .map((type) => DropdownMenuItem(value: type, child: Text(type)))
@@ -140,7 +140,7 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: experienceLevel,
+                    initialValue: experienceLevel,
                     decoration: const InputDecoration(labelText: 'Level Pengalaman', border: OutlineInputBorder()),
                     items: ['Entry Level', 'Mid Level', 'Senior']
                         .map((level) => DropdownMenuItem(value: level, child: Text(level)))

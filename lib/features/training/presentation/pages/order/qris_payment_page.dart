@@ -343,7 +343,7 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
                                 hargaSatuan: widget.hargaSatuan,
                                 totalBayar: widget.totalBayar,
                                 deadlineStr: deadlineStr,
-                                primaryColorValue: Theme.of(context).colorScheme.primary.value,
+                                primaryColorValue: Theme.of(context).colorScheme.primary.toARGB32(),
                               );
                               
                               if (Platform.isAndroid) {
