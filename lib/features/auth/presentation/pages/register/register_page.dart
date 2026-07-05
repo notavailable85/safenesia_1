@@ -139,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 24.0),
@@ -154,18 +154,15 @@ class _RegisterPageState extends State<RegisterPage> {
           children: [
             Text(
               'Buat Akun Baru',
-              style: GoogleFonts.inter(
-                textStyle: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             Text(
               'Lengkapi form di bawah ini untuk mendaftar',
-              style: GoogleFonts.inter(
-                textStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-              ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                  ),
             ),
             const SizedBox(height: 32),
 
@@ -220,24 +217,35 @@ class _RegisterPageState extends State<RegisterPage> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue.shade800,
-                  foregroundColor: Colors.white,
-                ),
                 onPressed: _register,
                 child: const Text('Daftar', style: TextStyle(fontSize: 16)),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
               child: Center(
-                child: Text('ATAU', style: TextStyle(color: Colors.grey)),
+                child: Text(
+                  'ATAU', 
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5)
+                  ),
+                ),
               ),
             ),
             SizedBox(
               width: double.infinity,
               height: 50,
               child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  side: BorderSide(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey.shade700
+                        : Colors.grey.shade300,
+                  ),
+                ),
                 onPressed: _isLoadingGoogle
                     ? null
                     : () async {
@@ -312,7 +320,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     : SvgPicture.asset(AppAssets.iconGoogle, height: 24),
                 label: Text(
                   _isLoadingGoogle ? 'Memproses...' : 'Daftar dengan Google',
-                  style: const TextStyle(color: Colors.black87),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 ),
               ),
             ),

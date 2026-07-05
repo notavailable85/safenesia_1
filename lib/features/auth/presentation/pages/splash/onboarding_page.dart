@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:safenesia_1/core/constants/constants.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/login/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ==========================================
 // 3. ONBOARDING PAGE (4 Bagian)
@@ -68,10 +69,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                ),
+                onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('has_seen_onboarding', true);
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                    );
+                  }
+                },
                 child: const Text(
                   'Lewati',
                   style: TextStyle(color: Colors.grey),
@@ -152,14 +159,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     backgroundColor: Colors.blue.shade800,
                     foregroundColor: Colors.white,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_currentPage == onboardingData.length - 1) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
-                      );
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool('has_seen_onboarding', true);
+                      if (context.mounted) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      }
                     } else {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 300),

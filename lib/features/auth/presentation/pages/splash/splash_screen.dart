@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/splash/auth_wrapper.dart';
-import 'package:lottie/lottie.dart';
+
 import '../../../../../core/constants/constants.dart';
 
 // ==========================================
@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SizedBox(
           width: double.infinity,
@@ -70,16 +70,12 @@ class _SplashScreenState extends State<SplashScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Lottie.asset(AppAssets.lottieHiWeCouple, width: 150),
-        AppSizes.gapH16,
+        CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
+        AppSizes.gapH24,
         Text(
           'Hi, Safetizen!',
-          style: GoogleFonts.inter(
-            textStyle: TextStyle(
-              color: AppColors.primaryDark,
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-            ),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
           ),
         ),
       ],

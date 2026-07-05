@@ -42,12 +42,12 @@ class _AuthWrapperState extends State<AuthWrapper> {
       final now = DateTime.now();
       final difference = now.difference(lastActiveTime).inDays;
 
-      if (difference <= 5) {
+      if (difference <= 15) {
         activeSession = true;
         // Update last active time to now
         await prefs.setInt('last_active_time', now.millisecondsSinceEpoch);
       } else {
-        // Session expired (more than 5 days)
+        // Session expired (more than 15 days)
         await prefs.setBool('is_logged_in', false);
       }
     }

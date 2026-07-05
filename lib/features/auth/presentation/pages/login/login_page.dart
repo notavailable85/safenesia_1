@@ -132,7 +132,10 @@ class _LoginPageState extends State<LoginPage> {
     await prefs.setString('user_name', foundUserName ?? 'Pengguna');
     await prefs.setString('user_email', identifier);
     await prefs.setBool('is_logged_in', true);
-    await prefs.setInt('last_active_time', DateTime.now().millisecondsSinceEpoch);
+    await prefs.setInt(
+      'last_active_time',
+      DateTime.now().millisecondsSinceEpoch,
+    );
 
     // Login berhasil
     if (mounted) {
@@ -154,30 +157,17 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 6),
               Image.asset(AppAssets.logoVertical, height: 200),
               SizedBox(height: 30),
-              Text(
-                'Selamat Datang!',
-                style: GoogleFonts.inter(
-                  textStyle: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimaryLight,
-                  ),
-                ),
-              ),
-              Text(
-                'Silakan masuk ke akun Anda',
-                style: GoogleFonts.inter(
-                  textStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                ),
-              ),
+
               const SizedBox(height: 30),
 
               TextField(
@@ -233,19 +223,22 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade800,
-                    foregroundColor: Colors.white,
-                  ),
                   onPressed: _login,
                   child: const Text('Login', style: TextStyle(fontSize: 16)),
                 ),
               ),
 
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Center(
-                  child: Text('ATAU', style: TextStyle(color: Colors.grey)),
+                  child: Text(
+                    'ATAU',
+                    style: TextStyle(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.5),
+                    ),
+                  ),
                 ),
               ),
 
@@ -254,6 +247,16 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    side: BorderSide(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey.shade700
+                          : Colors.grey.shade300,
+                    ),
+                  ),
                   onPressed: _isLoadingGoogle
                       ? null
                       : () async {
@@ -288,7 +291,10 @@ class _LoginPageState extends State<LoginPage> {
                               googleUser.email,
                             );
                             await prefs.setBool('is_logged_in', true);
-                            await prefs.setInt('last_active_time', DateTime.now().millisecondsSinceEpoch);
+                            await prefs.setInt(
+                              'last_active_time',
+                              DateTime.now().millisecondsSinceEpoch,
+                            );
 
                             if (mounted) {
                               setState(() {
@@ -306,7 +312,8 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const MainNavigationScreen(),
+                                  builder: (context) =>
+                                      const MainNavigationScreen(),
                                 ),
                               );
                             }
@@ -335,7 +342,9 @@ class _LoginPageState extends State<LoginPage> {
                       : SvgPicture.asset(AppAssets.iconGoogle, height: 24),
                   label: Text(
                     _isLoadingGoogle ? 'Memproses...' : 'Masuk dengan Google',
-                    style: const TextStyle(color: Colors.black87),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ),
               ),
@@ -361,6 +370,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
