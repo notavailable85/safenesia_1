@@ -13,7 +13,7 @@ import 'package:safenesia_1/features/auth/models/user_model.dart';
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static const _databaseName = "safenesia.db";
-  static const _databaseVersion = 12;
+  static const _databaseVersion = 13;
 
   static Database? _database;
 
@@ -84,6 +84,10 @@ class DatabaseHelper {
     if (oldVersion < 12) {
       await db.execute('DROP TABLE IF EXISTS careers');
       await _createCareersTable(db);
+    }
+    if (oldVersion < 13) {
+      await db.execute('DROP TABLE IF EXISTS training_schedules');
+      await _createTrainingSchedulesTable(db);
     }
   }
 
@@ -292,6 +296,20 @@ CREATE TABLE training_schedules (
       'idPelatihan': '6', // K3 EE
       'tanggalStart': DateTime(now.year, now.month + 2, 5).toIso8601String(),
       'tanggalEnd': DateTime(now.year, now.month + 2, 17).toIso8601String(),
+      'gambar': '',
+    });
+    await db.insert('training_schedules', {
+      'idJadwal': 's4',
+      'idPelatihan': '2', // Auditor SMK3
+      'tanggalStart': DateTime(now.year, now.month + 1, 10).toIso8601String(),
+      'tanggalEnd': DateTime(now.year, now.month + 1, 15).toIso8601String(),
+      'gambar': '',
+    });
+    await db.insert('training_schedules', {
+      'idJadwal': 's5',
+      'idPelatihan': '3', // Petugas P3K
+      'tanggalStart': DateTime(now.year, now.month + 2, 20).toIso8601String(),
+      'tanggalEnd': DateTime(now.year, now.month + 2, 22).toIso8601String(),
       'gambar': '',
     });
   }

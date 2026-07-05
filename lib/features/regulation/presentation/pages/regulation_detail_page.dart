@@ -87,29 +87,42 @@ class RegulationDetailPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: ElevatedButton.icon(
-            onPressed: () {
-              // TODO: Implement PDF Viewer / Downloader
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Mengunduh dokumen PDF: ${regulation.title}'),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            },
-            icon: const Icon(Icons.picture_as_pdf),
-            label: const Text('Baca Dokumen (PDF)'),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor: theme.primaryColor,
-              foregroundColor: Colors.white,
-              textStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+      bottomNavigationBar: Container(
+        height: 70.0 + MediaQuery.of(context).padding.bottom,
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8 + MediaQuery.of(context).padding.bottom,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0D000000), // 5% black
+              blurRadius: 10,
+              offset: Offset(0, -5),
+            ),
+          ],
+        ),
+        child: ElevatedButton.icon(
+          onPressed: () {
+            // TODO: Implement PDF Viewer / Downloader
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Mengunduh dokumen PDF: ${regulation.title}'),
+                behavior: SnackBarBehavior.floating,
               ),
+            );
+          },
+          icon: const Icon(Icons.picture_as_pdf),
+          label: const Text('Baca Dokumen (PDF)'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: theme.primaryColor,
+            foregroundColor: Colors.white,
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),

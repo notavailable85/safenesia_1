@@ -392,7 +392,13 @@ class _OrderFormPageState extends State<OrderFormPage> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        height: 70.0 + MediaQuery.of(context).padding.bottom,
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8 + MediaQuery.of(context).padding.bottom,
+        ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           boxShadow: const [
@@ -403,10 +409,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
             ),
           ],
         ),
-        child: SafeArea(
-          child: SizedBox(
-            height: 50,
-            child: ElevatedButton(
+        child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -460,8 +463,6 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 ],
               ),
             ),
-          ),
-        ),
       ),
     );
   }

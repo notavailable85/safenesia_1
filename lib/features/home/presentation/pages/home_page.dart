@@ -400,19 +400,27 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
-              Wrap(
-                spacing: 16,
-                runSpacing: 24,
-                alignment: WrapAlignment.center,
+              Column(
                 children: [
-                  _buildPopupItem(Icons.headset_mic, 'Konsultasi K3', Colors.blue),
-                  _buildPopupItem(Icons.report_problem, 'Lapor Insiden', Colors.red),
-                  _buildPopupItem(Icons.checklist_rtl, 'Inspeksi Harian', Colors.teal),
-                  _buildPopupItem(Icons.calculate, 'Kalkulator Risiko', Colors.orange),
-                  _buildPopupItem(Icons.store, 'Toko Safety', Colors.green),
-                  _buildPopupItem(Icons.event, 'Webinar K3', Colors.purple),
-                  _buildPopupItem(Icons.forum, 'Komunitas K3', Colors.indigo),
-                  _buildPopupItem(Icons.newspaper, 'Berita Terkini', Colors.blueGrey),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: _buildPopupItem(Icons.headset_mic, 'Konsultasi K3', Colors.blue)),
+                      Expanded(child: _buildPopupItem(Icons.report_problem, 'Lapor Insiden', Colors.red)),
+                      Expanded(child: _buildPopupItem(Icons.checklist_rtl, 'Inspeksi Harian', Colors.teal)),
+                      Expanded(child: _buildPopupItem(Icons.calculate, 'Kalkulator Risiko', Colors.orange)),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: _buildPopupItem(Icons.store, 'Toko Safety', Colors.green)),
+                      Expanded(child: _buildPopupItem(Icons.event, 'Webinar K3', Colors.purple)),
+                      Expanded(child: _buildPopupItem(Icons.forum, 'Komunitas K3', Colors.indigo)),
+                      Expanded(child: _buildPopupItem(Icons.newspaper, 'Berita Terkini', Colors.blueGrey)),
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -424,24 +432,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPopupItem(IconData icon, String title, [Color color = Colors.blue]) {
-    return SizedBox(
-      width: 75,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CircleAvatar(
-            radius: 25,
-            backgroundColor: color.withOpacity(0.1),
-            child: Icon(icon, color: color),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CircleAvatar(
+          radius: 25,
+          backgroundColor: color.withOpacity(0.1),
+          child: Icon(icon, color: color),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+        ),
+      ],
     );
   }
 

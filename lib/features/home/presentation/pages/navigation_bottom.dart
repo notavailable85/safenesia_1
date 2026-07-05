@@ -83,11 +83,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     final unselectedColor = navTheme.unselectedItemColor ?? Colors.white70;
 
     return Container(
+      height: 70.0 + MediaQuery.of(context).padding.bottom,
       padding: EdgeInsets.only(
         left: 12,
         right: 12,
-        top: 8, // Dikurangi agar tinggi keseluruhan ~54px
-        bottom: 8 + MediaQuery.of(context).padding.bottom,
+        bottom: MediaQuery.of(context).padding.bottom,
       ),
       decoration: BoxDecoration(
         color: bgColor,

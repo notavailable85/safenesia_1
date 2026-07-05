@@ -273,7 +273,13 @@ class QrisPaymentPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        height: 70.0 + MediaQuery.of(context).padding.bottom,
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8 + MediaQuery.of(context).padding.bottom,
+        ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           boxShadow: const [
@@ -284,10 +290,7 @@ class QrisPaymentPage extends StatelessWidget {
             ),
           ],
         ),
-        child: SafeArea(
-          child: SizedBox(
-            height: 50,
-            child: OutlinedButton(
+        child: OutlinedButton(
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.grey),
                 shape: RoundedRectangleBorder(
@@ -302,8 +305,6 @@ class QrisPaymentPage extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
-          ),
-        ),
       ),
     );
   }

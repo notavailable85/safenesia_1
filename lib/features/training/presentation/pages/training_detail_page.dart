@@ -202,7 +202,13 @@ class TrainingDetailPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        height: 70.0 + MediaQuery.of(context).padding.bottom,
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8 + MediaQuery.of(context).padding.bottom,
+        ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           boxShadow: const [
@@ -213,10 +219,7 @@ class TrainingDetailPage extends StatelessWidget {
             ),
           ],
         ),
-        child: SafeArea(
-          child: SizedBox(
-            height: 50,
-            child: ElevatedButton.icon(
+        child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -240,8 +243,6 @@ class TrainingDetailPage extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
-          ),
-        ),
       ),
     );
   }
