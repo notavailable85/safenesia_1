@@ -583,7 +583,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
+                Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) =>
                         TrainingDetailPage(scheduleData: schedule),

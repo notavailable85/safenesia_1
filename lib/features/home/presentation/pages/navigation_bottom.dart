@@ -58,7 +58,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       canPop: false,
       onPopInvoked: _onPopInvoked,
       child: Scaffold(
-        extendBody: true, // Allow content to scroll behind the floating nav bar
+        extendBody: false,
         body: IndexedStack(
           index: _selectedIndex,
           children: _pages.asMap().entries.map((entry) {

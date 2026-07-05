@@ -7,6 +7,7 @@ import 'package:safenesia_1/features/article/presentation/pages/article_list_pag
 import 'package:safenesia_1/features/home/presentation/pages/home_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_list_page.dart';
+import 'package:safenesia_1/core/database/database_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,10 @@ void main() async {
   if (savedModeIndex != null) {
     appThemeModeNotifier.value = ThemeMode.values[savedModeIndex];
   }
+
+  // Pastikan database dan dummy data selesai di-seed sebelum UI dirender
+  // Ini memperbaiki bug dimana tab Pelatihan K3 di IndexedStack kosong saat pertama kali dibuka.
+  await DatabaseHelper.instance.database;
 
   runApp(const SafenesiaApp());
 }

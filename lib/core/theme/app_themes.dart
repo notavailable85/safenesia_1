@@ -176,6 +176,17 @@ class AppThemes {
           borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
       ),
+
+      // SnackBar Theme Global
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color(0xFF1F2937), // Dark Gray
+        contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+        actionTextColor: _lighten(customPrimary, 0.2), // Terang agar kontras di background gelap
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 6,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      ),
     );
   }
 
@@ -325,6 +336,17 @@ class AppThemes {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
+      ),
+
+      // SnackBar Theme Global (Dark Mode)
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color(0xFF374151), // Slightly lighter gray than background
+        contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+        actionTextColor: _lighten(customPrimary, 0.3), // Terang agar kontras di background gelap
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 6,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       ),
     );
   }

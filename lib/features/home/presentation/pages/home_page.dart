@@ -805,6 +805,9 @@ class _HomePageState extends State<HomePage> {
     }
 
     final now = DateTime.now();
+    // Anggap jadwal hari ini tetap berlaku (hilangkan jam)
+    final today = DateTime(now.year, now.month, now.day);
+    
     final sortedSchedules = List<TrainingSchedule>.from(_schedules);
     sortedSchedules.sort((a, b) {
       DateTime dateA;
@@ -812,11 +815,21 @@ class _HomePageState extends State<HomePage> {
       try { dateA = DateTime.parse(a.tanggalStart); } catch (e) { dateA = DateTime.fromMillisecondsSinceEpoch(0); }
       try { dateB = DateTime.parse(b.tanggalStart); } catch (e) { dateB = DateTime.fromMillisecondsSinceEpoch(0); }
       
-      // Hitung selisih waktu mutlak dari sekarang (terdekat berarti selisihnya paling kecil)
-      final diffA = dateA.difference(now).abs();
-      final diffB = dateB.difference(now).abs();
+      final isAPast = dateA.isBefore(today);
+      final isBPast = dateB.isBefore(today);
       
-      return diffA.compareTo(diffB);
+      // Jika salah satu sudah lewat, yang belum lewat diutamakan
+      if (isAPast && !isBPast) return 1;
+      if (!isAPast && isBPast) return -1;
+      
+      // Jika keduanya upcoming (belum lewat), urutkan dari yang paling dekat dengan hari ini
+      if (!isAPast && !isBPast) {
+        return dateA.compareTo(dateB);
+      } 
+      // Jika keduanya sudah lewat, tampilkan yang paling baru lewat
+      else {
+        return dateB.compareTo(dateA);
+      }
     });
     
     // Ambil 5 jadwal yang posisinya secara waktu paling dekat dengan hari ini
