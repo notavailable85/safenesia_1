@@ -18,6 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:safenesia_1/features/inspection/presentation/pages/inspection_order_page.dart';
 import 'package:safenesia_1/features/inspection/presentation/pages/inspection_history_page.dart';
+import 'package:safenesia_1/core/widgets/custom_download_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:safenesia_1/core/utils/user_state.dart';
 import 'package:gal/gal.dart';
@@ -287,16 +288,8 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 32),
             // Tombol Unduh Kartu
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black87,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 4,
-              ),
+            CustomDownloadButton(
+              label: 'Unduh Kartu',
               onPressed: () async {
                 try {
                   // Tampilkan loading dialog sebentar
@@ -351,11 +344,6 @@ class _HomePageState extends State<HomePage> {
                   }
                 }
               },
-              icon: const Icon(Icons.download, size: 24),
-              label: const Text(
-                'Unduh Kartu',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
             ),
           ],
         ),
