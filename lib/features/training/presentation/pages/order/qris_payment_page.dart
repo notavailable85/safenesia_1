@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:safenesia_1/features/training/presentation/pages/order/payment_success_page.dart';
 import 'package:safenesia_1/core/utils/currency_formatter.dart';
+import 'package:safenesia_1/features/training/utils/invoice_pdf_generator.dart';
 
 // ==========================================
 // 5. HALAMAN PEMBAYARAN QRIS
@@ -187,10 +191,35 @@ class QrisPaymentPage extends StatelessWidget {
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: Colors.grey),
                           ),
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Invoice berhasil diunduh!')),
-                            );
+                          onPressed: () async {
+                            try {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Menyiapkan Invoice...')),
+                              );
+                              
+                              final pdfBytes = await InvoicePdfGenerator.generateInvoicePdf(
+                                invoiceNumber: invoiceNumber,
+                                namaPelatihan: namaPelatihan,
+                                jumlahPeserta: jumlahPeserta,
+                                hargaSatuan: hargaSatuan,
+                                totalBayar: totalBayar,
+                                deadlineStr: deadlineStr,
+                              );
+                              
+                              final directory = await getTemporaryDirectory();
+                              final file = File('${directory.path}/Invoice_$invoiceNumber.pdf');
+                              await file.writeAsBytes(pdfBytes);
+                              
+                              await Share.shareXFiles(
+                                [XFile(file.path)],
+                                text: 'Invoice Pembayaran $namaPelatihan',
+                              );
+                            } catch (e) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Gagal membuat invoice: $e')),
+                              );
+                            }
                           },
                           icon: const Icon(Icons.receipt, size: 16),
                           label: const Text('Invoice', textAlign: TextAlign.center, style: TextStyle(fontSize: 14)),
@@ -290,9 +319,10 @@ class QrisPaymentPage extends StatelessWidget {
             ),
           ],
         ),
-        child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.grey),
+        child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
