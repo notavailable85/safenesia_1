@@ -194,8 +194,8 @@ class _ChatAiPageState extends State<ChatAiPage> {
                           decoration: BoxDecoration(
                             color: isUser ? primaryColor : theme.cardColor,
                             borderRadius: BorderRadius.only(
-                              topLeft: const Radius.circular(16),
-                              topRight: const Radius.circular(16),
+                              topLeft: const Radius.circular(12),
+                              topRight: const Radius.circular(12),
                               bottomLeft: Radius.circular(isUser ? 16 : 0),
                               bottomRight: Radius.circular(isUser ? 0 : 16),
                             ),
@@ -269,7 +269,7 @@ class _ChatAiPageState extends State<ChatAiPage> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: theme.cardColor,
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.grey.shade300),
                     ),
                     child: TextField(

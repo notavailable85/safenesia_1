@@ -75,7 +75,7 @@ class _ArticleBookmarkPageState extends State<ArticleBookmarkPage> {
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(8),
                         leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                           child: Image.network(
                             article.imageUrl,
                             width: 80,

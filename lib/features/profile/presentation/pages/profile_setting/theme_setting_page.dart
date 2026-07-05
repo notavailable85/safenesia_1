@@ -34,17 +34,17 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
     await prefs.setInt('app_theme_color', appThemeNotifier.value.value);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tema berhasil disimpan')),
+        const SnackBar(content: Text('Warna Tema berhasil diubah')),
       );
     }
   }
-  
+
   void _onThemeModeChanged(ThemeMode mode) async {
     appThemeModeNotifier.value = mode;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('app_theme_mode', mode.index);
   }
-  
+
   void _resetColor() async {
     appThemeNotifier.value = AppColors.primary;
     final hsv = HSVColor.fromColor(AppColors.primary);
@@ -66,9 +66,7 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tema Aplikasi'),
-      ),
+      appBar: AppBar(title: const Text('Tema Aplikasi')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -86,9 +84,21 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
                   width: double.infinity,
                   child: SegmentedButton<ThemeMode>(
                     segments: const [
-                      ButtonSegment(value: ThemeMode.light, label: Text('Terang'), icon: Icon(Icons.light_mode)),
-                      ButtonSegment(value: ThemeMode.dark, label: Text('Gelap'), icon: Icon(Icons.dark_mode)),
-                      ButtonSegment(value: ThemeMode.system, label: Text('Sistem'), icon: Icon(Icons.settings_system_daydream)),
+                      ButtonSegment(
+                        value: ThemeMode.light,
+                        label: Text('Terang'),
+                        icon: Icon(Icons.light_mode),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.dark,
+                        label: Text('Gelap'),
+                        icon: Icon(Icons.dark_mode),
+                      ),
+                      ButtonSegment(
+                        value: ThemeMode.system,
+                        label: Text('Sistem'),
+                        icon: Icon(Icons.settings_system_daydream),
+                      ),
                     ],
                     selected: {themeMode},
                     onSelectionChanged: (Set<ThemeMode> newSelection) {
@@ -121,8 +131,8 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
                       color: Colors.black12,
                       blurRadius: 10,
                       spreadRadius: 2,
-                    )
-                  ]
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -130,10 +140,8 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
             Container(
               height: 40,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
-                  colors: hueColors,
-                ),
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(colors: hueColors),
               ),
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
@@ -162,6 +170,11 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Colors.white,
+                  side: BorderSide.none,
+                ),
                 onPressed: _resetColor,
                 child: const Text('Kembalikan ke Default'),
               ),

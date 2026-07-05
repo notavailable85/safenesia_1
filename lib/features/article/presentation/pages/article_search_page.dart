@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/article/models/article_model.dart';
 import 'package:safenesia_1/features/article/presentation/pages/article_detail_page.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
+import 'package:safenesia_1/core/widgets/standard_search_field.dart';
 
 class ArticleSearchPage extends StatefulWidget {
   const ArticleSearchPage({super.key});
@@ -50,34 +51,9 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
+        title: StandardSearchField(
+          hintText: 'Cari artikel...',
           autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Cari artikel...',
-            isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.white54, width: 1),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.white54, width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.white, width: 1.5),
-            ),
-            filled: true,
-            fillColor: Colors.white12,
-            hintStyle: TextStyle(color: Colors.white70),
-            suffixIcon: Icon(
-              Icons.search,
-              color: Colors.white70,
-              size: 20,
-            ),
-          ),
-          style: const TextStyle(color: Colors.white, fontSize: 18),
           onChanged: _onSearchChanged,
         ),
       ),
@@ -110,7 +86,7 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(8),
                         leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                           child: Image.network(
                             article.imageUrl,
                             width: 80,

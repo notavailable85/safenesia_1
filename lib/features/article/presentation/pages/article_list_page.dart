@@ -190,7 +190,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
                                         horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
                                       color: Colors.blue.shade50,
-                                      borderRadius: BorderRadius.circular(4),
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Text(
                                       article.category,

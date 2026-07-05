@@ -36,7 +36,7 @@ class QrisPaymentPage extends StatelessWidget {
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               side: const BorderSide(color: Colors.grey),
             ),
             child: Padding(
@@ -78,7 +78,7 @@ class QrisPaymentPage extends StatelessWidget {
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               side: const BorderSide(color: Colors.grey),
             ),
             child: Padding(
@@ -125,7 +125,7 @@ class QrisPaymentPage extends StatelessWidget {
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               side: const BorderSide(color: Colors.grey),
             ),
             child: Padding(
@@ -208,7 +208,7 @@ class QrisPaymentPage extends StatelessWidget {
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               side: const BorderSide(color: Colors.grey),
             ),
             child: Padding(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/career/models/career_model.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
+import 'package:safenesia_1/core/widgets/standard_search_field.dart';
 import 'package:safenesia_1/features/career/presentation/pages/career_detail_page.dart';
 
 // ==========================================
@@ -142,15 +143,8 @@ class _KarirPageState extends State<KarirPage> {
                   child: Row(
                     children: [
                       const Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Cari posisi, perusahaan...',
-                            prefixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                          ),
+                        child: StandardSearchField(
+                          hintText: 'Cari posisi, perusahaan...',
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -256,10 +250,10 @@ class _KarirPageState extends State<KarirPage> {
 
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.only(bottom: 16),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         onTap: () async {
           final result = await Navigator.push(
             context,
@@ -393,7 +387,7 @@ class _KarirPageState extends State<KarirPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.green.shade50,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Text(
                         'Status: Menunggu',
@@ -419,7 +413,7 @@ class _KarirPageState extends State<KarirPage> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         text,

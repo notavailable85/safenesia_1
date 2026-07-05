@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                   gradient: const LinearGradient(
                     colors: [
                       Color(0xFFE2E2E2),
@@ -195,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                         width: 42,
                         height: 32,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(12),
                           gradient: const LinearGradient(
                             colors: [Color(0xFFE6C27A), Color(0xFFD4AF37), Color(0xFF996515)],
                             begin: Alignment.topLeft,
@@ -293,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                 foregroundColor: Colors.black87,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 4,
               ),
@@ -370,7 +370,7 @@ class _HomePageState extends State<HomePage> {
       useRootNavigator: true,
       constraints: const BoxConstraints(maxWidth: double.infinity),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       builder: (context) {
         return SizedBox(
@@ -392,7 +392,7 @@ class _HomePageState extends State<HomePage> {
                 margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
               const Text(
@@ -586,7 +586,7 @@ class _HomePageState extends State<HomePage> {
                           alignment: Alignment.center,
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                               child: Image.asset(
                                 _bannerImages[index],
                                 fit: BoxFit.contain,
@@ -632,7 +632,7 @@ class _HomePageState extends State<HomePage> {
                     color: _currentBannerIndex == index
                         ? Theme.of(context).colorScheme.primary
                         : Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
@@ -675,7 +675,7 @@ class _HomePageState extends State<HomePage> {
                                   padding: const EdgeInsets.all(14),
                                   decoration: BoxDecoration(
                                     color: feature['color'].withOpacity(0.08),
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Icon(
                                     feature['icon'],
@@ -853,7 +853,7 @@ class _HomePageState extends State<HomePage> {
                 child: ListTile(
                 contentPadding: const EdgeInsets.all(12),
                 leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   child: Image.asset(
                     training.gambarPelatihan,
                     width: 60,
@@ -938,7 +938,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             },
-            child: const Text('Lihat Lainnya'),
+            child: Text(
+              'Lihat Lainnya',
+              style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : null,
+              ),
+            ),
           ),
         ),
       ],

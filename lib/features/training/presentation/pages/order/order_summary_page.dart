@@ -44,7 +44,7 @@ class OrderSummaryPage extends StatelessWidget {
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
             ),
             child: Padding(
@@ -53,7 +53,7 @@ class OrderSummaryPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
                       scheduleData.trainingData!.gambarPelatihan,
                       width: 80,
@@ -126,7 +126,7 @@ class OrderSummaryPage extends StatelessWidget {
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
             ),
             child: ListView.separated(
@@ -167,7 +167,7 @@ class OrderSummaryPage extends StatelessWidget {
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
             ),
             child: Padding(

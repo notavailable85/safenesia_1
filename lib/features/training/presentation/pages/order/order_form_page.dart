@@ -128,7 +128,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(12),
                 side: const BorderSide(
                   color: Colors.grey,
                 ),
@@ -197,7 +197,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(12),
                 side: const BorderSide(
                   color: Colors.grey,
                 ),
@@ -263,7 +263,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                         color: Colors.grey,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
@@ -289,7 +289,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                       foregroundColor: Colors.red,
                       side: const BorderSide(color: Colors.grey),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
@@ -333,7 +333,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                       : Colors.red.withOpacity(0.1),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(12),
                     side: const BorderSide(
                       color: Colors.grey,
                     ),

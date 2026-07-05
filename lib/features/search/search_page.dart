@@ -15,34 +15,40 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          autofocus: true,
-          decoration: InputDecoration(
-            hintText: 'Cari layanan, artikel...',
-            isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.white54, width: 1),
+        title: SizedBox(
+          height: 40,
+          child: TextField(
+            autofocus: true,
+            decoration: InputDecoration(
+              hintText: 'Cari layanan, artikel...',
+              // isDense: true,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 0,
+              ), // Kurangi vertical padding
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(color: Colors.white54, width: 1),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(color: Colors.white54, width: 1),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(color: Colors.white, width: 1.5),
+              ),
+              filled: true,
+              fillColor: Colors.white12,
+              hintStyle: const TextStyle(color: Colors.white70),
+              suffixIcon: const Icon(
+                Icons.search,
+                color: Colors.white70,
+                size: 20,
+              ),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.white54, width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.white, width: 1.5),
-            ),
-            filled: true,
-            fillColor: Colors.white12,
-            hintStyle: const TextStyle(color: Colors.white70),
-            suffixIcon: const Icon(
-              Icons.search,
-              color: Colors.white70,
-              size: 20,
-            ),
+            style: const TextStyle(color: Colors.white),
           ),
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Padding(
@@ -86,7 +92,9 @@ class _SearchPageState extends State<SearchPage> {
                       .map(
                         (p) => Chip(
                           label: Text(p),
-                          backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                          backgroundColor: Theme.of(
+                            context,
+                          ).primaryColor.withOpacity(0.1),
                           side: BorderSide.none,
                         ),
                       )

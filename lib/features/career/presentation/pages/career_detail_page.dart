@@ -52,7 +52,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -144,7 +144,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
                     height: 70,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.05),
@@ -155,7 +155,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
                     ),
                     child: _career.companyLogoUrl.isNotEmpty 
                         ? ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(12),
                             child: Image.network(_career.companyLogoUrl, fit: BoxFit.cover, errorBuilder: (c, e, s) => Icon(Icons.business, size: 36, color: primaryColor)),
                           )
                         : Icon(Icons.business, size: 36, color: primaryColor),
@@ -291,7 +291,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey.shade300),
       ),
       child: Row(

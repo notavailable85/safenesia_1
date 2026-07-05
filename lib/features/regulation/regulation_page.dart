@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/regulation/models/regulation_model.dart';
 import 'package:safenesia_1/features/regulation/presentation/pages/regulation_detail_page.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
+import 'package:safenesia_1/core/widgets/standard_search_field.dart';
 
 class RegulasiPage extends StatefulWidget {
   const RegulasiPage({super.key});
@@ -72,33 +73,8 @@ class _RegulasiPageState extends State<RegulasiPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          decoration: const InputDecoration(
-            hintText: 'Cari regulasi...',
-            isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.white54, width: 1),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.white54, width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              borderSide: BorderSide(color: Colors.white, width: 1.5),
-            ),
-            filled: true,
-            fillColor: Colors.white12,
-            hintStyle: TextStyle(color: Colors.white70),
-            suffixIcon: Icon(
-              Icons.search,
-              color: Colors.white70,
-              size: 20,
-            ),
-          ),
-          style: const TextStyle(color: Colors.white, fontSize: 16),
+        title: StandardSearchField(
+          hintText: 'Cari regulasi...',
           onChanged: _onSearchChanged,
         ),
       ),
@@ -132,7 +108,7 @@ class _RegulasiPageState extends State<RegulasiPage> {
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                       );
@@ -164,10 +140,10 @@ class _RegulasiPageState extends State<RegulasiPage> {
                             return Card(
                               margin: const EdgeInsets.only(bottom: 12),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               child: InkWell(
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(12),
                                 onTap: () {
                                   Navigator.push(
                                     context,
@@ -219,7 +195,7 @@ class _RegulasiPageState extends State<RegulasiPage> {
                                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                               decoration: BoxDecoration(
                                                 color: theme.primaryColor.withOpacity(0.1),
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius: BorderRadius.circular(12),
                                               ),
                                               child: Text(
                                                 reg.category,

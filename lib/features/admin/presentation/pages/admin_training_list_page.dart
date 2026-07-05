@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
 import 'package:safenesia_1/features/training/models/training_model.dart';
 import 'package:safenesia_1/features/admin/presentation/pages/admin_training_form_page.dart';
+import 'package:safenesia_1/features/admin/presentation/pages/admin_schedule_list_page.dart';
+import 'package:safenesia_1/core/utils/currency_formatter.dart';
 
 class AdminTrainingListPage extends StatefulWidget {
   const AdminTrainingListPage({super.key});
@@ -11,28 +13,60 @@ class AdminTrainingListPage extends StatefulWidget {
 }
 
 class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
-  List<Training> trainings = [];
-  bool isLoading = true;
+  List<Training> _trainings = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    refreshTrainings();
+    _refreshTrainings();
   }
 
-  Future refreshTrainings() async {
-    setState(() => isLoading = true);
-    trainings = await DatabaseHelper.instance.readAllTrainings();
-    setState(() => isLoading = false);
+  Future<void> _refreshTrainings() async {
+    setState(() => _isLoading = true);
+    try {
+      final data = await DatabaseHelper.instance.readAllTrainings();
+      setState(() {
+        _trainings = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Terjadi kesalahan: $e')),
+        );
+      }
+    }
   }
 
-  Future deleteTraining(String id) async {
-    await DatabaseHelper.instance.deleteTraining(id);
-    refreshTrainings();
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Training deleted')),
-      );
+  Future<void> _deleteTraining(String id) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Hapus Pelatihan'),
+        content: const Text('Apakah Anda yakin ingin menghapus jadwal pelatihan ini?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text('Hapus', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await DatabaseHelper.instance.deleteTraining(id);
+      _refreshTrainings();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Jadwal pelatihan berhasil dihapus')),
+        );
+      }
     }
   }
 
@@ -40,29 +74,44 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Trainings'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: const Text('Master Data Pelatihan'),
+
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.event_note),
+            tooltip: 'Kelola Jadwal Pelatihan',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AdminScheduleListPage(),
+                ),
+              );
+            },
+          )
+        ],
       ),
-      body: isLoading
+      body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : trainings.isEmpty
-              ? const Center(child: Text('No Trainings found'))
+          : _trainings.isEmpty
+              ? const Center(child: Text('Belum ada jadwal pelatihan.'))
               : ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: trainings.length,
+                  itemCount: _trainings.length,
                   itemBuilder: (context, index) {
-                    final training = trainings[index];
+                    final training = _trainings[index];
                     return Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: ListTile(
-                        leading: const Icon(Icons.school, color: Colors.green),
-                        title: Text(training.namaPelatihan),
-                        subtitle: Text(training.bidang),
+                        title: Text(
+                          training.namaPelatihan,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text('${training.bidang} • ${training.hargaPromo.toRupiah()}'),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.orange),
+                              icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
                               onPressed: () async {
                                 await Navigator.push(
                                   context,
@@ -70,33 +119,12 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
                                     builder: (context) => AdminTrainingFormPage(training: training),
                                   ),
                                 );
-                                refreshTrainings();
+                                _refreshTrainings();
                               },
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('Delete Training'),
-                                    content: const Text('Are you sure you want to delete this training? This will also delete related schedules.'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          deleteTraining(training.idPelatihan);
-                                        },
-                                        child: const Text('Delete', style: TextStyle(color: Colors.red)),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
+                              icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
+                              onPressed: () => _deleteTraining(training.idPelatihan),
                             ),
                           ],
                         ),
@@ -105,8 +133,8 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
                   },
                 ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: const Icon(Icons.add, color: Colors.white),
+
+        child: const Icon(Icons.add),
         onPressed: () async {
           await Navigator.push(
             context,
@@ -114,7 +142,7 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
               builder: (context) => const AdminTrainingFormPage(),
             ),
           );
-          refreshTrainings();
+          _refreshTrainings();
         },
       ),
     );

@@ -72,7 +72,7 @@ class AppThemes {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           side: BorderSide(color: Colors.grey.shade200, width: 1),
         ),
       ),
@@ -151,7 +151,7 @@ class AppThemes {
         elevation: 4,
         hoverElevation: 6,
         highlightElevation: 8,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
 
       // Pengaturan TextField Global (Minimalis)
@@ -228,7 +228,7 @@ class AppThemes {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           side: BorderSide(color: Colors.grey.shade800, width: 1),
         ),
       ),
@@ -302,7 +302,7 @@ class AppThemes {
         elevation: 4,
         hoverElevation: 6,
         highlightElevation: 8,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
 
       inputDecorationTheme: InputDecorationTheme(

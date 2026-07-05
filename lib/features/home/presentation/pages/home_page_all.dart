@@ -97,7 +97,7 @@
 //     showDialog(
 //       context: context,
 //       builder: (context) => AlertDialog(
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 //         contentPadding: const EdgeInsets.all(24),
 //         content: Column(
 //           mainAxisSize: MainAxisSize.min,
