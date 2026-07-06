@@ -45,6 +45,7 @@ class SafenesiaApp extends StatelessWidget {
               darkTheme: AppThemes.getDarkTheme(primaryColor),
               themeMode: themeMode,
               home: const SplashScreen(),
+              //cek
             );
           },
         );
