@@ -106,7 +106,7 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
     await Future.delayed(const Duration(seconds: 2));
     
     if (!mounted) return;
-    Navigator.pop(context); // Close dialog
+    Navigator.of(context, rootNavigator: true).pop(); // Close dialog
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Status: Menunggu Pembayaran')),
