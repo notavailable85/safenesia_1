@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:safenesia_1/features/auth/presentation/pages/splash/auth_wrapper.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/activities/my_certificate_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/activities/my_document_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/activities/my_training_page.dart';
@@ -7,6 +9,10 @@ import 'package:safenesia_1/features/profile/presentation/pages/information/abou
 import 'package:safenesia_1/features/profile/presentation/pages/information/support_center_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_password_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_profile_page.dart';
+import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/theme_setting_page.dart';
+import 'package:safenesia_1/features/admin/presentation/pages/admin_dashboard_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:safenesia_1/core/utils/user_state.dart';
 
 // ==========================================
 // 1. HALAMAN UTAMA AKUN
@@ -20,6 +26,33 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   bool isBiometricEnabled = false;
+  String _userName = 'Pengguna';
+  String _userEmail = '';
+  String? _userAvatarPath;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+    UserState.profileUpdatedNotifier.addListener(_loadUserData);
+  }
+
+  @override
+  void dispose() {
+    UserState.profileUpdatedNotifier.removeListener(_loadUserData);
+    super.dispose();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (context.mounted) {
+      setState(() {
+        _userName = prefs.getString('user_name') ?? 'Pengguna';
+        _userEmail = prefs.getString('user_email') ?? '';
+        _userAvatarPath = prefs.getString('user_avatar_path');
+      });
+    }
+  }
 
   void _showBiometricDialog() {
     showDialog(
@@ -67,22 +100,33 @@ class _AccountPageState extends State<AccountPage> {
           children: [
             CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(
-                Icons.person,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              backgroundImage: _userAvatarPath != null ? FileImage(File(_userAvatarPath!)) : null,
+              child: _userAvatarPath == null
+                  ? Icon(
+                      Icons.person,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : null,
             ),
             const SizedBox(width: 12),
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Azhar Ridwan',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  _userName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 Text(
-                  'azharridwan@gmail.com',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                  _userEmail,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white70,
+                  ),
                 ),
               ],
             ),
@@ -90,7 +134,7 @@ class _AccountPageState extends State<AccountPage> {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
         children: [
           // KONTAINER 1
           const Text(
@@ -169,10 +213,25 @@ class _AccountPageState extends State<AccountPage> {
                   leading: const Icon(Icons.edit),
                   title: const Text('Edit Profil'),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (c) => const EditProfilePage()),
-                  ),
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (c) => const EditProfilePage()),
+                    );
+                    _loadUserData(); // Reload after editing
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.color_lens),
+                  title: const Text('Tema Aplikasi'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (c) => const ThemeSettingPage()),
+                    );
+                  },
                 ),
                 const Divider(height: 1),
                 ListTile(
@@ -241,6 +300,24 @@ class _AccountPageState extends State<AccountPage> {
             ),
           ),
 
+          // KONTAINER ADMIN
+          const Text(
+            'Admin',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+          ),
+          Card(
+            margin: const EdgeInsets.only(top: 8, bottom: 32),
+            child: ListTile(
+              leading: const Icon(Icons.admin_panel_settings, color: Colors.blue),
+              title: const Text('Admin Dashboard', style: TextStyle(fontWeight: FontWeight.bold)),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (c) => const AdminDashboardPage()),
+              ),
+            ),
+          ),
+
           // TOMBOL LOGOUT
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
@@ -253,8 +330,17 @@ class _AccountPageState extends State<AccountPage> {
               'Keluar (Logout)',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
-            onPressed: () {
-              // Aksi Logout
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('is_logged_in', false);
+              
+              if (context.mounted) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (c) => const AuthWrapper()),
+                  (route) => false,
+                );
+              }
             },
           ),
           const SizedBox(height: 32),

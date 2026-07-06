@@ -111,8 +111,7 @@ class _AdminArticleFormPageState extends State<AdminArticleFormPage> {
                 validator: (value) => value == null || value.isEmpty ? 'Judul tidak boleh kosong' : null,
               ),
               const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: _selectedCategory,
+              DropdownButtonFormField(initialValue: _selectedCategory,
                 decoration: const InputDecoration(labelText: 'Kategori', border: OutlineInputBorder()),
                 items: formCategories.map((String category) {
                   return DropdownMenuItem(

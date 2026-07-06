@@ -33,7 +33,7 @@ class CertPaymentQrisPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(color: Colors.grey.shade300, blurRadius: 10),
                   ],

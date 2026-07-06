@@ -15,17 +15,41 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const TextField(
-          autofocus: true,
-          decoration: InputDecoration(
-            hintText: 'Cari layanan, artikel...',
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.white70),
+        title: SizedBox(
+          height: 40,
+          child: TextField(
+            autofocus: true,
+            decoration: InputDecoration(
+              hintText: 'Cari layanan, artikel...',
+              // isDense: true,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 0,
+              ), // Kurangi vertical padding
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(color: Colors.white54, width: 1),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(color: Colors.white54, width: 1),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(color: Colors.white, width: 1.5),
+              ),
+              filled: true,
+              fillColor: Colors.white12,
+              hintStyle: const TextStyle(color: Colors.white70),
+              suffixIcon: const Icon(
+                Icons.search,
+                color: Colors.white70,
+                size: 20,
+              ),
+            ),
+            style: const TextStyle(color: Colors.white),
           ),
-          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.blue.shade800,
-        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -68,7 +92,10 @@ class _SearchPageState extends State<SearchPage> {
                       .map(
                         (p) => Chip(
                           label: Text(p),
-                          backgroundColor: Colors.blue.shade50,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).primaryColor.withValues(alpha: 0.1),
+                          side: BorderSide.none,
                         ),
                       )
                       .toList(),

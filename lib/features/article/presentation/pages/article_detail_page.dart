@@ -102,7 +102,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                             horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
                           color: Colors.blue.shade50,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           widget.article.category,
@@ -127,7 +127,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                   const SizedBox(height: 16),
                   Text(
                     widget.article.title,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),

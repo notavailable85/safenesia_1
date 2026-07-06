@@ -97,7 +97,7 @@
 //     showDialog(
 //       context: context,
 //       builder: (context) => AlertDialog(
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 //         contentPadding: const EdgeInsets.all(24),
 //         content: Column(
 //           mainAxisSize: MainAxisSize.min,
@@ -289,7 +289,7 @@
 //                           Container(
 //                             padding: const EdgeInsets.all(12),
 //                             decoration: BoxDecoration(
-//                               color: feature['color'].withOpacity(0.1),
+//                               color: feature['color'].withValues(alpha: 0.1),
 //                               borderRadius: BorderRadius.circular(12),
 //                             ),
 //                             child: Icon(

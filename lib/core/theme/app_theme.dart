@@ -36,7 +36,7 @@
 
 //       // -- Konfigurasi Global Font & Text --
 //       // Jika menggunakan Google Fonts (misal: Poppins)
-//       textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+//       textTheme: GoogleFonts.interTextTheme().copyWith(
 //         displayLarge: const TextStyle(
 //           color: textPrimaryColor,
 //           fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@
 //             fontSize: 14,
 //             fontWeight: FontWeight.w600,
 //           ),
-//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 //         ),
 //       ),
 
@@ -100,7 +100,7 @@
 //             fontSize: 14,
 //             fontWeight: FontWeight.w600,
 //           ),
-//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 //         ),
 //       ),
 
@@ -116,21 +116,21 @@
 //         hintStyle: const TextStyle(color: textSecondaryColor),
 //         // Border saat normal
 //         enabledBorder: OutlineInputBorder(
-//           borderRadius: BorderRadius.circular(10),
+//           borderRadius: BorderRadius.circular(12),
 //           borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
 //         ),
 //         // Border saat sedang diketik (fokus)
 //         focusedBorder: OutlineInputBorder(
-//           borderRadius: BorderRadius.circular(10),
+//           borderRadius: BorderRadius.circular(12),
 //           borderSide: const BorderSide(color: primaryColor, width: 2),
 //         ),
 //         // Border saat ada error/validasi gagal
 //         errorBorder: OutlineInputBorder(
-//           borderRadius: BorderRadius.circular(10),
+//           borderRadius: BorderRadius.circular(12),
 //           borderSide: const BorderSide(color: Colors.redAccent, width: 1),
 //         ),
 //         focusedErrorBorder: OutlineInputBorder(
-//           borderRadius: BorderRadius.circular(10),
+//           borderRadius: BorderRadius.circular(12),
 //           borderSide: const BorderSide(color: Colors.redAccent, width: 2),
 //         ),
 //       ),

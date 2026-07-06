@@ -37,7 +37,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
       appBar: AppBar(
         title: Text(
           'Artikel K3',
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontWeight: FontWeight.w600),
         ),
         actions: [
           IconButton(
@@ -190,7 +190,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
                                         horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
                                       color: Colors.blue.shade50,
-                                      borderRadius: BorderRadius.circular(4),
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Text(
                                       article.category,
@@ -204,7 +204,7 @@ class _ArticleListPageState extends State<ArticleListPage> {
                                   const SizedBox(height: 8),
                                   Text(
                                     article.title,
-                                    style: GoogleFonts.poppins(
+                                    style: GoogleFonts.inter(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),

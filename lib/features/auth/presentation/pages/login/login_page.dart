@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -88,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
 
     bool userFound = false;
     bool passwordCorrect = false;
+    String? foundUserName;
 
     if (usersStr != null) {
       final List<dynamic> registeredUsers = jsonDecode(usersStr);
@@ -96,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
           userFound = true;
           if (user['password'] == password) {
             passwordCorrect = true;
+            foundUserName = user['name'];
             break;
           }
         }
@@ -110,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
         userFound = true;
         if (fallbackPassword == password) {
           passwordCorrect = true;
+          foundUserName = 'Pengguna';
         }
       }
     }
@@ -124,13 +126,22 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    // Simpan data sesi ke SharedPreferences
+    await prefs.setString('login_method', 'manual');
+    await prefs.setString('user_name', foundUserName ?? 'Pengguna');
+    await prefs.setString('user_email', identifier);
+    await prefs.setBool('is_logged_in', true);
+    await prefs.setInt(
+      'last_active_time',
+      DateTime.now().millisecondsSinceEpoch,
+    );
+
     // Login berhasil
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-      );
-    }
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (c) => const MainNavigationScreen()),
+    );
   }
 
   @override
@@ -144,30 +155,17 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 6),
               Image.asset(AppAssets.logoVertical, height: 200),
               SizedBox(height: 30),
-              Text(
-                'Selamat Datang!',
-                style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimaryLight,
-                  ),
-                ),
-              ),
-              Text(
-                'Silakan masuk ke akun Anda',
-                style: GoogleFonts.inter(
-                  textStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                ),
-              ),
+
               const SizedBox(height: 30),
 
               TextField(
@@ -223,19 +221,22 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade800,
-                    foregroundColor: Colors.white,
-                  ),
                   onPressed: _login,
                   child: const Text('Login', style: TextStyle(fontSize: 16)),
                 ),
               ),
 
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Center(
-                  child: Text('ATAU', style: TextStyle(color: Colors.grey)),
+                  child: Text(
+                    'ATAU',
+                    style: TextStyle(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.5),
+                    ),
+                  ),
                 ),
               ),
 
@@ -244,6 +245,16 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    side: BorderSide(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey.shade700
+                          : Colors.grey.shade300,
+                    ),
+                  ),
                   onPressed: _isLoadingGoogle
                       ? null
                       : () async {
@@ -277,6 +288,11 @@ class _LoginPageState extends State<LoginPage> {
                               'user_email',
                               googleUser.email,
                             );
+                            await prefs.setBool('is_logged_in', true);
+                            await prefs.setInt(
+                              'last_active_time',
+                              DateTime.now().millisecondsSinceEpoch,
+                            );
 
                             if (context.mounted) {
                               setState(() {
@@ -294,7 +310,8 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const MainNavigationScreen(),
+                                  builder: (context) =>
+                                      const MainNavigationScreen(),
                                 ),
                               );
                             }
@@ -323,7 +340,9 @@ class _LoginPageState extends State<LoginPage> {
                       : SvgPicture.asset(AppAssets.iconGoogle, height: 24),
                   label: Text(
                     _isLoadingGoogle ? 'Memproses...' : 'Masuk dengan Google',
-                    style: const TextStyle(color: Colors.black87),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ),
               ),
@@ -349,6 +368,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

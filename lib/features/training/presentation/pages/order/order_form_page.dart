@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:safenesia_1/features/training/presentation/pages/order/order_summary_page.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ==========================================
 // 3. HALAMAN FORM DATA PEMESAN & PESERTA
@@ -13,7 +15,7 @@ class OrderFormPage extends StatefulWidget {
   State<OrderFormPage> createState() => _OrderFormPageState();
 }
 
-class _OrderFormPageState extends State<OrderFormPage> {
+class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserver {
   final _formKey = GlobalKey<FormState>();
 
   // Form 1
@@ -33,7 +35,94 @@ class _OrderFormPageState extends State<OrderFormPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _updatePesertaControllers();
+    _loadData();
+  }
+
+  static const String _prefKey = 'order_form_temp_data';
+  static const String _prefTimestampKey = 'order_form_timestamp';
+
+  void _saveData() {
+    // Ambil semua data secara sinkron sebelum controller di-dispose
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final data = {
+      'schedule_id': widget.scheduleData.idJadwal,
+      'jenis_peserta': _jenisPeserta,
+      'jumlah_peserta': _jumlahPeserta,
+      'nama_pemesan': _namaPemesanController.text,
+      'wa_pemesan': _waPemesanController.text,
+      'email_pemesan': _emailPemesanController.text,
+      'peserta': List.generate(_jumlahPeserta, (i) {
+        if (i < _namaPesertaControllers.length) {
+          return {
+            'nama': _namaPesertaControllers[i].text,
+            'wa': _waPesertaControllers[i].text,
+            'email': _emailPesertaControllers[i].text,
+          };
+        }
+        return {'nama': '', 'wa': '', 'email': ''};
+      }),
+    };
+    final dataString = json.encode(data);
+
+    // Lakukan penyimpanan secara asynchronous
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setInt(_prefTimestampKey, timestamp);
+      prefs.setString(_prefKey, dataString);
+    });
+  }
+
+  Future<void> _loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    final timestamp = prefs.getInt(_prefTimestampKey);
+    if (timestamp != null) {
+      final savedTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      final difference = DateTime.now().difference(savedTime);
+      if (difference.inMinutes >= 10) {
+        await prefs.remove(_prefKey);
+        await prefs.remove(_prefTimestampKey);
+        return; // Data kadaluarsa
+      }
+    }
+    
+    final dataString = prefs.getString(_prefKey);
+    if (dataString != null) {
+      try {
+        final data = json.decode(dataString) as Map<String, dynamic>;
+        if (data['schedule_id'] == widget.scheduleData.idJadwal) {
+          setState(() {
+            _jenisPeserta = data['jenis_peserta'] ?? 'Pribadi';
+            _jumlahPeserta = data['jumlah_peserta'] ?? 1;
+            
+            _namaPemesanController.text = data['nama_pemesan'] ?? '';
+            _waPemesanController.text = data['wa_pemesan'] ?? '';
+            _emailPemesanController.text = data['email_pemesan'] ?? '';
+            
+            _updatePesertaControllers();
+            
+            final List<dynamic>? peserta = data['peserta'];
+            if (peserta != null) {
+              for (int i = 0; i < peserta.length && i < _jumlahPeserta; i++) {
+                _namaPesertaControllers[i].text = peserta[i]['nama'] ?? '';
+                _waPesertaControllers[i].text = peserta[i]['wa'] ?? '';
+                _emailPesertaControllers[i].text = peserta[i]['email'] ?? '';
+              }
+            }
+          });
+        }
+      } catch (e) {
+        debugPrint('Error loading form data: $e');
+      }
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      _saveData();
+    }
   }
 
   void _updatePesertaControllers() {
@@ -51,6 +140,8 @@ class _OrderFormPageState extends State<OrderFormPage> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _saveData();
     _namaPemesanController.dispose();
     _waPemesanController.dispose();
     _emailPemesanController.dispose();
@@ -66,17 +157,25 @@ class _OrderFormPageState extends State<OrderFormPage> {
     super.dispose();
   }
 
-
+  
   String? _validateEmail(String? v) {
     if (v == null || v.isEmpty) return 'Wajib diisi';
-    if (!v.contains('@') || !v.contains('.')) return 'Email tidak valid';
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(v)) return 'Format email tidak valid (contoh: budi@email.com)';
     return null;
   }
 
   String? _validatePhone(String? v) {
     if (v == null || v.isEmpty) return 'Wajib diisi';
-    if (v.length < 9) return 'No WA terlalu pendek';
-    if (!RegExp(r'^[0-9]+$').hasMatch(v)) return 'Hanya boleh angka';
+    
+    String cleanNumber = v.replaceAll(' ', '').replaceAll('-', '');
+    
+    if (!RegExp(r'^\+?[0-9]+$').hasMatch(cleanNumber)) return 'Hanya boleh berisi angka';
+    if (cleanNumber.length < 9 || cleanNumber.length > 15) return 'Nomor tidak valid (9-15 digit)';
+    if (!cleanNumber.startsWith('08') && !cleanNumber.startsWith('62') && !cleanNumber.startsWith('+62')) {
+      return 'Harus diawali 08, 62, atau +62';
+    }
+    
     return null;
   }
 
@@ -87,7 +186,18 @@ class _OrderFormPageState extends State<OrderFormPage> {
       floatingLabelStyle: const TextStyle(fontSize: 12),
       isDense: true,
       prefixIcon: Icon(icon, color: Theme.of(context).colorScheme.primary),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade400),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0),
+      ),
       filled: true,
       fillColor: Theme.of(context).colorScheme.surface,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -100,6 +210,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
       appBar: AppBar(title: const Text('Data Pemesan & Peserta')),
       body: Form(
         key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
@@ -116,7 +227,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(12),
                 side: const BorderSide(
                   color: Colors.grey,
                 ),
@@ -138,7 +249,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                           .toList(),
                       onChanged: (val) => setState(() => _jenisPeserta = val!),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 12),
                     DropdownButtonFormField<int>(
                       initialValue: _jumlahPeserta,
                       decoration: _buildInputDecoration(
@@ -181,16 +292,17 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 ),
               ],
             ),
+            const SizedBox(height: 12),
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(12),
                 side: const BorderSide(
                   color: Colors.grey,
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     TextFormField(
@@ -201,7 +313,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                       ),
                       validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 12),
                     TextFormField(
                       controller: _waPemesanController,
                       decoration: _buildInputDecoration(
@@ -211,7 +323,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                       keyboardType: TextInputType.phone,
                       validator: _validatePhone,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 12),
                     TextFormField(
                       controller: _emailPemesanController,
                       decoration: _buildInputDecoration('Email', Icons.email),
@@ -245,12 +357,12 @@ class _OrderFormPageState extends State<OrderFormPage> {
                     ),
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.surface,
-                      foregroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Colors.green,
                       side: const BorderSide(
                         color: Colors.grey,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
@@ -270,13 +382,13 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: OutlinedButton(
+                  child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       foregroundColor: Colors.red,
                       side: const BorderSide(color: Colors.grey),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
@@ -289,7 +401,8 @@ class _OrderFormPageState extends State<OrderFormPage> {
                         }
                       });
                     },
-                    child: const Text(
+                    icon: const Icon(Icons.delete, size: 16),
+                    label: const Text(
                       'Kosongkan',
                       style: TextStyle(fontSize: 12),
                     ),
@@ -315,11 +428,11 @@ class _OrderFormPageState extends State<OrderFormPage> {
 
                 return Card(
                   color: isComplete
-                      ? Colors.green.withOpacity(0.1)
-                      : Colors.red.withOpacity(0.1),
+                      ? Colors.green.withValues(alpha: 0.1)
+                      : Colors.red.withValues(alpha: 0.1),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(12),
                     side: const BorderSide(
                       color: Colors.grey,
                     ),
@@ -349,7 +462,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                         validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
                         onChanged: (val) => setState(() {}),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
                       TextFormField(
                         controller: _waPesertaControllers[index],
                         decoration: _buildInputDecoration(
@@ -360,7 +473,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
                         validator: _validatePhone,
                         onChanged: (val) => setState(() {}),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
                       TextFormField(
                         controller: _emailPesertaControllers[index],
                         decoration: _buildInputDecoration('Email', Icons.email),
@@ -378,7 +491,13 @@ class _OrderFormPageState extends State<OrderFormPage> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        height: 70.0 + MediaQuery.of(context).padding.bottom,
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8 + MediaQuery.of(context).padding.bottom,
+        ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           boxShadow: const [
@@ -389,10 +508,7 @@ class _OrderFormPageState extends State<OrderFormPage> {
             ),
           ],
         ),
-        child: SafeArea(
-          child: SizedBox(
-            height: 50,
-            child: ElevatedButton(
+        child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -446,8 +562,6 @@ class _OrderFormPageState extends State<OrderFormPage> {
                 ],
               ),
             ),
-          ),
-        ),
       ),
     );
   }

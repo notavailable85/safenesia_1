@@ -16,20 +16,23 @@ class ForgotPasswordPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Jangan khawatir!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Masukkan email yang terdaftar, kami akan mengirimkan kode OTP untuk mereset password Anda.',
-              style: TextStyle(color: Colors.grey),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
             ),
             const SizedBox(height: 32),
             const TextField(
               decoration: InputDecoration(
                 labelText: 'Email Anda',
-                border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.email),
               ),
             ),
@@ -38,10 +41,6 @@ class ForgotPasswordPage extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue.shade800,
-                  foregroundColor: Colors.white,
-                ),
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(

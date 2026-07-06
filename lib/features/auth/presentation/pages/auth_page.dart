@@ -272,7 +272,7 @@
 //       width: _currentPage == index ? 25 : 10,
 //       margin: const EdgeInsets.only(right: 5),
 //       decoration: BoxDecoration(
-//         borderRadius: BorderRadius.circular(20),
+//         borderRadius: BorderRadius.circular(12),
 //         color: _currentPage == index
 //             ? Colors.blue.shade800
 //             : Colors.grey.shade300,

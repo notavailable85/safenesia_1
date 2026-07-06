@@ -3,11 +3,17 @@ import 'package:path/path.dart';
 import 'package:safenesia_1/features/article/models/article_model.dart';
 import 'package:safenesia_1/features/training/models/training_model.dart';
 import 'package:safenesia_1/features/training/models/training_schedule_model.dart';
+import 'package:safenesia_1/features/certification/models/certification_model.dart';
+import 'package:safenesia_1/features/career/models/career_model.dart';
+import 'package:safenesia_1/features/notification/models/notification_model.dart';
+import 'package:safenesia_1/features/regulation/models/regulation_model.dart';
+import 'package:safenesia_1/features/inspection/models/inspection_model.dart';
+import 'package:safenesia_1/features/auth/models/user_model.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static const _databaseName = "safenesia.db";
-  static const _databaseVersion = 7;
+  static const _databaseVersion = 13;
 
   static Database? _database;
 
@@ -59,6 +65,30 @@ class DatabaseHelper {
       await _createTrainingsTable(db);
       await _createTrainingSchedulesTable(db);
     }
+    if (oldVersion < 8) {
+      await _createCertificationsTable(db);
+      await _createCareersTable(db);
+      await _createNotificationsTable(db);
+      await _createRegulationsTable(db);
+    }
+    if (oldVersion < 9) {
+      await _createUsersTable(db);
+    }
+    if (oldVersion < 10) {
+      await db.execute('DROP TABLE IF EXISTS regulations');
+      await _createRegulationsTable(db);
+    }
+    if (oldVersion < 11) {
+      await _createInspectionsTable(db);
+    }
+    if (oldVersion < 12) {
+      await db.execute('DROP TABLE IF EXISTS careers');
+      await _createCareersTable(db);
+    }
+    if (oldVersion < 13) {
+      await db.execute('DROP TABLE IF EXISTS training_schedules');
+      await _createTrainingSchedulesTable(db);
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -82,6 +112,108 @@ CREATE TABLE articles (
     // Prepopulate with dummy data
     for (var article in dummyArticles) {
       await db.insert('articles', article.toMap());
+    }
+    await _createCertificationsTable(db);
+    await _createCareersTable(db);
+    await _createNotificationsTable(db);
+    await _createRegulationsTable(db);
+    await _createInspectionsTable(db);
+    await _createUsersTable(db);
+  }
+
+  Future _createUsersTable(Database db) async {
+    await db.execute('''
+CREATE TABLE users (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  password TEXT NOT NULL,
+  phoneNumber TEXT NOT NULL,
+  role TEXT NOT NULL
+)
+''');
+    
+    // Insert default admin
+    await db.insert('users', {
+      'id': 'admin-1',
+      'name': 'Administrator',
+      'email': 'admin@gmail.com',
+      'password': 'password123',
+      'phoneNumber': '08123456789',
+      'role': 'admin',
+    });
+  }
+
+  Future _createCertificationsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE certifications (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  category TEXT NOT NULL,
+  level TEXT NOT NULL,
+  basePrice INTEGER NOT NULL
+)
+''');
+    for (var cert in dummyCertifications) {
+      await db.insert('certifications', cert.toMap());
+    }
+  }
+
+  Future _createCareersTable(Database db) async {
+    await db.execute('''
+CREATE TABLE careers (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  company TEXT NOT NULL,
+  field TEXT NOT NULL,
+  location TEXT NOT NULL,
+  jobType TEXT NOT NULL,
+  experienceLevel TEXT NOT NULL,
+  salaryMin INTEGER NOT NULL,
+  salaryMax INTEGER NOT NULL,
+  description TEXT NOT NULL,
+  requirements TEXT NOT NULL,
+  benefits TEXT NOT NULL,
+  postedDate TEXT NOT NULL,
+  companyLogoUrl TEXT NOT NULL,
+  isSaved INTEGER NOT NULL,
+  isApplied INTEGER NOT NULL
+)
+''');
+    for (var career in dummyCareers) {
+      await db.insert('careers', career.toMap());
+    }
+  }
+
+  Future _createNotificationsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE notifications (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  subtitle TEXT NOT NULL,
+  type TEXT NOT NULL
+)
+''');
+    for (var notif in dummyNotifications) {
+      await db.insert('notifications', notif.toMap());
+    }
+  }
+
+  Future _createRegulationsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE regulations (
+  id TEXT PRIMARY KEY,
+  category TEXT NOT NULL,
+  title TEXT NOT NULL,
+  nomor TEXT NOT NULL,
+  tahun TEXT NOT NULL,
+  deskripsi TEXT NOT NULL,
+  fileUrl TEXT NOT NULL,
+  isSaved INTEGER NOT NULL
+)
+''');
+    for (var reg in dummyRegulations) {
+      await db.insert('regulations', reg.toMap());
     }
   }
 
@@ -165,6 +297,20 @@ CREATE TABLE training_schedules (
       'tanggalEnd': DateTime(now.year, now.month + 2, 17).toIso8601String(),
       'gambar': '',
     });
+    await db.insert('training_schedules', {
+      'idJadwal': 's4',
+      'idPelatihan': '2', // Auditor SMK3
+      'tanggalStart': DateTime(now.year, now.month + 1, 10).toIso8601String(),
+      'tanggalEnd': DateTime(now.year, now.month + 1, 15).toIso8601String(),
+      'gambar': '',
+    });
+    await db.insert('training_schedules', {
+      'idJadwal': 's5',
+      'idPelatihan': '3', // Petugas P3K
+      'tanggalStart': DateTime(now.year, now.month + 2, 20).toIso8601String(),
+      'tanggalEnd': DateTime(now.year, now.month + 2, 22).toIso8601String(),
+      'gambar': '',
+    });
   }
 
   // ================= ARTICLE METHODS =================
@@ -194,12 +340,7 @@ CREATE TABLE training_schedules (
 
   Future<int> update(Article article) async {
     final db = await instance.database;
-    return db.update(
-      'articles',
-      article.toMap(),
-      where: 'id = ?',
-      whereArgs: [article.id],
-    );
+    return db.update('articles', article.toMap(), where: 'id = ?', whereArgs: [article.id]);
   }
 
   Future<int> delete(String id) async {
@@ -217,11 +358,7 @@ CREATE TABLE training_schedules (
 
   Future<Training?> readTraining(String id) async {
     final db = await instance.database;
-    final maps = await db.query(
-      'trainings',
-      where: 'idPelatihan = ?',
-      whereArgs: [id],
-    );
+    final maps = await db.query('trainings', where: 'idPelatihan = ?', whereArgs: [id]);
     if (maps.isNotEmpty) {
       return Training.fromMap(maps.first);
     } else {
@@ -238,27 +375,14 @@ CREATE TABLE training_schedules (
 
   Future<int> updateTraining(Training training) async {
     final db = await instance.database;
-    return db.update(
-      'trainings',
-      training.toMap(),
-      where: 'idPelatihan = ?',
-      whereArgs: [training.idPelatihan],
-    );
+    return db.update('trainings', training.toMap(), where: 'idPelatihan = ?', whereArgs: [training.idPelatihan]);
   }
 
   Future<int> deleteTraining(String id) async {
     final db = await instance.database;
     // Also delete associated schedules
-    await db.delete(
-      'training_schedules',
-      where: 'idPelatihan = ?',
-      whereArgs: [id],
-    );
-    return await db.delete(
-      'trainings',
-      where: 'idPelatihan = ?',
-      whereArgs: [id],
-    );
+    await db.delete('training_schedules', where: 'idPelatihan = ?', whereArgs: [id]);
+    return await db.delete('trainings', where: 'idPelatihan = ?', whereArgs: [id]);
   }
 
   // ================= TRAINING SCHEDULE METHODS =================
@@ -271,26 +395,17 @@ CREATE TABLE training_schedules (
 
   Future<int> updateSchedule(TrainingSchedule schedule) async {
     final db = await instance.database;
-    return db.update(
-      'training_schedules',
-      schedule.toMap(),
-      where: 'idJadwal = ?',
-      whereArgs: [schedule.idJadwal],
-    );
+    return db.update('training_schedules', schedule.toMap(), where: 'idJadwal = ?', whereArgs: [schedule.idJadwal]);
   }
 
   Future<int> deleteSchedule(String id) async {
     final db = await instance.database;
-    return await db.delete(
-      'training_schedules',
-      where: 'idJadwal = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('training_schedules', where: 'idJadwal = ?', whereArgs: [id]);
   }
 
   Future<List<TrainingSchedule>> readAllSchedulesWithTraining() async {
     final db = await instance.database;
-
+    
     // Perform SQL JOIN to get Schedule + Training details
     final List<Map<String, dynamic>> result = await db.rawQuery('''
       SELECT s.*, t.* 
@@ -307,8 +422,169 @@ CREATE TABLE training_schedules (
     }).toList();
   }
 
+  // ================= CERTIFICATION METHODS =================
+  Future<CertModel> createCertification(CertModel cert) async {
+    final db = await instance.database;
+    await db.insert('certifications', cert.toMap());
+    return cert;
+  }
+
+  Future<List<CertModel>> readAllCertifications() async {
+    final db = await instance.database;
+    final result = await db.query('certifications');
+    return result.map((json) => CertModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateCertification(CertModel cert) async {
+    final db = await instance.database;
+    return db.update('certifications', cert.toMap(), where: 'id = ?', whereArgs: [cert.id]);
+  }
+
+  Future<int> deleteCertification(String id) async {
+    final db = await instance.database;
+    return await db.delete('certifications', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ================= CAREER METHODS =================
+  Future<CareerModel> createCareer(CareerModel career) async {
+    final db = await instance.database;
+    await db.insert('careers', career.toMap());
+    return career;
+  }
+
+  Future<List<CareerModel>> readAllCareers() async {
+    final db = await instance.database;
+    final result = await db.query('careers');
+    return result.map((json) => CareerModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateCareer(CareerModel career) async {
+    final db = await instance.database;
+    return db.update(
+      'careers',
+      career.toMap(),
+      where: 'id = ?',
+      whereArgs: [career.id],
+    );
+  }
+
+  Future<int> deleteCareer(String id) async {
+    final db = await instance.database;
+    return await db.delete('careers', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ================= NOTIFICATION METHODS =================
+  Future<NotificationModel> createNotification(NotificationModel notification) async {
+    final db = await instance.database;
+    await db.insert('notifications', notification.toMap());
+    return notification;
+  }
+
+  Future<List<NotificationModel>> readAllNotifications() async {
+    final db = await instance.database;
+    final result = await db.query('notifications');
+    return result.map((json) => NotificationModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateNotification(NotificationModel notification) async {
+    final db = await instance.database;
+    return db.update('notifications', notification.toMap(), where: 'id = ?', whereArgs: [notification.id]);
+  }
+
+  Future<int> deleteNotification(String id) async {
+    final db = await instance.database;
+    return await db.delete('notifications', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ================= REGULATION METHODS =================
+  Future<RegulationModel> createRegulation(RegulationModel regulation) async {
+    final db = await instance.database;
+    await db.insert('regulations', regulation.toMap());
+    return regulation;
+  }
+
+  Future<List<RegulationModel>> readAllRegulations() async {
+    final db = await instance.database;
+    final result = await db.query('regulations');
+    return result.map((json) => RegulationModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateRegulation(RegulationModel regulation) async {
+    final db = await instance.database;
+    return db.update('regulations', regulation.toMap(), where: 'id = ?', whereArgs: [regulation.id]);
+  }
+
+  Future<int> deleteRegulation(String id) async {
+    final db = await instance.database;
+    return await db.delete('regulations', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ================= USER METHODS =================
+  Future<UserModel> createUser(UserModel user) async {
+    final db = await instance.database;
+    await db.insert('users', user.toMap());
+    return user;
+  }
+
+  Future<List<UserModel>> readAllUsers() async {
+    final db = await instance.database;
+    final result = await db.query('users');
+    return result.map((json) => UserModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateUser(UserModel user) async {
+    final db = await instance.database;
+    return db.update('users', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
+  }
+
+  Future<int> deleteUser(String id) async {
+    final db = await instance.database;
+    return await db.delete('users', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ================= INSPECTION METHODS =================
+  Future _createInspectionsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE inspections (
+  id TEXT PRIMARY KEY,
+  companyName TEXT NOT NULL,
+  equipmentType TEXT NOT NULL,
+  location TEXT NOT NULL,
+  scheduledDate TEXT NOT NULL,
+  notes TEXT NOT NULL,
+  status TEXT NOT NULL
+)
+''');
+    for (var ins in dummyInspections) {
+      await db.insert('inspections', ins.toMap());
+    }
+  }
+
+  Future<InspectionModel> createInspection(InspectionModel inspection) async {
+    final db = await instance.database;
+    await db.insert('inspections', inspection.toMap());
+    return inspection;
+  }
+
+  Future<List<InspectionModel>> readAllInspections() async {
+    final db = await instance.database;
+    final result = await db.query('inspections', orderBy: 'ROWID DESC');
+    return result.map((json) => InspectionModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateInspection(InspectionModel inspection) async {
+    final db = await instance.database;
+    return db.update('inspections', inspection.toMap(), where: 'id = ?', whereArgs: [inspection.id]);
+  }
+
+  Future<int> deleteInspection(String id) async {
+    final db = await instance.database;
+    return await db.delete('inspections', where: 'id = ?', whereArgs: [id]);
+  }
+
   Future close() async {
     final db = await instance.database;
     db.close();
   }
 }
+

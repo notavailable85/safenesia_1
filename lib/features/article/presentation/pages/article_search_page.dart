@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/article/models/article_model.dart';
 import 'package:safenesia_1/features/article/presentation/pages/article_detail_page.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
+import 'package:safenesia_1/core/widgets/standard_search_field.dart';
 
 class ArticleSearchPage extends StatefulWidget {
   const ArticleSearchPage({super.key});
@@ -50,18 +51,11 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
+        title: StandardSearchField(
+          hintText: 'Cari artikel...',
           autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Cari artikel...',
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.white70),
-          ),
-          style: const TextStyle(color: Colors.white, fontSize: 18),
           onChanged: _onSearchChanged,
         ),
-        backgroundColor: Colors.blue.shade800,
-        foregroundColor: Colors.white,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -92,7 +86,7 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(8),
                         leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                           child: Image.network(
                             article.imageUrl,
                             width: 80,
@@ -110,7 +104,7 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
                           article.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
+                          style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -120,7 +114,7 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
                           child: Text(
                             article.category,
                             style: TextStyle(
-                              color: Colors.blue.shade800,
+                              color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
                             ),

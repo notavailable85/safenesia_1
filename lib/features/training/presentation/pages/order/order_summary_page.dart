@@ -38,14 +38,16 @@ class OrderSummaryPage extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
           // Bagian 1: Info Pelatihan
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -53,7 +55,7 @@ class OrderSummaryPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
                       scheduleData.trainingData!.gambarPelatihan,
                       width: 80,
@@ -76,12 +78,19 @@ class OrderSummaryPage extends StatelessWidget {
                       children: [
                         Text(
                           scheduleData.trainingData!.namaPelatihan,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            Icon(Icons.verified, size: 14, color: Theme.of(context).colorScheme.primary),
+                            Icon(
+                              Icons.verified,
+                              size: 14,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
@@ -94,11 +103,18 @@ class OrderSummaryPage extends StatelessWidget {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.calendar_today, size: 14, color: Colors.grey),
+                            const Icon(
+                              Icons.calendar_today,
+                              size: 14,
+                              color: Colors.grey,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               scheduleData.tanggalStr,
-                              style: const TextStyle(fontSize: 12, color: Colors.grey),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
                             ),
                           ],
                         ),
@@ -109,7 +125,7 @@ class OrderSummaryPage extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
           // Bagian 2: Daftar Peserta
           Row(
@@ -118,16 +134,21 @@ class OrderSummaryPage extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'Daftar Peserta ($jumlahPeserta Peserta)',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+              ),
             ),
             child: ListView.separated(
               shrinkWrap: true,
@@ -138,8 +159,13 @@ class OrderSummaryPage extends StatelessWidget {
                 final p = daftarPeserta[index];
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                    child: Icon(Icons.person, color: Theme.of(context).colorScheme.onPrimaryContainer),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primaryContainer,
+                    child: Icon(
+                      Icons.person,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
                   ),
                   title: Text(
                     p['nama_lengkap'] ?? 'Tanpa Nama',
@@ -150,12 +176,15 @@ class OrderSummaryPage extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
           // Bagian 3: Rincian Harga
           Row(
             children: [
-              Icon(Icons.receipt_long, color: Theme.of(context).colorScheme.primary),
+              Icon(
+                Icons.receipt_long,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               const SizedBox(width: 8),
               const Text(
                 'Rincian Harga',
@@ -163,12 +192,14 @@ class OrderSummaryPage extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -183,12 +214,17 @@ class OrderSummaryPage extends StatelessWidget {
                           children: [
                             Text(
                               scheduleData.trainingData!.namaPelatihan,
-                              style: const TextStyle(fontWeight: FontWeight.w500),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               '$jumlahPeserta x ${hargaSatuan.toRupiah()}',
-                              style: const TextStyle(color: Colors.grey, fontSize: 12),
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
@@ -203,11 +239,17 @@ class OrderSummaryPage extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
         ],
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        height: 70.0 + MediaQuery.of(context).padding.bottom,
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8 + MediaQuery.of(context).padding.bottom,
+        ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           boxShadow: const [
@@ -218,16 +260,21 @@ class OrderSummaryPage extends StatelessWidget {
             ),
           ],
         ),
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
                     'Total Harga',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     totalHarga.toRupiah(),
@@ -239,39 +286,37 @@ class OrderSummaryPage extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => QrisPaymentPage(
-                          totalBayar: totalHarga,
-                          namaPelatihan: scheduleData.trainingData!.namaPelatihan,
-                          jumlahPeserta: jumlahPeserta,
-                          hargaSatuan: hargaSatuan,
-                        ),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Bayar',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: 120,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QrisPaymentPage(
+                        totalBayar: totalHarga,
+                        namaPelatihan: scheduleData.trainingData!.namaPelatihan,
+                        jumlahPeserta: jumlahPeserta,
+                        hargaSatuan: hargaSatuan,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Bayar',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
