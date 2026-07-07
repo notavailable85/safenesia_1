@@ -100,7 +100,9 @@ class _AccountPageState extends State<AccountPage> {
           children: [
             CircleAvatar(
               backgroundColor: Colors.white,
-              backgroundImage: _userAvatarPath != null ? FileImage(File(_userAvatarPath!)) : null,
+              backgroundImage: _userAvatarPath != null
+                  ? FileImage(File(_userAvatarPath!))
+                  : null,
               child: _userAvatarPath == null
                   ? Icon(
                       Icons.person,
@@ -134,7 +136,12 @@ class _AccountPageState extends State<AccountPage> {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
+        padding: const EdgeInsets.only(
+          left: 16,
+          top: 16,
+          right: 16,
+          bottom: 100,
+        ),
         children: [
           // KONTAINER 1
           const Text(
@@ -216,7 +223,9 @@ class _AccountPageState extends State<AccountPage> {
                   onTap: () async {
                     await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (c) => const EditProfilePage()),
+                      MaterialPageRoute(
+                        builder: (c) => const EditProfilePage(),
+                      ),
                     );
                     _loadUserData(); // Reload after editing
                   },
@@ -229,7 +238,9 @@ class _AccountPageState extends State<AccountPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (c) => const ThemeSettingPage()),
+                      MaterialPageRoute(
+                        builder: (c) => const ThemeSettingPage(),
+                      ),
                     );
                   },
                 ),
@@ -308,8 +319,14 @@ class _AccountPageState extends State<AccountPage> {
           Card(
             margin: const EdgeInsets.only(top: 8, bottom: 32),
             child: ListTile(
-              leading: const Icon(Icons.admin_panel_settings, color: Colors.blue),
-              title: const Text('Admin Dashboard', style: TextStyle(fontWeight: FontWeight.bold)),
+              leading: const Icon(
+                Icons.admin_panel_settings,
+                color: Colors.blue,
+              ),
+              title: const Text(
+                'Admin Dashboard',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => Navigator.push(
                 context,
@@ -333,7 +350,7 @@ class _AccountPageState extends State<AccountPage> {
             onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.setBool('is_logged_in', false);
-              
+
               if (context.mounted) {
                 Navigator.pushAndRemoveUntil(
                   context,

@@ -500,9 +500,12 @@ class TrainingDetailPage extends StatelessWidget {
     bool isFile,
   ) async {
     try {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Menyimpan gambar...')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content: Text('Menyimpan gambar...'),
+        ),
+      );
 
       String savePath = '';
 
@@ -535,14 +538,20 @@ class TrainingDetailPage extends StatelessWidget {
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Gambar berhasil disimpan ke galeri!')),
+          const SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Gambar berhasil disimpan ke galeri!'),
+          ),
         );
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Gagal menyimpan gambar: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Gagal menyimpan gambar: $e'),
+          ),
+        );
       }
     }
   }

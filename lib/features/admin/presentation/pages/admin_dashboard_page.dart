@@ -16,12 +16,20 @@ class AdminDashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Dashboard', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Admin Dashboard',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
       ),
       body: GridView.count(
-        padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
+        padding: const EdgeInsets.only(
+          left: 16,
+          top: 16,
+          right: 16,
+          bottom: 100,
+        ),
         crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
@@ -103,10 +111,7 @@ class AdminDashboardPage extends StatelessWidget {
   }) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
       borderRadius: BorderRadius.circular(12),
       child: Container(

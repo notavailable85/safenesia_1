@@ -34,7 +34,10 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Terjadi kesalahan: $e')),
+          SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Terjadi kesalahan: $e'),
+          ),
         );
       }
     }
@@ -45,7 +48,9 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Hapus Pelatihan'),
-        content: const Text('Apakah Anda yakin ingin menghapus jadwal pelatihan ini?'),
+        content: const Text(
+          'Apakah Anda yakin ingin menghapus jadwal pelatihan ini?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -53,7 +58,10 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text('Hapus', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            child: Text(
+              'Hapus',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           ),
         ],
       ),
@@ -64,7 +72,10 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
       _refreshTrainings();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Jadwal pelatihan berhasil dihapus')),
+          const SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Jadwal pelatihan berhasil dihapus'),
+          ),
         );
       }
     }
@@ -88,52 +99,64 @@ class _AdminTrainingListPageState extends State<AdminTrainingListPage> {
                 ),
               );
             },
-          )
+          ),
         ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _trainings.isEmpty
-              ? const Center(child: Text('Belum ada jadwal pelatihan.'))
-              : ListView.builder(
-                  itemCount: _trainings.length,
-                  itemBuilder: (context, index) {
-                    final training = _trainings[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        title: Text(
-                          training.namaPelatihan,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+          ? const Center(child: Text('Belum ada jadwal pelatihan.'))
+          : ListView.builder(
+              itemCount: _trainings.length,
+              itemBuilder: (context, index) {
+                final training = _trainings[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      training.namaPelatihan,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      '${training.bidang} • ${training.hargaPromo.toRupiah()}',
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.edit,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AdminTrainingFormPage(training: training),
+                              ),
+                            );
+                            _refreshTrainings();
+                          },
                         ),
-                        subtitle: Text('${training.bidang} • ${training.hargaPromo.toRupiah()}'),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
-                              onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminTrainingFormPage(training: training),
-                                  ),
-                                );
-                                _refreshTrainings();
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-                              onPressed: () => _deleteTraining(training.idPelatihan),
-                            ),
-                          ],
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                          onPressed: () =>
+                              _deleteTraining(training.idPelatihan),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
-
         child: const Icon(Icons.add),
         onPressed: () async {
           await Navigator.push(

@@ -46,7 +46,9 @@ class OrderSummaryPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: BorderSide(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.2),
               ),
             ),
             child: Padding(
@@ -147,7 +149,9 @@ class OrderSummaryPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: BorderSide(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.2),
               ),
             ),
             child: ListView.separated(
@@ -198,7 +202,9 @@ class OrderSummaryPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: BorderSide(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.2),
               ),
             ),
             child: Padding(

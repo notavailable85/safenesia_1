@@ -7,7 +7,8 @@ class AdminRegulationListPage extends StatefulWidget {
   const AdminRegulationListPage({super.key});
 
   @override
-  State<AdminRegulationListPage> createState() => _AdminRegulationListPageState();
+  State<AdminRegulationListPage> createState() =>
+      _AdminRegulationListPageState();
 }
 
 class _AdminRegulationListPageState extends State<AdminRegulationListPage> {
@@ -31,7 +32,10 @@ class _AdminRegulationListPageState extends State<AdminRegulationListPage> {
     refreshRegulations();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Regulation deleted')),
+        const SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content: Text('Regulation deleted'),
+        ),
       );
     }
   }
@@ -47,63 +51,70 @@ class _AdminRegulationListPageState extends State<AdminRegulationListPage> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : regulations.isEmpty
-              ? const Center(child: Text('No Regulations found'))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: regulations.length,
-                  itemBuilder: (context, index) {
-                    final regulation = regulations[index];
-                    return Card(
-                      child: ListTile(
-                        leading: const Icon(Icons.gavel, color: Colors.teal),
-                        title: Text(regulation.title),
-                        subtitle: Text(regulation.category),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.orange),
-                              onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminRegulationFormPage(regulation: regulation),
-                                  ),
-                                );
-                                refreshRegulations();
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('Delete Regulation'),
-                                    content: const Text('Are you sure you want to delete this regulation?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          deleteRegulation(regulation.id);
-                                        },
-                                        child: const Text('Delete', style: TextStyle(color: Colors.red)),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+          ? const Center(child: Text('No Regulations found'))
+          : ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: regulations.length,
+              itemBuilder: (context, index) {
+                final regulation = regulations[index];
+                return Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.gavel, color: Colors.teal),
+                    title: Text(regulation.title),
+                    subtitle: Text(regulation.category),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.orange),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AdminRegulationFormPage(
+                                  regulation: regulation,
+                                ),
+                              ),
+                            );
+                            refreshRegulations();
+                          },
                         ),
-                      ),
-                    );
-                  },
-                ),
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Delete Regulation'),
+                                content: const Text(
+                                  'Are you sure you want to delete this regulation?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      deleteRegulation(regulation.id);
+                                    },
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add, color: Colors.white),

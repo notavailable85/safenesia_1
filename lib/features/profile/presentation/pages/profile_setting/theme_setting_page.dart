@@ -34,7 +34,10 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
     await prefs.setInt('app_theme_color', appThemeNotifier.value.toARGB32());
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Warna Tema berhasil diubah')),
+        const SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content: Text('Warna Tema berhasil diubah'),
+        ),
       );
     }
   }

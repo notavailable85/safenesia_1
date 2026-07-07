@@ -47,10 +47,12 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(_isBookmarked
-              ? 'Artikel disimpan ke Bookmark'
-              : 'Artikel dihapus dari Bookmark'),
-          duration: const Duration(seconds: 2),
+          content: Text(
+            _isBookmarked
+                ? 'Artikel disimpan ke Bookmark'
+                : 'Artikel dihapus dari Bookmark',
+          ),
+          duration: const Duration(milliseconds: 1500),
         ),
       );
     }
@@ -58,40 +60,89 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detail Artikel'),
-        backgroundColor: Colors.blue.shade800,
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: Icon(
-              _isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 300.0,
+            floating: false,
+            pinned: true,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.black.withValues(alpha: 0.3),
+                foregroundColor: Colors.white,
+              ),
             ),
-            onPressed: _toggleBookmark,
+            actions: [
+              IconButton(
+                icon: Icon(
+                  _isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
+                ),
+                onPressed: _toggleBookmark,
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.black.withValues(alpha: 0.3),
+                  foregroundColor: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 8),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              background: Hero(
+                tag: 'article_image_\${widget.article.id}',
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      widget.article.imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: theme.colorScheme.surfaceContainerHighest,
+                          child: Icon(
+                            Icons.image,
+                            size: 100,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        );
+                      },
+                    ),
+                    // Gradient to make the back button and text readable
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Colors.black.withValues(alpha: 0.7),
+                            Colors.transparent,
+                            Colors.black.withValues(alpha: 0.4),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(
-              widget.article.imageUrl,
-              width: double.infinity,
-              height: 250,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 250,
-                  width: double.infinity,
-                  color: Colors.grey.shade300,
-                  child: const Icon(Icons.image, size: 80, color: Colors.grey),
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 24.0,
+              ),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
+                ),
+              ),
+              transform: Matrix4.translationValues(0.0, -20.0, 0.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -99,54 +150,68 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
-                          color: Colors.blue.shade50,
-                          borderRadius: BorderRadius.circular(12),
+                          color: theme.colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           widget.article.category,
                           style: TextStyle(
-                            color: Colors.blue.shade800,
-                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onPrimaryContainer,
+                            fontWeight: FontWeight.w700,
                             fontSize: 12,
+                            letterSpacing: 0.5,
                           ),
                         ),
                       ),
                       const Spacer(),
-                      Icon(Icons.calendar_today,
-                          size: 14, color: Colors.grey.shade600),
-                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.calendar_today,
+                        size: 14,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 6),
                       Text(
                         widget.article.date,
                         style: TextStyle(
-                            color: Colors.grey.shade600, fontSize: 12),
+                          color: theme.colorScheme.onSurfaceVariant,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   Text(
                     widget.article.title,
                     style: GoogleFonts.inter(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w800,
+                      color: theme.colorScheme.onSurface,
+                      height: 1.3,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Divider(),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
+                  Divider(color: theme.colorScheme.outlineVariant),
+                  const SizedBox(height: 24),
                   Text(
                     widget.article.content,
                     style: GoogleFonts.inter(
                       fontSize: 16,
-                      height: 1.6, // line height
+                      height: 1.8,
+                      color: theme.colorScheme.onSurface,
+                      letterSpacing: 0.3,
                     ),
                   ),
+                  const SizedBox(height: 60), // Bottom padding
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

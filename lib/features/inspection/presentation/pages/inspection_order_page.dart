@@ -11,7 +11,7 @@ class InspectionOrderPage extends StatefulWidget {
 
 class _InspectionOrderPageState extends State<InspectionOrderPage> {
   final _formKey = GlobalKey<FormState>();
-  
+
   String companyName = '';
   String equipmentType = 'Pesawat Angkat Angkut (Crane)';
   String location = '';
@@ -24,7 +24,7 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
     'Pesawat Tenaga dan Produksi (Genset)',
     'Instalasi Listrik',
     'Lift / Escalator',
-    'Penyalur Petir'
+    'Penyalur Petir',
   ];
 
   Future<void> _selectDate(BuildContext context) async {
@@ -43,7 +43,10 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
     if (_formKey.currentState!.validate()) {
       if (scheduledDate == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Pilih tanggal inspeksi terlebih dahulu')),
+          const SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Pilih tanggal inspeksi terlebih dahulu'),
+          ),
         );
         return;
       }
@@ -62,7 +65,10 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Pesanan berhasil diajukan!')),
+          const SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Pesanan berhasil diajukan!'),
+          ),
         );
         Navigator.pop(context);
       }
@@ -72,11 +78,14 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pesan Riksa Uji'),
-      ),
+      appBar: AppBar(title: const Text('Pesan Riksa Uji')),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
+        padding: const EdgeInsets.only(
+          left: 16,
+          top: 16,
+          right: 16,
+          bottom: 100,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
@@ -93,11 +102,13 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.business),
                 ),
-                validator: (val) => val == null || val.isEmpty ? 'Wajib diisi' : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? 'Wajib diisi' : null,
                 onChanged: (val) => companyName = val,
               ),
               const SizedBox(height: 16),
-              DropdownButtonFormField(initialValue: equipmentType,
+              DropdownButtonFormField(
+                initialValue: equipmentType,
                 isExpanded: true,
                 decoration: const InputDecoration(
                   labelText: 'Jenis Alat',
@@ -107,10 +118,7 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
                 items: equipmentTypes.map((type) {
                   return DropdownMenuItem(
                     value: type,
-                    child: Text(
-                      type,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    child: Text(type, overflow: TextOverflow.ellipsis),
                   );
                 }).toList(),
                 onChanged: (val) => setState(() => equipmentType = val!),
@@ -122,7 +130,8 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.location_on),
                 ),
-                validator: (val) => val == null || val.isEmpty ? 'Wajib diisi' : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? 'Wajib diisi' : null,
                 onChanged: (val) => location = val,
               ),
               const SizedBox(height: 16),
@@ -161,7 +170,10 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
                     backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Colors.white,
                   ),
-                  child: const Text('Ajukan Pesanan', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    'Ajukan Pesanan',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],

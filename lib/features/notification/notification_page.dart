@@ -44,6 +44,7 @@ class _NotificationPageState extends State<NotificationPage> {
         return Colors.blue;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

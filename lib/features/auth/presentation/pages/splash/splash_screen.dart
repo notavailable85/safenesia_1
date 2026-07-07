@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Simulasi loading selama 2.5 detik, lalu pindah ke AuthWrapper
-    Future.delayed(const Duration(milliseconds: 2500), () {
+    Future.delayed(const Duration(milliseconds: 1500), () {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
@@ -74,7 +74,9 @@ class _SplashScreenState extends State<SplashScreen> {
         Text(
           'Hi, Safetizen!',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
       ],

@@ -80,7 +80,10 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
           child: ElevatedButton(
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Password berhasil diubah!')),
+                const SnackBar(
+                  duration: const Duration(milliseconds: 1500),
+                  content: Text('Password berhasil diubah!'),
+                ),
               );
               Navigator.pop(context);
             },

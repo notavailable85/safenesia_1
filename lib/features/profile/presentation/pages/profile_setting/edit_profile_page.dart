@@ -20,7 +20,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  
+
   String? _imagePath;
   final ImagePicker _picker = ImagePicker();
   bool _isLoading = true;
@@ -35,7 +35,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _nameController.text = prefs.getString('user_name') ?? 'Budi Santoso';
-      _emailController.text = prefs.getString('user_email') ?? 'budi.santoso@email.com';
+      _emailController.text =
+          prefs.getString('user_email') ?? 'budi.santoso@email.com';
       _phoneController.text = prefs.getString('user_phone') ?? '081234567890';
       _imagePath = prefs.getString('user_avatar_path');
       _isLoading = false;
@@ -50,11 +51,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (_imagePath != null) {
       await prefs.setString('user_avatar_path', _imagePath!);
     }
-    
+
     if (mounted) {
       UserState.notifyProfileUpdated(); // Notify other pages to update
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profil berhasil diperbarui')),
+        const SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content: Text('Profil berhasil diperbarui'),
+        ),
       );
       Navigator.pop(context, true); // Return true to indicate change
     }
@@ -99,7 +103,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memilih gambar: $e')),
+          SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Gagal memilih gambar: $e'),
+          ),
         );
       }
     }
@@ -116,9 +123,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -132,8 +137,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.grey.shade300,
-                  backgroundImage: _imagePath != null ? FileImage(File(_imagePath!)) : null,
-                  child: _imagePath == null ? const Icon(Icons.person, size: 50, color: Colors.grey) : null,
+                  backgroundImage: _imagePath != null
+                      ? FileImage(File(_imagePath!))
+                      : null,
+                  child: _imagePath == null
+                      ? const Icon(Icons.person, size: 50, color: Colors.grey)
+                      : null,
                 ),
                 Positioned(
                   bottom: 0,
@@ -156,9 +165,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           const SizedBox(height: 32),
           TextField(
-            decoration: const InputDecoration(
-              labelText: 'Nama Lengkap',
-            ),
+            decoration: const InputDecoration(labelText: 'Nama Lengkap'),
             controller: _nameController,
           ),
           const SizedBox(height: 16),
@@ -181,7 +188,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
             onPressed: _saveUserData,
-            child: const Text('Simpan Perubahan', style: TextStyle(fontWeight: FontWeight.bold)),
+            child: const Text(
+              'Simpan Perubahan',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),

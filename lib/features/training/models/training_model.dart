@@ -117,9 +117,6 @@ class Training {
 
 // Data Dummy Awal
 List<Training> getDummyTrainings() {
-  
-  
-
   return [
     // ahli k3 umum
     Training(

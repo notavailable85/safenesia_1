@@ -16,19 +16,11 @@ class CustomDownloadButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 12,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       ),
       icon: const Icon(Icons.download),
-      label: Text(
-        label,
-        style: const TextStyle(fontWeight: FontWeight.bold),
-      ),
+      label: Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
       onPressed: onPressed,
     );
   }

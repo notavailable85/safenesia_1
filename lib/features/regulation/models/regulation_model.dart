@@ -53,7 +53,8 @@ final List<RegulationModel> dummyRegulations = [
     title: 'Keselamatan Kerja',
     nomor: 'UU No. 1',
     tahun: '1970',
-    deskripsi: 'Undang-undang yang mengatur tentang prinsip dasar keselamatan kerja bagi tenaga kerja di segala tempat kerja.',
+    deskripsi:
+        'Undang-undang yang mengatur tentang prinsip dasar keselamatan kerja bagi tenaga kerja di segala tempat kerja.',
     fileUrl: 'https://example.com/pdf/uu-1-1970.pdf',
     isSaved: 1,
   ),
@@ -63,7 +64,8 @@ final List<RegulationModel> dummyRegulations = [
     title: 'Ketenagakerjaan',
     nomor: 'UU No. 13',
     tahun: '2003',
-    deskripsi: 'Undang-undang komprehensif tentang hak, kewajiban, dan perlindungan tenaga kerja di Indonesia.',
+    deskripsi:
+        'Undang-undang komprehensif tentang hak, kewajiban, dan perlindungan tenaga kerja di Indonesia.',
     fileUrl: 'https://example.com/pdf/uu-13-2003.pdf',
     isSaved: 0,
   ),
@@ -73,7 +75,8 @@ final List<RegulationModel> dummyRegulations = [
     title: 'Penerapan Sistem Manajemen Keselamatan dan Kesehatan Kerja',
     nomor: 'PP No. 50',
     tahun: '2012',
-    deskripsi: 'Aturan turunan mengenai penerapan SMK3 bagi perusahaan dengan jumlah pekerja tertentu.',
+    deskripsi:
+        'Aturan turunan mengenai penerapan SMK3 bagi perusahaan dengan jumlah pekerja tertentu.',
     fileUrl: 'https://example.com/pdf/pp-50-2012.pdf',
     isSaved: 0,
   ),
@@ -83,7 +86,8 @@ final List<RegulationModel> dummyRegulations = [
     title: 'Keselamatan dan Kesehatan Kerja Lingkungan Kerja',
     nomor: 'Permenaker No. 5',
     tahun: '2018',
-    deskripsi: 'Mengatur standar NAB (Nilai Ambang Batas) faktor fisika dan kimia di lingkungan kerja.',
+    deskripsi:
+        'Mengatur standar NAB (Nilai Ambang Batas) faktor fisika dan kimia di lingkungan kerja.',
     fileUrl: 'https://example.com/pdf/permen-5-2018.pdf',
     isSaved: 0,
   ),
@@ -93,7 +97,8 @@ final List<RegulationModel> dummyRegulations = [
     title: 'Panitia Pembina Keselamatan dan Kesehatan Kerja (P2K3)',
     nomor: 'Permenaker No. 4',
     tahun: '1987',
-    deskripsi: 'Peraturan tentang tata cara pembentukan P2K3 serta pengangkatan Ahli K3.',
+    deskripsi:
+        'Peraturan tentang tata cara pembentukan P2K3 serta pengangkatan Ahli K3.',
     fileUrl: 'https://example.com/pdf/permen-4-1987.pdf',
     isSaved: 1,
   ),

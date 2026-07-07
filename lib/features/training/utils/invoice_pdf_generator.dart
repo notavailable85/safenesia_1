@@ -27,7 +27,7 @@ class InvoicePdfGenerator {
       ((primaryColorValue >> 8) & 0xFF) / 255.0,
       (primaryColorValue & 0xFF) / 255.0,
     );
-    
+
     // Derived light color for UI backgrounds
     final lightColor = PdfColor(
       primaryColor.red + (1.0 - primaryColor.red) * 0.9,
@@ -48,7 +48,10 @@ class InvoicePdfGenerator {
               // ==========================================
               pw.Container(
                 color: primaryColor,
-                padding: const pw.EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+                padding: const pw.EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 40,
+                ),
                 child: pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
@@ -92,7 +95,13 @@ class InvoicePdfGenerator {
                       child: pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text('Total Tagihan', style: pw.TextStyle(color: PdfColors.grey700, fontSize: 10)),
+                          pw.Text(
+                            'Total Tagihan',
+                            style: pw.TextStyle(
+                              color: PdfColors.grey700,
+                              fontSize: 10,
+                            ),
+                          ),
                           pw.SizedBox(height: 4),
                           pw.Text(
                             currencyFormat.format(totalBayar),
@@ -125,11 +134,30 @@ class InvoicePdfGenerator {
                         pw.Column(
                           crossAxisAlignment: pw.CrossAxisAlignment.start,
                           children: [
-                            pw.Text('DITAGIHKAN KEPADA:', style: pw.TextStyle(fontSize: 10, color: PdfColors.grey600, fontWeight: pw.FontWeight.bold)),
+                            pw.Text(
+                              'DITAGIHKAN KEPADA:',
+                              style: pw.TextStyle(
+                                fontSize: 10,
+                                color: PdfColors.grey600,
+                                fontWeight: pw.FontWeight.bold,
+                              ),
+                            ),
                             pw.SizedBox(height: 4),
-                            pw.Text('Peserta Pelatihan K3', style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold)),
+                            pw.Text(
+                              'Peserta Pelatihan K3',
+                              style: pw.TextStyle(
+                                fontSize: 14,
+                                fontWeight: pw.FontWeight.bold,
+                              ),
+                            ),
                             pw.SizedBox(height: 2),
-                            pw.Text('Melalui Sistem Safenesia', style: const pw.TextStyle(fontSize: 12, color: PdfColors.grey800)),
+                            pw.Text(
+                              'Melalui Sistem Safenesia',
+                              style: const pw.TextStyle(
+                                fontSize: 12,
+                                color: PdfColors.grey800,
+                              ),
+                            ),
                           ],
                         ),
                         // Right Column
@@ -139,27 +167,66 @@ class InvoicePdfGenerator {
                             pw.Row(
                               mainAxisAlignment: pw.MainAxisAlignment.end,
                               children: [
-                                pw.Text('No. Invoice:', style: const pw.TextStyle(fontSize: 12, color: PdfColors.grey600)),
+                                pw.Text(
+                                  'No. Invoice:',
+                                  style: const pw.TextStyle(
+                                    fontSize: 12,
+                                    color: PdfColors.grey600,
+                                  ),
+                                ),
                                 pw.SizedBox(width: 8),
-                                pw.Text(invoiceNumber, style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold)),
+                                pw.Text(
+                                  invoiceNumber,
+                                  style: pw.TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: pw.FontWeight.bold,
+                                  ),
+                                ),
                               ],
                             ),
                             pw.SizedBox(height: 4),
                             pw.Row(
                               mainAxisAlignment: pw.MainAxisAlignment.end,
                               children: [
-                                pw.Text('Tanggal Tagihan:', style: const pw.TextStyle(fontSize: 12, color: PdfColors.grey600)),
+                                pw.Text(
+                                  'Tanggal Tagihan:',
+                                  style: const pw.TextStyle(
+                                    fontSize: 12,
+                                    color: PdfColors.grey600,
+                                  ),
+                                ),
                                 pw.SizedBox(width: 8),
-                                pw.Text(DateFormat('dd MMM yyyy').format(DateTime.now()), style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold)),
+                                pw.Text(
+                                  DateFormat(
+                                    'dd MMM yyyy',
+                                  ).format(DateTime.now()),
+                                  style: pw.TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: pw.FontWeight.bold,
+                                  ),
+                                ),
                               ],
                             ),
                             pw.SizedBox(height: 4),
                             pw.Row(
                               mainAxisAlignment: pw.MainAxisAlignment.end,
                               children: [
-                                pw.Text('Jatuh Tempo:', style: const pw.TextStyle(fontSize: 12, color: PdfColors.grey600)),
+                                pw.Text(
+                                  'Jatuh Tempo:',
+                                  style: const pw.TextStyle(
+                                    fontSize: 12,
+                                    color: PdfColors.grey600,
+                                  ),
+                                ),
                                 pw.SizedBox(width: 8),
-                                pw.Text(deadlineStr, style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, color: PdfColors.red800)),
+                                pw.Text(
+                                  deadlineStr,
+                                  style: pw.TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: PdfColors.red800,
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -172,9 +239,17 @@ class InvoicePdfGenerator {
                     // ==========================================
                     // TABLE DETAILS
                     // ==========================================
-                    pw.Text('RINCIAN PEMBAYARAN', style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, letterSpacing: 1, color: primaryColor)),
+                    pw.Text(
+                      'RINCIAN PEMBAYARAN',
+                      style: pw.TextStyle(
+                        fontSize: 12,
+                        fontWeight: pw.FontWeight.bold,
+                        letterSpacing: 1,
+                        color: primaryColor,
+                      ),
+                    ),
                     pw.SizedBox(height: 12),
-                    
+
                     pw.Table(
                       columnWidths: {
                         0: const pw.FlexColumnWidth(4),
@@ -187,24 +262,69 @@ class InvoicePdfGenerator {
                         pw.TableRow(
                           decoration: pw.BoxDecoration(
                             color: primaryColor,
-                            borderRadius: const pw.BorderRadius.vertical(top: pw.Radius.circular(6)),
+                            borderRadius: const pw.BorderRadius.vertical(
+                              top: pw.Radius.circular(6),
+                            ),
                           ),
                           children: [
                             pw.Padding(
-                              padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                              child: pw.Text('DESKRIPSI', style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 10)),
+                              padding: const pw.EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 16,
+                              ),
+                              child: pw.Text(
+                                'DESKRIPSI',
+                                style: pw.TextStyle(
+                                  color: PdfColors.white,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
                             pw.Padding(
-                              padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                              child: pw.Text('QTY', textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 10)),
+                              padding: const pw.EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 8,
+                              ),
+                              child: pw.Text(
+                                'QTY',
+                                textAlign: pw.TextAlign.center,
+                                style: pw.TextStyle(
+                                  color: PdfColors.white,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
                             pw.Padding(
-                              padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                              child: pw.Text('HARGA SATUAN', textAlign: pw.TextAlign.right, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 10)),
+                              padding: const pw.EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 16,
+                              ),
+                              child: pw.Text(
+                                'HARGA SATUAN',
+                                textAlign: pw.TextAlign.right,
+                                style: pw.TextStyle(
+                                  color: PdfColors.white,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
                             pw.Padding(
-                              padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                              child: pw.Text('TOTAL', textAlign: pw.TextAlign.right, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 10)),
+                              padding: const pw.EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 16,
+                              ),
+                              child: pw.Text(
+                                'TOTAL',
+                                textAlign: pw.TextAlign.right,
+                                style: pw.TextStyle(
+                                  color: PdfColors.white,
+                                  fontWeight: pw.FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -213,35 +333,74 @@ class InvoicePdfGenerator {
                           decoration: pw.BoxDecoration(
                             color: lightColor,
                             border: const pw.Border(
-                              bottom: pw.BorderSide(color: PdfColors.grey300, width: 0.5),
-                              left: pw.BorderSide(color: PdfColors.grey300, width: 0.5),
-                              right: pw.BorderSide(color: PdfColors.grey300, width: 0.5),
+                              bottom: pw.BorderSide(
+                                color: PdfColors.grey300,
+                                width: 0.5,
+                              ),
+                              left: pw.BorderSide(
+                                color: PdfColors.grey300,
+                                width: 0.5,
+                              ),
+                              right: pw.BorderSide(
+                                color: PdfColors.grey300,
+                                width: 0.5,
+                              ),
                             ),
                           ),
                           children: [
                             pw.Padding(
-                              padding: const pw.EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                              child: pw.Text(namaPelatihan, style: const pw.TextStyle(fontSize: 12)),
+                              padding: const pw.EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 16,
+                              ),
+                              child: pw.Text(
+                                namaPelatihan,
+                                style: const pw.TextStyle(fontSize: 12),
+                              ),
                             ),
                             pw.Padding(
-                              padding: const pw.EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-                              child: pw.Text(jumlahPeserta.toString(), textAlign: pw.TextAlign.center, style: const pw.TextStyle(fontSize: 12)),
+                              padding: const pw.EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 8,
+                              ),
+                              child: pw.Text(
+                                jumlahPeserta.toString(),
+                                textAlign: pw.TextAlign.center,
+                                style: const pw.TextStyle(fontSize: 12),
+                              ),
                             ),
                             pw.Padding(
-                              padding: const pw.EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                              child: pw.Text(currencyFormat.format(hargaSatuan), textAlign: pw.TextAlign.right, style: const pw.TextStyle(fontSize: 12)),
+                              padding: const pw.EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 16,
+                              ),
+                              child: pw.Text(
+                                currencyFormat.format(hargaSatuan),
+                                textAlign: pw.TextAlign.right,
+                                style: const pw.TextStyle(fontSize: 12),
+                              ),
                             ),
                             pw.Padding(
-                              padding: const pw.EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                              child: pw.Text(currencyFormat.format(totalBayar), textAlign: pw.TextAlign.right, style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold)),
+                              padding: const pw.EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 16,
+                              ),
+                              child: pw.Text(
+                                currencyFormat.format(totalBayar),
+                                textAlign: pw.TextAlign.right,
+                                style: pw.TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: pw.FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ],
                         ),
                       ],
                     ),
-                    
+
                     pw.SizedBox(height: 24),
-                    
+
                     // ==========================================
                     // TOTALS SUMMARY
                     // ==========================================
@@ -251,7 +410,10 @@ class InvoicePdfGenerator {
                         pw.Container(
                           width: 250,
                           decoration: pw.BoxDecoration(
-                            border: pw.Border.all(color: primaryColor, width: 1.5),
+                            border: pw.Border.all(
+                              color: primaryColor,
+                              width: 1.5,
+                            ),
                             borderRadius: pw.BorderRadius.circular(8),
                           ),
                           child: pw.Column(
@@ -259,22 +421,48 @@ class InvoicePdfGenerator {
                               pw.Padding(
                                 padding: const pw.EdgeInsets.all(12),
                                 child: pw.Row(
-                                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      pw.MainAxisAlignment.spaceBetween,
                                   children: [
-                                    pw.Text('Subtotal:', style: const pw.TextStyle(fontSize: 12)),
-                                    pw.Text(currencyFormat.format(totalBayar), style: const pw.TextStyle(fontSize: 12)),
+                                    pw.Text(
+                                      'Subtotal:',
+                                      style: const pw.TextStyle(fontSize: 12),
+                                    ),
+                                    pw.Text(
+                                      currencyFormat.format(totalBayar),
+                                      style: const pw.TextStyle(fontSize: 12),
+                                    ),
                                   ],
                                 ),
                               ),
-                              pw.Divider(color: primaryColor, thickness: 1.5, height: 0),
+                              pw.Divider(
+                                color: primaryColor,
+                                thickness: 1.5,
+                                height: 0,
+                              ),
                               pw.Container(
                                 color: lightColor,
                                 padding: const pw.EdgeInsets.all(12),
                                 child: pw.Row(
-                                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      pw.MainAxisAlignment.spaceBetween,
                                   children: [
-                                    pw.Text('TOTAL TAGIHAN:', style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: primaryColor)),
-                                    pw.Text(currencyFormat.format(totalBayar), style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: primaryColor)),
+                                    pw.Text(
+                                      'TOTAL TAGIHAN:',
+                                      style: pw.TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: pw.FontWeight.bold,
+                                        color: primaryColor,
+                                      ),
+                                    ),
+                                    pw.Text(
+                                      currencyFormat.format(totalBayar),
+                                      style: pw.TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: pw.FontWeight.bold,
+                                        color: primaryColor,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -294,24 +482,38 @@ class InvoicePdfGenerator {
               // ==========================================
               pw.Container(
                 padding: const pw.EdgeInsets.all(40),
-                decoration: const pw.BoxDecoration(
-                  color: PdfColors.grey100,
-                ),
+                decoration: const pw.BoxDecoration(color: PdfColors.grey100),
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                    pw.Text('Instruksi Pembayaran', style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, color: PdfColors.grey800)),
+                    pw.Text(
+                      'Instruksi Pembayaran',
+                      style: pw.TextStyle(
+                        fontSize: 12,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.grey800,
+                      ),
+                    ),
                     pw.SizedBox(height: 8),
                     pw.Text(
                       'Harap selesaikan pembayaran melalui QRIS di dalam aplikasi sebelum batas waktu yang tertera. '
                       'Apabila Anda memiliki pertanyaan terkait tagihan ini, silakan hubungi tim support Safenesia.',
-                      style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey700, lineSpacing: 2),
+                      style: const pw.TextStyle(
+                        fontSize: 10,
+                        color: PdfColors.grey700,
+                        lineSpacing: 2,
+                      ),
                     ),
                     pw.SizedBox(height: 24),
                     pw.Center(
                       child: pw.Text(
                         'Terima kasih telah berbisnis dengan kami!',
-                        style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, color: primaryColor, fontStyle: pw.FontStyle.italic),
+                        style: pw.TextStyle(
+                          fontSize: 12,
+                          fontWeight: pw.FontWeight.bold,
+                          color: primaryColor,
+                          fontStyle: pw.FontStyle.italic,
+                        ),
                       ),
                     ),
                   ],

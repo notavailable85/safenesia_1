@@ -48,7 +48,9 @@ final List<InspectionModel> dummyInspections = [
     companyName: 'PT. Maju Mundur',
     equipmentType: 'Pesawat Angkat Angkut (Crane)',
     location: 'Jl. Industri No. 45, Jakarta',
-    scheduledDate: DateTime.now().add(const Duration(days: 3)).toIso8601String(),
+    scheduledDate: DateTime.now()
+        .add(const Duration(days: 3))
+        .toIso8601String(),
     notes: 'Mohon hubungi Bapak Budi saat tiba di lokasi.',
     status: 'Pending',
   ),
@@ -57,7 +59,9 @@ final List<InspectionModel> dummyInspections = [
     companyName: 'PT. Sejahtera Abadi',
     equipmentType: 'Bejana Tekan (Boiler)',
     location: 'Kawasan Industri MM2100, Bekasi',
-    scheduledDate: DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
+    scheduledDate: DateTime.now()
+        .subtract(const Duration(days: 2))
+        .toIso8601String(),
     notes: 'Perpanjangan suket disnaker.',
     status: 'Completed',
   ),

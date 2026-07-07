@@ -34,7 +34,7 @@
 //   void initState() {
 //     super.initState();
 //     // Simulasi loading selama 2.5 detik, lalu pindah ke AuthWrapper
-//     Future.delayed(const Duration(milliseconds: 2500), () {
+//     Future.delayed(const Duration(milliseconds: 1500), () {
 //       Navigator.pushReplacement(
 //         context,
 //         MaterialPageRoute(builder: (context) => const AuthWrapper()),

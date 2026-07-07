@@ -7,7 +7,8 @@ class AdminNotificationListPage extends StatefulWidget {
   const AdminNotificationListPage({super.key});
 
   @override
-  State<AdminNotificationListPage> createState() => _AdminNotificationListPageState();
+  State<AdminNotificationListPage> createState() =>
+      _AdminNotificationListPageState();
 }
 
 class _AdminNotificationListPageState extends State<AdminNotificationListPage> {
@@ -31,7 +32,10 @@ class _AdminNotificationListPageState extends State<AdminNotificationListPage> {
     refreshNotifications();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Notification deleted')),
+        const SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content: Text('Notification deleted'),
+        ),
       );
     }
   }
@@ -47,63 +51,70 @@ class _AdminNotificationListPageState extends State<AdminNotificationListPage> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : notifications.isEmpty
-              ? const Center(child: Text('No Notifications found'))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: notifications.length,
-                  itemBuilder: (context, index) {
-                    final notif = notifications[index];
-                    return Card(
-                      child: ListTile(
-                        leading: const Icon(Icons.notifications, color: Colors.red),
-                        title: Text(notif.title),
-                        subtitle: Text(notif.subtitle),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.orange),
-                              onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminNotificationFormPage(notification: notif),
-                                  ),
-                                );
-                                refreshNotifications();
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('Delete Notification'),
-                                    content: const Text('Are you sure you want to delete this notification?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          deleteNotification(notif.id);
-                                        },
-                                        child: const Text('Delete', style: TextStyle(color: Colors.red)),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+          ? const Center(child: Text('No Notifications found'))
+          : ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: notifications.length,
+              itemBuilder: (context, index) {
+                final notif = notifications[index];
+                return Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.notifications, color: Colors.red),
+                    title: Text(notif.title),
+                    subtitle: Text(notif.subtitle),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.orange),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AdminNotificationFormPage(
+                                  notification: notif,
+                                ),
+                              ),
+                            );
+                            refreshNotifications();
+                          },
                         ),
-                      ),
-                    );
-                  },
-                ),
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Delete Notification'),
+                                content: const Text(
+                                  'Are you sure you want to delete this notification?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      deleteNotification(notif.id);
+                                    },
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add, color: Colors.white),

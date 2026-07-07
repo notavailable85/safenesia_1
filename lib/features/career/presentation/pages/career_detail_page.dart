@@ -43,16 +43,18 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
     );
 
     await DatabaseHelper.instance.updateCareer(updatedCareer);
-    
+
     if (mounted) {
       setState(() {
         _career = updatedCareer;
       });
-      
+
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -60,7 +62,10 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
               const SizedBox(height: 16),
               Text(
                 'Lamaran Berhasil Dikirim!',
-                style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 18),
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
@@ -91,7 +96,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
   Widget build(BuildContext context) {
     final isApplied = _career.isApplied == 1;
     final primaryColor = Theme.of(context).colorScheme.primary;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Pekerjaan'),
@@ -125,7 +130,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
                 _career = updatedCareer;
               });
             },
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -150,13 +155,21 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
                           color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
-                        )
+                        ),
                       ],
                     ),
-                    child: _career.companyLogoUrl.isNotEmpty 
+                    child: _career.companyLogoUrl.isNotEmpty
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: Image.network(_career.companyLogoUrl, fit: BoxFit.cover, errorBuilder: (c, e, s) => Icon(Icons.business, size: 36, color: primaryColor)),
+                            child: Image.network(
+                              _career.companyLogoUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (c, e, s) => Icon(
+                                Icons.business,
+                                size: 36,
+                                color: primaryColor,
+                              ),
+                            ),
                           )
                         : Icon(Icons.business, size: 36, color: primaryColor),
                   ),
@@ -184,21 +197,25 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.location_on, size: 14, color: Colors.grey),
+                            const Icon(
+                              Icons.location_on,
+                              size: 14,
+                              color: Colors.grey,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               _career.location,
                               style: const TextStyle(color: Colors.grey),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-            
+
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -211,12 +228,15 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
                     children: [
                       _buildBadge(Icons.work_outline, _career.jobType),
                       _buildBadge(Icons.stairs, _career.experienceLevel),
-                      _buildBadge(Icons.monetization_on_outlined, 'Rp ${_career.salaryMin ~/ 1000000} Jt - ${_career.salaryMax ~/ 1000000} Jt'),
+                      _buildBadge(
+                        Icons.monetization_on_outlined,
+                        'Rp ${_career.salaryMin ~/ 1000000} Jt - ${_career.salaryMax ~/ 1000000} Jt',
+                      ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Description
                   _buildSectionTitle('Deskripsi Pekerjaan'),
                   const SizedBox(height: 12),
@@ -224,9 +244,9 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
                     _career.description,
                     style: const TextStyle(height: 1.6, color: Colors.black87),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Requirements
                   _buildSectionTitle('Persyaratan'),
                   const SizedBox(height: 12),
@@ -234,9 +254,9 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
                     _career.requirements,
                     style: const TextStyle(height: 1.6, color: Colors.black87),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Benefits
                   _buildSectionTitle('Keuntungan & Fasilitas'),
                   const SizedBox(height: 12),
@@ -259,7 +279,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
               color: Colors.black.withValues(alpha: 0.05),
               offset: const Offset(0, -4),
               blurRadius: 10,
-            )
+            ),
           ],
         ),
         child: SafeArea(
@@ -269,7 +289,9 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: isApplied ? Colors.grey : primaryColor,
-                foregroundColor: isApplied ? Colors.white : Theme.of(context).colorScheme.onPrimary,
+                foregroundColor: isApplied
+                    ? Colors.white
+                    : Theme.of(context).colorScheme.onPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -277,7 +299,10 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
               onPressed: isApplied ? null : _applyJob,
               child: Text(
                 isApplied ? 'Telah Dilamar' : 'Lamar Sekarang',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -315,10 +340,7 @@ class _CareerDetailPageState extends State<CareerDetailPage> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: GoogleFonts.inter(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
+      style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold),
     );
   }
 }

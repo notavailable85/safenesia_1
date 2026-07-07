@@ -15,7 +15,8 @@ class OrderFormPage extends StatefulWidget {
   State<OrderFormPage> createState() => _OrderFormPageState();
 }
 
-class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserver {
+class _OrderFormPageState extends State<OrderFormPage>
+    with WidgetsBindingObserver {
   final _formKey = GlobalKey<FormState>();
 
   // Form 1
@@ -75,7 +76,7 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
 
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
-    
+
     final timestamp = prefs.getInt(_prefTimestampKey);
     if (timestamp != null) {
       final savedTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
@@ -86,7 +87,7 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
         return; // Data kadaluarsa
       }
     }
-    
+
     final dataString = prefs.getString(_prefKey);
     if (dataString != null) {
       try {
@@ -95,13 +96,13 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
           setState(() {
             _jenisPeserta = data['jenis_peserta'] ?? 'Pribadi';
             _jumlahPeserta = data['jumlah_peserta'] ?? 1;
-            
+
             _namaPemesanController.text = data['nama_pemesan'] ?? '';
             _waPemesanController.text = data['wa_pemesan'] ?? '';
             _emailPemesanController.text = data['email_pemesan'] ?? '';
-            
+
             _updatePesertaControllers();
-            
+
             final List<dynamic>? peserta = data['peserta'];
             if (peserta != null) {
               for (int i = 0; i < peserta.length && i < _jumlahPeserta; i++) {
@@ -120,7 +121,8 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       _saveData();
     }
   }
@@ -157,25 +159,29 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
     super.dispose();
   }
 
-  
   String? _validateEmail(String? v) {
     if (v == null || v.isEmpty) return 'Wajib diisi';
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(v)) return 'Format email tidak valid (contoh: budi@email.com)';
+    if (!emailRegex.hasMatch(v))
+      return 'Format email tidak valid (contoh: budi@email.com)';
     return null;
   }
 
   String? _validatePhone(String? v) {
     if (v == null || v.isEmpty) return 'Wajib diisi';
-    
+
     String cleanNumber = v.replaceAll(' ', '').replaceAll('-', '');
-    
-    if (!RegExp(r'^\+?[0-9]+$').hasMatch(cleanNumber)) return 'Hanya boleh berisi angka';
-    if (cleanNumber.length < 9 || cleanNumber.length > 15) return 'Nomor tidak valid (9-15 digit)';
-    if (!cleanNumber.startsWith('08') && !cleanNumber.startsWith('62') && !cleanNumber.startsWith('+62')) {
+
+    if (!RegExp(r'^\+?[0-9]+$').hasMatch(cleanNumber))
+      return 'Hanya boleh berisi angka';
+    if (cleanNumber.length < 9 || cleanNumber.length > 15)
+      return 'Nomor tidak valid (9-15 digit)';
+    if (!cleanNumber.startsWith('08') &&
+        !cleanNumber.startsWith('62') &&
+        !cleanNumber.startsWith('+62')) {
       return 'Harus diawali 08, 62, atau +62';
     }
-    
+
     return null;
   }
 
@@ -196,7 +202,10 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0),
+        borderSide: BorderSide(
+          color: Theme.of(context).colorScheme.primary,
+          width: 2.0,
+        ),
       ),
       filled: true,
       fillColor: Theme.of(context).colorScheme.surface,
@@ -228,9 +237,7 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(
-                  color: Colors.grey,
-                ),
+                side: const BorderSide(color: Colors.grey),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -297,9 +304,7 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(
-                  color: Colors.grey,
-                ),
+                side: const BorderSide(color: Colors.grey),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -311,7 +316,8 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
                         'Nama Lengkap',
                         Icons.person,
                       ),
-                      validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
+                      validator: (v) =>
+                          (v == null || v.isEmpty) ? 'Wajib diisi' : null,
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
@@ -358,9 +364,7 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       foregroundColor: Colors.green,
-                      side: const BorderSide(
-                        color: Colors.grey,
-                      ),
+                      side: const BorderSide(color: Colors.grey),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -433,9 +437,7 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: const BorderSide(
-                      color: Colors.grey,
-                    ),
+                    side: const BorderSide(color: Colors.grey),
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: ExpansionTile(
@@ -459,7 +461,8 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
                           'Nama Lengkap',
                           Icons.person,
                         ),
-                        validator: (v) => (v == null || v.isEmpty) ? 'Wajib diisi' : null,
+                        validator: (v) =>
+                            (v == null || v.isEmpty) ? 'Wajib diisi' : null,
                         onChanged: (val) => setState(() {}),
                       ),
                       const SizedBox(height: 12),
@@ -509,59 +512,59 @@ class _OrderFormPageState extends State<OrderFormPage> with WidgetsBindingObserv
           ],
         ),
         child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  // Build data list from controllers
-                  List<Map<String, String>> daftarPeserta = List.generate(
-                    _jumlahPeserta,
-                    (i) => {
-                      'nama_lengkap': _namaPesertaControllers[i].text,
-                      'wa': _waPesertaControllers[i].text,
-                      'email': _emailPesertaControllers[i].text,
-                    },
-                  );
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OrderSummaryPage(
-                        scheduleData: widget.scheduleData,
-                        jumlahPeserta: _jumlahPeserta,
-                        daftarPeserta: daftarPeserta,
-                        jenisPeserta: _jenisPeserta,
-                      ),
-                    ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      content: Text(
-                        'Mohon lengkapi seluruh formulir dan detail data peserta!',
-                      ),
-                    ),
-                  );
-                }
-              },
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Selanjutnya',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 8),
-                  Icon(Icons.arrow_forward),
-                ],
-              ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
+          ),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              // Build data list from controllers
+              List<Map<String, String>> daftarPeserta = List.generate(
+                _jumlahPeserta,
+                (i) => {
+                  'nama_lengkap': _namaPesertaControllers[i].text,
+                  'wa': _waPesertaControllers[i].text,
+                  'email': _emailPesertaControllers[i].text,
+                },
+              );
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OrderSummaryPage(
+                    scheduleData: widget.scheduleData,
+                    jumlahPeserta: _jumlahPeserta,
+                    daftarPeserta: daftarPeserta,
+                    jenisPeserta: _jenisPeserta,
+                  ),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  content: Text(
+                    'Mohon lengkapi seluruh formulir dan detail data peserta!',
+                  ),
+                ),
+              );
+            }
+          },
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Selanjutnya',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 8),
+              Icon(Icons.arrow_forward),
+            ],
+          ),
+        ),
       ),
     );
   }

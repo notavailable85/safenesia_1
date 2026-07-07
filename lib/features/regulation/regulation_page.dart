@@ -28,7 +28,7 @@ class _RegulasiPageState extends State<RegulasiPage> {
 
   Future<void> _loadRegulations() async {
     final regulations = await DatabaseHelper.instance.readAllRegulations();
-    
+
     // Extract unique categories
     final Set<String> cats = {'Semua'};
     for (var reg in regulations) {
@@ -46,12 +46,14 @@ class _RegulasiPageState extends State<RegulasiPage> {
   void _filterData() {
     setState(() {
       _filteredRegulations = _allRegulations.where((reg) {
-        final matchesCategory = _selectedCategory == 'Semua' || reg.category == _selectedCategory;
+        final matchesCategory =
+            _selectedCategory == 'Semua' || reg.category == _selectedCategory;
         final query = _searchQuery.toLowerCase();
-        final matchesSearch = query.isEmpty || 
-                              reg.title.toLowerCase().contains(query) || 
-                              reg.nomor.toLowerCase().contains(query) || 
-                              reg.tahun.toLowerCase().contains(query);
+        final matchesSearch =
+            query.isEmpty ||
+            reg.title.toLowerCase().contains(query) ||
+            reg.nomor.toLowerCase().contains(query) ||
+            reg.tahun.toLowerCase().contains(query);
         return matchesCategory && matchesSearch;
       }).toList();
     });
@@ -104,8 +106,12 @@ class _RegulasiPageState extends State<RegulasiPage> {
                           backgroundColor: theme.scaffoldBackgroundColor,
                           selectedColor: theme.primaryColor,
                           labelStyle: TextStyle(
-                            color: isSelected ? Colors.white : theme.textTheme.bodyMedium?.color,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            color: isSelected
+                                ? Colors.white
+                                : theme.textTheme.bodyMedium?.color,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -123,7 +129,11 @@ class _RegulasiPageState extends State<RegulasiPage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.gavel, size: 80, color: Colors.grey.shade300),
+                              Icon(
+                                Icons.gavel,
+                                size: 80,
+                                color: Colors.grey.shade300,
+                              ),
                               const SizedBox(height: 16),
                               Text(
                                 'Regulasi tidak ditemukan',
@@ -133,7 +143,12 @@ class _RegulasiPageState extends State<RegulasiPage> {
                           ),
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            top: 16,
+                            right: 16,
+                            bottom: 100,
+                          ),
                           itemCount: _filteredRegulations.length,
                           itemBuilder: (context, index) {
                             final reg = _filteredRegulations[index];
@@ -148,29 +163,40 @@ class _RegulasiPageState extends State<RegulasiPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => RegulationDetailPage(regulation: reg),
+                                      builder: (context) =>
+                                          RegulationDetailPage(regulation: reg),
                                     ),
                                   );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(16),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // Icon PDF
                                       Container(
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
-                                          color: Colors.red.withValues(alpha: 0.1),
-                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.red.withValues(
+                                            alpha: 0.1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                         ),
-                                        child: const Icon(Icons.picture_as_pdf, color: Colors.red, size: 32),
+                                        child: const Icon(
+                                          Icons.picture_as_pdf,
+                                          color: Colors.red,
+                                          size: 32,
+                                        ),
                                       ),
                                       const SizedBox(width: 16),
                                       // Content
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               reg.title,
@@ -192,10 +218,16 @@ class _RegulasiPageState extends State<RegulasiPage> {
                                             ),
                                             const SizedBox(height: 6),
                                             Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 2,
+                                                  ),
                                               decoration: BoxDecoration(
-                                                color: theme.primaryColor.withValues(alpha: 0.1),
-                                                borderRadius: BorderRadius.circular(12),
+                                                color: theme.primaryColor
+                                                    .withValues(alpha: 0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
                                               ),
                                               child: Text(
                                                 reg.category,
@@ -205,15 +237,19 @@ class _RegulasiPageState extends State<RegulasiPage> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ),
                                       // Bookmark
                                       IconButton(
                                         icon: Icon(
-                                          reg.isSaved == 1 ? Icons.bookmark : Icons.bookmark_border,
-                                          color: reg.isSaved == 1 ? Colors.orange : Colors.grey.shade400,
+                                          reg.isSaved == 1
+                                              ? Icons.bookmark
+                                              : Icons.bookmark_border,
+                                          color: reg.isSaved == 1
+                                              ? Colors.orange
+                                              : Colors.grey.shade400,
                                         ),
                                         onPressed: () async {
                                           // Toggle bookmark
@@ -227,7 +263,8 @@ class _RegulasiPageState extends State<RegulasiPage> {
                                             fileUrl: reg.fileUrl,
                                             isSaved: reg.isSaved == 1 ? 0 : 1,
                                           );
-                                          await DatabaseHelper.instance.updateRegulation(newReg);
+                                          await DatabaseHelper.instance
+                                              .updateRegulation(newReg);
                                           _loadRegulations(); // Refresh
                                         },
                                       ),

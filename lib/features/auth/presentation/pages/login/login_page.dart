@@ -161,214 +161,215 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 6),
-              Image.asset(AppAssets.logoVertical, height: 200),
-              SizedBox(height: 30),
+              children: [
+                SizedBox(height: 6),
+                Image.asset(AppAssets.logoVertical, height: 200),
+                SizedBox(height: 30),
 
-              const SizedBox(height: 30),
+                const SizedBox(height: 30),
 
-              TextField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                  ),
-                  prefixIcon: Icon(Icons.email),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _passwordController,
-                obscureText: !_isPasswordVisible,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                  ),
-                  prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                TextField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
+                    prefixIcon: Icon(Icons.email),
                   ),
                 ),
-              ),
-
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ForgotPasswordPage(),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _passwordController,
+                  obscureText: !_isPasswordVisible,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
-                  ),
-                  child: const Text('Lupa Password?'),
-                ),
-              ),
-              const SizedBox(height: 6),
-
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _login,
-                  child: const Text('Login', style: TextStyle(fontSize: 16)),
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Center(
-                  child: Text(
-                    'ATAU',
-                    style: TextStyle(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withValues(alpha: 0.5),
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
                     ),
                   ),
                 ),
-              ),
 
-              // Google Sign-In Button
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: OutlinedButton.icon(
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordPage(),
+                      ),
                     ),
-                    side: BorderSide(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.grey.shade700
-                          : Colors.grey.shade300,
+                    child: const Text('Lupa Password?'),
+                  ),
+                ),
+                const SizedBox(height: 6),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _login,
+                    child: const Text('Login', style: TextStyle(fontSize: 16)),
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Center(
+                    child: Text(
+                      'ATAU',
+                      style: TextStyle(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.5),
+                      ),
                     ),
                   ),
-                  onPressed: _isLoadingGoogle
-                      ? null
-                      : () async {
-                          setState(() {
-                            _isLoadingGoogle = true;
-                          });
+                ),
 
-                          try {
-                            final GoogleSignIn googleSignIn = GoogleSignIn();
-                            final GoogleSignInAccount? googleUser =
-                                await googleSignIn.signIn();
+                // Google Sign-In Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      side: BorderSide(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey.shade700
+                            : Colors.grey.shade300,
+                      ),
+                    ),
+                    onPressed: _isLoadingGoogle
+                        ? null
+                        : () async {
+                            setState(() {
+                              _isLoadingGoogle = true;
+                            });
 
-                            if (googleUser == null) {
-                              // Pengguna membatalkan proses login
+                            try {
+                              final GoogleSignIn googleSignIn = GoogleSignIn();
+                              final GoogleSignInAccount? googleUser =
+                                  await googleSignIn.signIn();
+
+                              if (googleUser == null) {
+                                // Pengguna membatalkan proses login
+                                if (context.mounted) {
+                                  setState(() {
+                                    _isLoadingGoogle = false;
+                                  });
+                                }
+                                return;
+                              }
+
+                              // Simpan data sesi ke SharedPreferences
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              await prefs.setString('login_method', 'google');
+                              await prefs.setString(
+                                'user_name',
+                                googleUser.displayName ?? 'Pengguna Google',
+                              );
+                              await prefs.setString(
+                                'user_email',
+                                googleUser.email,
+                              );
+                              await prefs.setBool('is_logged_in', true);
+                              await prefs.setInt(
+                                'last_active_time',
+                                DateTime.now().millisecondsSinceEpoch,
+                              );
+
                               if (context.mounted) {
                                 setState(() {
                                   _isLoadingGoogle = false;
                                 });
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Login berhasil sebagai ${googleUser.displayName ?? googleUser.email}',
+                                    ),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MainNavigationScreen(),
+                                  ),
+                                );
                               }
-                              return;
-                            }
-
-                            // Simpan data sesi ke SharedPreferences
-                            final prefs = await SharedPreferences.getInstance();
-                            await prefs.setString('login_method', 'google');
-                            await prefs.setString(
-                              'user_name',
-                              googleUser.displayName ?? 'Pengguna Google',
-                            );
-                            await prefs.setString(
-                              'user_email',
-                              googleUser.email,
-                            );
-                            await prefs.setBool('is_logged_in', true);
-                            await prefs.setInt(
-                              'last_active_time',
-                              DateTime.now().millisecondsSinceEpoch,
-                            );
-
-                            if (context.mounted) {
-                              setState(() {
-                                _isLoadingGoogle = false;
-                              });
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Login berhasil sebagai ${googleUser.displayName ?? googleUser.email}',
+                            } catch (error) {
+                              if (context.mounted) {
+                                setState(() {
+                                  _isLoadingGoogle = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Gagal login dengan Google: $error',
+                                    ),
+                                    backgroundColor: Colors.red.shade600,
                                   ),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const MainNavigationScreen(),
-                                ),
-                              );
+                                );
+                              }
                             }
-                          } catch (error) {
-                            if (context.mounted) {
-                              setState(() {
-                                _isLoadingGoogle = false;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Gagal login dengan Google: $error',
-                                  ),
-                                  backgroundColor: Colors.red.shade600,
-                                ),
-                              );
-                            }
-                          }
-                        },
-                  icon: _isLoadingGoogle
-                      ? const SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : SvgPicture.asset(AppAssets.iconGoogle, height: 24),
-                  label: Text(
-                    _isLoadingGoogle ? 'Memproses...' : 'Masuk dengan Google',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
+                          },
+                    icon: _isLoadingGoogle
+                        ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : SvgPicture.asset(AppAssets.iconGoogle, height: 24),
+                    label: Text(
+                      _isLoadingGoogle ? 'Memproses...' : 'Masuk dengan Google',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Belum punya akun?'),
-                  TextButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RegisterPage(),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Belum punya akun?'),
+                    TextButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterPage(),
+                        ),
+                      ),
+                      child: const Text(
+                        'Daftar Sekarang',
+                        // style: TextStyle(color: AppColors.primary),
                       ),
                     ),
-                    child: const Text(
-                      'Daftar Sekarang',
-                      // style: TextStyle(color: AppColors.primary),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );

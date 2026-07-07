@@ -46,7 +46,9 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
   void saveCareer() async {
     if (_formKey.currentState!.validate()) {
       final career = CareerModel(
-        id: widget.career?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        id:
+            widget.career?.id ??
+            DateTime.now().millisecondsSinceEpoch.toString(),
         title: title,
         company: company,
         field: field,
@@ -58,7 +60,8 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
         description: description,
         requirements: requirements,
         benefits: benefits,
-        postedDate: widget.career?.postedDate ?? DateTime.now().toIso8601String(),
+        postedDate:
+            widget.career?.postedDate ?? DateTime.now().toIso8601String(),
         companyLogoUrl: companyLogoUrl,
         isSaved: widget.career?.isSaved ?? 0,
         isApplied: widget.career?.isApplied ?? 0,
@@ -78,7 +81,9 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.career == null ? 'Tambah Karir K3' : 'Edit Karir K3'),
+        title: Text(
+          widget.career == null ? 'Tambah Karir K3' : 'Edit Karir K3',
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
@@ -87,19 +92,30 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            const Text('Informasi Dasar', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            const Text(
+              'Informasi Dasar',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
             const SizedBox(height: 12),
             TextFormField(
               initialValue: title,
-              decoration: const InputDecoration(labelText: 'Posisi / Jabatan', border: OutlineInputBorder()),
-              validator: (value) => value == null || value.isEmpty ? 'Wajib diisi' : null,
+              decoration: const InputDecoration(
+                labelText: 'Posisi / Jabatan',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Wajib diisi' : null,
               onChanged: (value) => title = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: company,
-              decoration: const InputDecoration(labelText: 'Nama Perusahaan', border: OutlineInputBorder()),
-              validator: (value) => value == null || value.isEmpty ? 'Wajib diisi' : null,
+              decoration: const InputDecoration(
+                labelText: 'Nama Perusahaan',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Wajib diisi' : null,
               onChanged: (value) => company = value,
             ),
             const SizedBox(height: 16),
@@ -108,8 +124,12 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
                 Expanded(
                   child: TextFormField(
                     initialValue: field,
-                    decoration: const InputDecoration(labelText: 'Bidang', border: OutlineInputBorder()),
-                    validator: (value) => value == null || value.isEmpty ? 'Wajib diisi' : null,
+                    decoration: const InputDecoration(
+                      labelText: 'Bidang',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) =>
+                        value == null || value.isEmpty ? 'Wajib diisi' : null,
                     onChanged: (value) => field = value,
                   ),
                 ),
@@ -117,8 +137,12 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
                 Expanded(
                   child: TextFormField(
                     initialValue: location,
-                    decoration: const InputDecoration(labelText: 'Lokasi (Kota)', border: OutlineInputBorder()),
-                    validator: (value) => value == null || value.isEmpty ? 'Wajib diisi' : null,
+                    decoration: const InputDecoration(
+                      labelText: 'Lokasi (Kota)',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) =>
+                        value == null || value.isEmpty ? 'Wajib diisi' : null,
                     onChanged: (value) => location = value,
                   ),
                 ),
@@ -130,10 +154,25 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
                 Expanded(
                   child: DropdownButtonFormField<String>(
                     initialValue: jobType,
-                    decoration: const InputDecoration(labelText: 'Tipe Pekerjaan', border: OutlineInputBorder()),
-                    items: ['Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance']
-                        .map((type) => DropdownMenuItem(value: type, child: Text(type)))
-                        .toList(),
+                    decoration: const InputDecoration(
+                      labelText: 'Tipe Pekerjaan',
+                      border: OutlineInputBorder(),
+                    ),
+                    items:
+                        [
+                              'Full-time',
+                              'Part-time',
+                              'Contract',
+                              'Internship',
+                              'Freelance',
+                            ]
+                            .map(
+                              (type) => DropdownMenuItem(
+                                value: type,
+                                child: Text(type),
+                              ),
+                            )
+                            .toList(),
                     onChanged: (value) => setState(() => jobType = value!),
                   ),
                 ),
@@ -141,11 +180,20 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
                 Expanded(
                   child: DropdownButtonFormField<String>(
                     initialValue: experienceLevel,
-                    decoration: const InputDecoration(labelText: 'Level Pengalaman', border: OutlineInputBorder()),
+                    decoration: const InputDecoration(
+                      labelText: 'Level Pengalaman',
+                      border: OutlineInputBorder(),
+                    ),
                     items: ['Entry Level', 'Mid Level', 'Senior']
-                        .map((level) => DropdownMenuItem(value: level, child: Text(level)))
+                        .map(
+                          (level) => DropdownMenuItem(
+                            value: level,
+                            child: Text(level),
+                          ),
+                        )
                         .toList(),
-                    onChanged: (value) => setState(() => experienceLevel = value!),
+                    onChanged: (value) =>
+                        setState(() => experienceLevel = value!),
                   ),
                 ),
               ],
@@ -156,7 +204,10 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
                 Expanded(
                   child: TextFormField(
                     initialValue: salaryMin == 0 ? '' : salaryMin.toString(),
-                    decoration: const InputDecoration(labelText: 'Gaji Min', border: OutlineInputBorder()),
+                    decoration: const InputDecoration(
+                      labelText: 'Gaji Min',
+                      border: OutlineInputBorder(),
+                    ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) => salaryMin = int.tryParse(value) ?? 0,
                   ),
@@ -165,41 +216,59 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
                 Expanded(
                   child: TextFormField(
                     initialValue: salaryMax == 0 ? '' : salaryMax.toString(),
-                    decoration: const InputDecoration(labelText: 'Gaji Max', border: OutlineInputBorder()),
+                    decoration: const InputDecoration(
+                      labelText: 'Gaji Max',
+                      border: OutlineInputBorder(),
+                    ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) => salaryMax = int.tryParse(value) ?? 0,
                   ),
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            const Text('Detail Pekerjaan', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            const Text(
+              'Detail Pekerjaan',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
             const SizedBox(height: 12),
             TextFormField(
               initialValue: description,
-              decoration: const InputDecoration(labelText: 'Deskripsi Pekerjaan', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Deskripsi Pekerjaan',
+                border: OutlineInputBorder(),
+              ),
               maxLines: 4,
               onChanged: (value) => description = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: requirements,
-              decoration: const InputDecoration(labelText: 'Persyaratan', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Persyaratan',
+                border: OutlineInputBorder(),
+              ),
               maxLines: 4,
               onChanged: (value) => requirements = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: benefits,
-              decoration: const InputDecoration(labelText: 'Keuntungan / Benefit', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Keuntungan / Benefit',
+                border: OutlineInputBorder(),
+              ),
               maxLines: 3,
               onChanged: (value) => benefits = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: companyLogoUrl,
-              decoration: const InputDecoration(labelText: 'URL Logo Perusahaan (Opsional)', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'URL Logo Perusahaan (Opsional)',
+                border: OutlineInputBorder(),
+              ),
               onChanged: (value) => companyLogoUrl = value,
             ),
             const SizedBox(height: 32),
@@ -210,7 +279,10 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: saveCareer,
-              child: const Text('Simpan Lowongan', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Simpan Lowongan',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 32),
           ],

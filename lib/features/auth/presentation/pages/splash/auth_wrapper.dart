@@ -27,10 +27,10 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   Future<void> _checkAuthState() async {
     final prefs = await SharedPreferences.getInstance();
-    
+
     // Check if it's the first time
     final hasSeenOnboarding = prefs.getBool('has_seen_onboarding') ?? false;
-    
+
     // Check login state
     final loggedIn = prefs.getBool('is_logged_in') ?? false;
     final lastActiveStr = prefs.getInt('last_active_time');
@@ -64,9 +64,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     // Logika pengarah halaman

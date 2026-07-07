@@ -114,7 +114,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Registrasi berhasil! Silakan login.')),
+      const SnackBar(
+        duration: const Duration(milliseconds: 1500),
+        content: Text('Registrasi berhasil! Silakan login.'),
+      ),
     );
     Navigator.pushReplacement(
       context,
@@ -152,15 +155,17 @@ class _RegisterPageState extends State<RegisterPage> {
           children: [
             Text(
               'Buat Akun Baru',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             Text(
               'Lengkapi form di bawah ini untuk mendaftar',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
             ),
             const SizedBox(height: 32),
 
@@ -223,9 +228,11 @@ class _RegisterPageState extends State<RegisterPage> {
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Center(
                 child: Text(
-                  'ATAU', 
+                  'ATAU',
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -318,7 +325,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     : SvgPicture.asset(AppAssets.iconGoogle, height: 24),
                 label: Text(
                   _isLoadingGoogle ? 'Memproses...' : 'Daftar dengan Google',
-                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ),
             ),

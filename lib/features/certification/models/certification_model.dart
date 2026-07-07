@@ -4,6 +4,7 @@ class CertModel {
   final String category; // 'SMK3' atau 'ISO'
   final String level; // Awal/Transisi/Lanjutan atau KAN/UKAS/EGAC
   final int basePrice;
+  final String? bannerUrl;
 
   CertModel({
     required this.id,
@@ -11,6 +12,7 @@ class CertModel {
     required this.category,
     required this.level,
     required this.basePrice,
+    this.bannerUrl,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +22,7 @@ class CertModel {
       'category': category,
       'level': level,
       'basePrice': basePrice,
+      'bannerUrl': bannerUrl,
     };
   }
 
@@ -30,6 +33,7 @@ class CertModel {
       category: map['category'] as String,
       level: map['level'] as String,
       basePrice: map['basePrice'] as int,
+      bannerUrl: map['bannerUrl'] as String?,
     );
   }
 }
@@ -41,6 +45,8 @@ final List<CertModel> dummyCertifications = [
     category: 'SMK3',
     level: 'Kriteria: Awal (64 Kriteria)',
     basePrice: 15000000,
+    bannerUrl:
+        'https://dummyimage.com/600x400/0055ff/ffffff.png&text=Dummy+Sertifikasi+1',
   ),
   CertModel(
     id: '2',
@@ -48,6 +54,8 @@ final List<CertModel> dummyCertifications = [
     category: 'SMK3',
     level: 'Kriteria: Lanjutan (166 Kriteria)',
     basePrice: 25000000,
+    bannerUrl:
+        'https://dummyimage.com/600x400/0055ff/ffffff.png&text=Dummy+Sertifikasi+2',
   ),
   CertModel(
     id: '3',
@@ -55,6 +63,8 @@ final List<CertModel> dummyCertifications = [
     category: 'SMK3',
     level: 'Kriteria: Transisi (122 Kriteria)',
     basePrice: 20000000,
+    bannerUrl:
+        'https://dummyimage.com/600x400/0055ff/ffffff.png&text=Dummy+Sertifikasi+3',
   ),
   CertModel(
     id: '4',
@@ -62,6 +72,8 @@ final List<CertModel> dummyCertifications = [
     category: 'ISO',
     level: 'Akreditasi: KAN',
     basePrice: 12000000,
+    bannerUrl:
+        'https://dummyimage.com/600x400/0055ff/ffffff.png&text=Dummy+Sertifikasi+4',
   ),
   CertModel(
     id: '5',
@@ -69,6 +81,8 @@ final List<CertModel> dummyCertifications = [
     category: 'ISO',
     level: 'Akreditasi: UKAS',
     basePrice: 18000000,
+    bannerUrl:
+        'https://dummyimage.com/600x400/0055ff/ffffff.png&text=Dummy+Sertifikasi+5',
   ),
   CertModel(
     id: '6',
@@ -76,5 +90,7 @@ final List<CertModel> dummyCertifications = [
     category: 'ISO',
     level: 'Akreditasi: EGAC',
     basePrice: 16000000,
+    bannerUrl:
+        'https://dummyimage.com/600x400/0055ff/ffffff.png&text=Dummy+Sertifikasi+6',
   ),
 ];

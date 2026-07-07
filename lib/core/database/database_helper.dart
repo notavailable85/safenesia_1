@@ -9,13 +9,16 @@ import 'package:safenesia_1/features/notification/models/notification_model.dart
 import 'package:safenesia_1/features/regulation/models/regulation_model.dart';
 import 'package:safenesia_1/features/inspection/models/inspection_model.dart';
 import 'package:safenesia_1/features/auth/models/user_model.dart';
+import 'package:safenesia_1/features/profile/models/transaction_model.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static const _databaseName = "safenesia.db";
-  static const _databaseVersion = 13;
+  static const _databaseVersion = 18;
 
   static Database? _database;
+
+  DatabaseHelper._privateConstructor();
 
   DatabaseHelper._init();
 
@@ -89,6 +92,25 @@ class DatabaseHelper {
       await db.execute('DROP TABLE IF EXISTS training_schedules');
       await _createTrainingSchedulesTable(db);
     }
+    if (oldVersion < 14) {
+      await db.execute('DROP TABLE IF EXISTS certifications');
+      await _createCertificationsTable(db);
+    }
+    if (oldVersion < 15) {
+      await _createTransactionsTable(db);
+    }
+    if (oldVersion < 16) {
+      await db.execute('DROP TABLE IF EXISTS certifications');
+      await _createCertificationsTable(db);
+    }
+    if (oldVersion < 17) {
+      await db.execute('DROP TABLE IF EXISTS certifications');
+      await _createCertificationsTable(db);
+    }
+    if (oldVersion < 18) {
+      await db.execute('DROP TABLE IF EXISTS certifications');
+      await _createCertificationsTable(db);
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -119,6 +141,7 @@ CREATE TABLE articles (
     await _createRegulationsTable(db);
     await _createInspectionsTable(db);
     await _createUsersTable(db);
+    await _createTransactionsTable(db);
   }
 
   Future _createUsersTable(Database db) async {
@@ -132,7 +155,7 @@ CREATE TABLE users (
   role TEXT NOT NULL
 )
 ''');
-    
+
     // Insert default admin
     await db.insert('users', {
       'id': 'admin-1',
@@ -151,7 +174,8 @@ CREATE TABLE certifications (
   title TEXT NOT NULL,
   category TEXT NOT NULL,
   level TEXT NOT NULL,
-  basePrice INTEGER NOT NULL
+  basePrice INTEGER NOT NULL,
+  bannerUrl TEXT
 )
 ''');
     for (var cert in dummyCertifications) {
@@ -340,7 +364,12 @@ CREATE TABLE training_schedules (
 
   Future<int> update(Article article) async {
     final db = await instance.database;
-    return db.update('articles', article.toMap(), where: 'id = ?', whereArgs: [article.id]);
+    return db.update(
+      'articles',
+      article.toMap(),
+      where: 'id = ?',
+      whereArgs: [article.id],
+    );
   }
 
   Future<int> delete(String id) async {
@@ -358,7 +387,11 @@ CREATE TABLE training_schedules (
 
   Future<Training?> readTraining(String id) async {
     final db = await instance.database;
-    final maps = await db.query('trainings', where: 'idPelatihan = ?', whereArgs: [id]);
+    final maps = await db.query(
+      'trainings',
+      where: 'idPelatihan = ?',
+      whereArgs: [id],
+    );
     if (maps.isNotEmpty) {
       return Training.fromMap(maps.first);
     } else {
@@ -375,14 +408,27 @@ CREATE TABLE training_schedules (
 
   Future<int> updateTraining(Training training) async {
     final db = await instance.database;
-    return db.update('trainings', training.toMap(), where: 'idPelatihan = ?', whereArgs: [training.idPelatihan]);
+    return db.update(
+      'trainings',
+      training.toMap(),
+      where: 'idPelatihan = ?',
+      whereArgs: [training.idPelatihan],
+    );
   }
 
   Future<int> deleteTraining(String id) async {
     final db = await instance.database;
     // Also delete associated schedules
-    await db.delete('training_schedules', where: 'idPelatihan = ?', whereArgs: [id]);
-    return await db.delete('trainings', where: 'idPelatihan = ?', whereArgs: [id]);
+    await db.delete(
+      'training_schedules',
+      where: 'idPelatihan = ?',
+      whereArgs: [id],
+    );
+    return await db.delete(
+      'trainings',
+      where: 'idPelatihan = ?',
+      whereArgs: [id],
+    );
   }
 
   // ================= TRAINING SCHEDULE METHODS =================
@@ -395,17 +441,26 @@ CREATE TABLE training_schedules (
 
   Future<int> updateSchedule(TrainingSchedule schedule) async {
     final db = await instance.database;
-    return db.update('training_schedules', schedule.toMap(), where: 'idJadwal = ?', whereArgs: [schedule.idJadwal]);
+    return db.update(
+      'training_schedules',
+      schedule.toMap(),
+      where: 'idJadwal = ?',
+      whereArgs: [schedule.idJadwal],
+    );
   }
 
   Future<int> deleteSchedule(String id) async {
     final db = await instance.database;
-    return await db.delete('training_schedules', where: 'idJadwal = ?', whereArgs: [id]);
+    return await db.delete(
+      'training_schedules',
+      where: 'idJadwal = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<List<TrainingSchedule>> readAllSchedulesWithTraining() async {
     final db = await instance.database;
-    
+
     // Perform SQL JOIN to get Schedule + Training details
     final List<Map<String, dynamic>> result = await db.rawQuery('''
       SELECT s.*, t.* 
@@ -437,7 +492,12 @@ CREATE TABLE training_schedules (
 
   Future<int> updateCertification(CertModel cert) async {
     final db = await instance.database;
-    return db.update('certifications', cert.toMap(), where: 'id = ?', whereArgs: [cert.id]);
+    return db.update(
+      'certifications',
+      cert.toMap(),
+      where: 'id = ?',
+      whereArgs: [cert.id],
+    );
   }
 
   Future<int> deleteCertification(String id) async {
@@ -474,7 +534,9 @@ CREATE TABLE training_schedules (
   }
 
   // ================= NOTIFICATION METHODS =================
-  Future<NotificationModel> createNotification(NotificationModel notification) async {
+  Future<NotificationModel> createNotification(
+    NotificationModel notification,
+  ) async {
     final db = await instance.database;
     await db.insert('notifications', notification.toMap());
     return notification;
@@ -488,7 +550,12 @@ CREATE TABLE training_schedules (
 
   Future<int> updateNotification(NotificationModel notification) async {
     final db = await instance.database;
-    return db.update('notifications', notification.toMap(), where: 'id = ?', whereArgs: [notification.id]);
+    return db.update(
+      'notifications',
+      notification.toMap(),
+      where: 'id = ?',
+      whereArgs: [notification.id],
+    );
   }
 
   Future<int> deleteNotification(String id) async {
@@ -511,7 +578,12 @@ CREATE TABLE training_schedules (
 
   Future<int> updateRegulation(RegulationModel regulation) async {
     final db = await instance.database;
-    return db.update('regulations', regulation.toMap(), where: 'id = ?', whereArgs: [regulation.id]);
+    return db.update(
+      'regulations',
+      regulation.toMap(),
+      where: 'id = ?',
+      whereArgs: [regulation.id],
+    );
   }
 
   Future<int> deleteRegulation(String id) async {
@@ -534,7 +606,12 @@ CREATE TABLE training_schedules (
 
   Future<int> updateUser(UserModel user) async {
     final db = await instance.database;
-    return db.update('users', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
+    return db.update(
+      'users',
+      user.toMap(),
+      where: 'id = ?',
+      whereArgs: [user.id],
+    );
   }
 
   Future<int> deleteUser(String id) async {
@@ -574,7 +651,12 @@ CREATE TABLE inspections (
 
   Future<int> updateInspection(InspectionModel inspection) async {
     final db = await instance.database;
-    return db.update('inspections', inspection.toMap(), where: 'id = ?', whereArgs: [inspection.id]);
+    return db.update(
+      'inspections',
+      inspection.toMap(),
+      where: 'id = ?',
+      whereArgs: [inspection.id],
+    );
   }
 
   Future<int> deleteInspection(String id) async {
@@ -582,9 +664,73 @@ CREATE TABLE inspections (
     return await db.delete('inspections', where: 'id = ?', whereArgs: [id]);
   }
 
+  // ================= TRANSACTION METHODS =================
+  Future _createTransactionsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE transactions (
+  id TEXT PRIMARY KEY,
+  layanan TEXT NOT NULL,
+  judul TEXT NOT NULL,
+  status TEXT NOT NULL,
+  tanggal TEXT NOT NULL,
+  totalBayar INTEGER
+)
+''');
+    // Add dummy transactions to match the original static data
+    await db.insert('transactions', {
+      'id': 'trx_1',
+      'layanan': 'Pelatihan',
+      'judul': 'Ahli K3 Umum',
+      'status': 'Selesai',
+      'tanggal': '12 Jan 2026',
+    });
+    await db.insert('transactions', {
+      'id': 'trx_2',
+      'layanan': 'Sertifikasi',
+      'judul': 'ISO 9001:2015',
+      'status': 'Proses',
+      'tanggal': '05 Feb 2026',
+    });
+    await db.insert('transactions', {
+      'id': 'trx_3',
+      'layanan': 'Riksa Uji',
+      'judul': 'Riksa Uji Crane',
+      'status': 'Selesai',
+      'tanggal': '20 Mar 2026',
+    });
+  }
+
+  Future<TransactionModel> createTransaction(
+    TransactionModel transaction,
+  ) async {
+    final db = await instance.database;
+    await db.insert('transactions', transaction.toMap());
+    return transaction;
+  }
+
+  Future<List<TransactionModel>> readAllTransactions() async {
+    final db = await instance.database;
+    final result = await db.query('transactions', orderBy: 'ROWID DESC');
+    return result.map((json) => TransactionModel.fromMap(json)).toList();
+  }
+
+  Future<int> updateTransaction(TransactionModel transaction) async {
+    final db = await instance.database;
+    return db.update(
+      'transactions',
+      transaction.toMap(),
+      where: 'id = ?',
+      whereArgs: [transaction.id],
+    );
+  }
+
+  Future<int> deleteTransaction(String id) async {
+    final db = await instance.database;
+    return await db.delete('transactions', where: 'id = ?', whereArgs: [id]);
+  }
+
   Future close() async {
     final db = await instance.database;
     db.close();
   }
 }
-

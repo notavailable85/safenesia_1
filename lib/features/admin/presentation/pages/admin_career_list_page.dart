@@ -31,7 +31,10 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
     refreshCareers();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lowongan berhasil dihapus')),
+        const SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content: Text('Lowongan berhasil dihapus'),
+        ),
       );
     }
   }
@@ -47,76 +50,93 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : careers.isEmpty
-              ? const Center(child: Text('Belum ada data karir'))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: careers.length,
-                  itemBuilder: (context, index) {
-                    final career = careers[index];
-                    return Card(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                          child: Icon(Icons.work, color: Theme.of(context).colorScheme.primary),
-                        ),
-                        title: Text(career.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('${career.company} - ${career.location}'),
-                            Text(
-                              '${career.jobType} • ${career.experienceLevel}',
-                              style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        isThreeLine: true,
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.orange),
-                              onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminCareerFormPage(career: career),
-                                  ),
-                                );
-                                refreshCareers();
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('Hapus Lowongan'),
-                                    content: const Text('Apakah Anda yakin ingin menghapus lowongan ini?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('Batal'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          deleteCareer(career.id);
-                                        },
-                                        child: const Text('Hapus', style: TextStyle(color: Colors.red)),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+          ? const Center(child: Text('Belum ada data karir'))
+          : ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: careers.length,
+              itemBuilder: (context, index) {
+                final career = careers[index];
+                return Card(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.1),
+                      child: Icon(
+                        Icons.work,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                    title: Text(
+                      career.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('${career.company} - ${career.location}'),
+                        Text(
+                          '${career.jobType} • ${career.experienceLevel}',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    isThreeLine: true,
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.orange),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AdminCareerFormPage(career: career),
+                              ),
+                            );
+                            refreshCareers();
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Hapus Lowongan'),
+                                content: const Text(
+                                  'Apakah Anda yakin ingin menghapus lowongan ini?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Batal'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      deleteCareer(career.id);
+                                    },
+                                    child: const Text(
+                                      'Hapus',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
@@ -133,4 +153,3 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
     );
   }
 }
-

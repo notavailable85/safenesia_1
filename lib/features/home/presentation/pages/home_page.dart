@@ -20,6 +20,7 @@ import 'package:safenesia_1/core/widgets/custom_download_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:safenesia_1/core/utils/user_state.dart';
 import 'package:gal/gal.dart';
+
 // ==========================================
 // 1. HALAMAN UTAMA (HOME PAGE)
 // ==========================================
@@ -103,8 +104,8 @@ class _HomePageState extends State<HomePage> {
     },
     {'title': 'Perpanjangan', 'icon': Icons.autorenew, 'color': Colors.teal},
     {'title': 'Artikel K3', 'icon': Icons.article, 'color': Colors.indigo},
-    {'title': 'Regulasi K3', 'icon': Icons.gavel, 'color': Colors.red},
     {'title': 'Karir K3', 'icon': Icons.work, 'color': Colors.purple},
+    {'title': 'Regulasi K3', 'icon': Icons.gavel, 'color': Colors.red},
     {'title': 'Fitur Lainnya', 'icon': Icons.grid_view, 'color': Colors.grey},
   ];
 
@@ -121,168 +122,198 @@ class _HomePageState extends State<HomePage> {
             RepaintBoundary(
               key: _cardKey,
               child: AspectRatio(
-                aspectRatio: 1.586, // Rasio presisi kartu kredit (85.6mm x 53.98mm)
+                aspectRatio:
+                    1.586, // Rasio presisi kartu kredit (85.6mm x 53.98mm)
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFFE2E2E2),
-                      Color(0xFFC9D6FF), // Sedikit kilauan biru es khas platinum
-                      Color(0xFFE2E2E2),
-                      Color(0xFF9E9E9E),
-                      Color(0xFFF5F7FA), // Perak cerah
-                    ],
-                    stops: [0.0, 0.3, 0.5, 0.8, 1.0],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.4),
-                      blurRadius: 20,
-                      offset: const Offset(0, 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFFE2E2E2),
+                        Color(
+                          0xFFC9D6FF,
+                        ), // Sedikit kilauan biru es khas platinum
+                        Color(0xFFE2E2E2),
+                        Color(0xFF9E9E9E),
+                        Color(0xFFF5F7FA), // Perak cerah
+                      ],
+                      stops: [0.0, 0.3, 0.5, 0.8, 1.0],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                  ],
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    width: 1.5,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.4),
+                        blurRadius: 20,
+                        offset: const Offset(0, 15),
+                      ),
+                    ],
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      width: 1.5,
+                    ),
                   ),
-                ),
-                child: Stack(
-                  children: [
-                    // Baris Atas: Contactless Icon & Logo
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.contactless, color: Color(0xFF555555), size: 28),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                  child: Stack(
+                    children: [
+                      // Baris Atas: Contactless Icon & Logo
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.contactless,
+                            color: Color(0xFF555555),
+                            size: 28,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              const Text(
+                                'SAFENESIA',
+                                style: TextStyle(
+                                  color: Color(0xFF222222),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                  fontStyle: FontStyle.italic,
+                                  letterSpacing: 1.5,
+                                ),
+                              ),
+                              Text(
+                                'PLATINUM',
+                                style: TextStyle(
+                                  color: const Color(
+                                    0xFF222222,
+                                  ).withValues(alpha: 0.7),
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      // Chip EMV
+                      Positioned(
+                        top: 50,
+                        left: 0,
+                        child: Container(
+                          width: 42,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFFE6C27A),
+                                Color(0xFFD4AF37),
+                                Color(0xFF996515),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            border: Border.all(
+                              color: Colors.black12,
+                              width: 0.5,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.memory,
+                            color: Colors.black54,
+                            size: 24,
+                          ),
+                        ),
+                      ),
+
+                      // Nomor Kartu Embossed Style
+                      const Positioned(
+                        bottom: 45,
+                        left: 0,
+                        child: Text(
+                          '5412  7512  3412  9000',
+                          style: TextStyle(
+                            color: Color(0xFF222222),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 2,
+                            fontFamily: 'Courier',
+                            shadows: [
+                              Shadow(
+                                color: Colors.white70,
+                                blurRadius: 1,
+                                offset: Offset(1, 1),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // Nama Member
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'SAFENESIA',
+                            Text(
+                              'CARDHOLDER',
                               style: TextStyle(
-                                color: Color(0xFF222222),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w900,
-                                fontStyle: FontStyle.italic,
-                                letterSpacing: 1.5,
+                                color: const Color(
+                                  0xFF222222,
+                                ).withValues(alpha: 0.5),
+                                fontSize: 8,
+                                letterSpacing: 1,
                               ),
                             ),
                             Text(
-                              'PLATINUM',
-                              style: TextStyle(
-                                color: const Color(0xFF222222).withValues(alpha: 0.7),
-                                fontSize: 8,
+                              _userName.toUpperCase(),
+                              style: const TextStyle(
+                                color: Color(0xFF222222),
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                letterSpacing: 2,
+                                letterSpacing: 1.5,
                               ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                    
-                    // Chip EMV
-                    Positioned(
-                      top: 50,
-                      left: 0,
-                      child: Container(
-                        width: 42,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFE6C27A), Color(0xFFD4AF37), Color(0xFF996515)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          border: Border.all(color: Colors.black12, width: 0.5),
-                        ),
-                        child: const Icon(Icons.memory, color: Colors.black54, size: 24),
                       ),
-                    ),
-                    
-                    // Nomor Kartu Embossed Style
-                    const Positioned(
-                      bottom: 45,
-                      left: 0,
-                      child: Text(
-                        '5412  7512  3412  9000',
-                        style: TextStyle(
-                          color: Color(0xFF222222),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 2,
-                          fontFamily: 'Courier',
-                          shadows: [Shadow(color: Colors.white70, blurRadius: 1, offset: Offset(1, 1))],
+
+                      // Valid Thru
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'VALID THRU',
+                              style: TextStyle(
+                                color: const Color(
+                                  0xFF222222,
+                                ).withValues(alpha: 0.5),
+                                fontSize: 8,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            const Text(
+                              '12/29',
+                              style: TextStyle(
+                                color: Color(0xFF222222),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                                fontFamily: 'Courier',
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    
-                    // Nama Member
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'CARDHOLDER',
-                            style: TextStyle(
-                              color: const Color(0xFF222222).withValues(alpha: 0.5),
-                              fontSize: 8,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          Text(
-                            _userName.toUpperCase(),
-                            style: const TextStyle(
-                              color: Color(0xFF222222),
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                    // Valid Thru
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            'VALID THRU',
-                            style: TextStyle(
-                              color: const Color(0xFF222222).withValues(alpha: 0.5),
-                              fontSize: 8,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          const Text(
-                            '12/29',
-                            style: TextStyle(
-                              color: Color(0xFF222222),
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
-                              fontFamily: 'Courier',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
             ),
             const SizedBox(height: 32),
             // Tombol Unduh Kartu
@@ -298,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                       child: CircularProgressIndicator(color: Colors.white),
                     ),
                   );
-                  
+
                   // Meminta izin storage dengan gal
                   final hasAccess = await Gal.hasAccess(toAlbum: true);
                   if (!hasAccess) {
@@ -307,7 +338,12 @@ class _HomePageState extends State<HomePage> {
                       if (context.mounted) {
                         Navigator.pop(context); // Tutup loading
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Izin penyimpanan diperlukan untuk mengunduh kartu')),
+                          const SnackBar(
+                            duration: const Duration(milliseconds: 1500),
+                            content: Text(
+                              'Izin penyimpanan diperlukan untuk mengunduh kartu',
+                            ),
+                          ),
                         );
                       }
                       return;
@@ -315,29 +351,43 @@ class _HomePageState extends State<HomePage> {
                   }
 
                   // Tangkap gambar dari RepaintBoundary
-                  RenderRepaintBoundary boundary = _cardKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-                  ui.Image image = await boundary.toImage(pixelRatio: 3.0); // Kualitas tinggi
-                  final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+                  RenderRepaintBoundary boundary =
+                      _cardKey.currentContext!.findRenderObject()
+                          as RenderRepaintBoundary;
+                  ui.Image image = await boundary.toImage(
+                    pixelRatio: 3.0,
+                  ); // Kualitas tinggi
+                  final byteData = await image.toByteData(
+                    format: ui.ImageByteFormat.png,
+                  );
                   final pngBytes = byteData!.buffer.asUint8List();
 
                   // Simpan ke galeri menggunakan gal
                   await Gal.putImageBytes(
                     pngBytes,
-                    name: 'Safenesia_Membercard_${DateTime.now().millisecondsSinceEpoch}',
+                    name:
+                        'Safenesia_Membercard_${DateTime.now().millisecondsSinceEpoch}',
                   );
-                  
+
                   if (!context.mounted) return;
                   Navigator.pop(context); // Tutup loading
-                  
+
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Kartu berhasil diunduh dan masuk ke galeri!')),
+                    const SnackBar(
+                      duration: const Duration(milliseconds: 1500),
+                      content: Text(
+                        'Kartu berhasil diunduh dan masuk ke galeri!',
+                      ),
+                    ),
                   );
-                  
                 } catch (e) {
                   if (context.mounted) {
                     Navigator.pop(context); // Tutup loading
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Gagal mengunduh kartu: $e')),
+                      SnackBar(
+                        duration: const Duration(milliseconds: 1500),
+                        content: Text('Gagal mengunduh kartu: $e'),
+                      ),
                     );
                   }
                 }
@@ -363,61 +413,113 @@ class _HomePageState extends State<HomePage> {
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.only(
-              left: 16, 
-              right: 16, 
-              top: 12, 
-              bottom: 32 + MediaQuery.of(context).padding.bottom
+              left: 16,
+              right: 16,
+              top: 12,
+              bottom: 32 + MediaQuery.of(context).padding.bottom,
             ),
             child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Drag handle
-              Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(12),
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Drag handle
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-              ),
-              const Text(
-                'Fitur Lainnya',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: _buildPopupItem(Icons.headset_mic, 'Konsultasi K3', Colors.blue)),
-                      Expanded(child: _buildPopupItem(Icons.report_problem, 'Lapor Insiden', Colors.red)),
-                      Expanded(child: _buildPopupItem(Icons.checklist_rtl, 'Inspeksi Harian', Colors.teal)),
-                      Expanded(child: _buildPopupItem(Icons.calculate, 'Kalkulator Risiko', Colors.orange)),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: _buildPopupItem(Icons.store, 'Toko Safety', Colors.green)),
-                      Expanded(child: _buildPopupItem(Icons.event, 'Webinar K3', Colors.purple)),
-                      Expanded(child: _buildPopupItem(Icons.forum, 'Komunitas K3', Colors.indigo)),
-                      Expanded(child: _buildPopupItem(Icons.newspaper, 'Berita Terkini', Colors.blueGrey)),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                const Text(
+                  'Fitur Lainnya',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 24),
+                Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: _buildPopupItem(
+                            Icons.headset_mic,
+                            'Konsultasi K3',
+                            Colors.blue,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildPopupItem(
+                            Icons.report_problem,
+                            'Lapor Insiden',
+                            Colors.red,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildPopupItem(
+                            Icons.checklist_rtl,
+                            'Inspeksi Harian',
+                            Colors.teal,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildPopupItem(
+                            Icons.calculate,
+                            'Kalkulator Risiko',
+                            Colors.orange,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: _buildPopupItem(
+                            Icons.store,
+                            'Toko Safety',
+                            Colors.green,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildPopupItem(
+                            Icons.event,
+                            'Webinar K3',
+                            Colors.purple,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildPopupItem(
+                            Icons.forum,
+                            'Komunitas K3',
+                            Colors.indigo,
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildPopupItem(
+                            Icons.newspaper,
+                            'Berita Terkini',
+                            Colors.blueGrey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
         );
       },
     );
   }
 
-  Widget _buildPopupItem(IconData icon, String title, [Color color = Colors.blue]) {
+  Widget _buildPopupItem(
+    IconData icon,
+    String title, [
+    Color color = Colors.blue,
+  ]) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -449,10 +551,14 @@ class _HomePageState extends State<HomePage> {
         context,
         MaterialPageRoute(builder: (c) => const CertListPage()),
       );
-    } else if (title == 'Regulasi K3') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (c) => const RegulasiPage()),
+    } else if (title == 'Regulasi K3' ||
+        title == 'Riksa Uji Alat' ||
+        title == 'Perpanjangan') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content: Text('Fitur sedang dalam pengembangan'),
+        ),
       );
     } else if (title == 'Artikel K3') {
       Navigator.push(
@@ -463,11 +569,6 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (c) => const KarirPage()),
-      );
-    } else if (title == 'Riksa Uji Alat') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (c) => const InspectionOrderPage()),
       );
     } else {
       // Mengubah state Kontainer 2 (Maksimal 5 item yang tampil)
@@ -482,41 +583,43 @@ class _HomePageState extends State<HomePage> {
         titleSpacing: 16,
         automaticallyImplyLeading: false,
         title: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: _userAvatarPath != null ? FileImage(File(_userAvatarPath!)) : null,
-                child: _userAvatarPath == null
-                    ? Icon(
-                        Icons.person,
-                        color: Theme.of(context).colorScheme.primary,
-                      )
-                    : null,
-              ),
-              const SizedBox(width: 12), // <-- Jarak pasti antara foto dan teks
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _userName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.white,
+              backgroundImage: _userAvatarPath != null
+                  ? FileImage(File(_userAvatarPath!))
+                  : null,
+              child: _userAvatarPath == null
+                  ? Icon(
+                      Icons.person,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 12), // <-- Jarak pasti antara foto dan teks
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _userName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  Text(
-                    _userEmail,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white70,
-                    ),
+                ),
+                Text(
+                  _userEmail,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white70,
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
+        ),
         actions: [
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -582,7 +685,11 @@ class _HomePageState extends State<HomePage> {
                               top: 8,
                               right: 8,
                               child: IconButton(
-                                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
                                 onPressed: () => Navigator.pop(context),
                               ),
                             ),
@@ -595,7 +702,10 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(_bannerImages[index], fit: BoxFit.cover),
+                      child: Image.asset(
+                        _bannerImages[index],
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 );
@@ -660,7 +770,9 @@ class _HomePageState extends State<HomePage> {
                                 Container(
                                   padding: const EdgeInsets.all(14),
                                   decoration: BoxDecoration(
-                                    color: feature['color'].withValues(alpha: 0.08),
+                                    color: feature['color'].withValues(
+                                      alpha: 0.08,
+                                    ),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Icon(
@@ -684,7 +796,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       }),
                     );
-                  }
+                  },
                 ),
               ],
             ),
@@ -698,7 +810,9 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _selectedFeature == 'Pelatihan K3' ? 'Pelatihan Terdekat' : 'Kategori $_selectedFeature',
+                  _selectedFeature == 'Pelatihan K3'
+                      ? 'Pelatihan Terdekat'
+                      : 'Kategori $_selectedFeature',
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -805,31 +919,39 @@ class _HomePageState extends State<HomePage> {
     final now = DateTime.now();
     // Anggap jadwal hari ini tetap berlaku (hilangkan jam)
     final today = DateTime(now.year, now.month, now.day);
-    
+
     final sortedSchedules = List<TrainingSchedule>.from(_schedules);
     sortedSchedules.sort((a, b) {
       DateTime dateA;
       DateTime dateB;
-      try { dateA = DateTime.parse(a.tanggalStart); } catch (e) { dateA = DateTime.fromMillisecondsSinceEpoch(0); }
-      try { dateB = DateTime.parse(b.tanggalStart); } catch (e) { dateB = DateTime.fromMillisecondsSinceEpoch(0); }
-      
+      try {
+        dateA = DateTime.parse(a.tanggalStart);
+      } catch (e) {
+        dateA = DateTime.fromMillisecondsSinceEpoch(0);
+      }
+      try {
+        dateB = DateTime.parse(b.tanggalStart);
+      } catch (e) {
+        dateB = DateTime.fromMillisecondsSinceEpoch(0);
+      }
+
       final isAPast = dateA.isBefore(today);
       final isBPast = dateB.isBefore(today);
-      
+
       // Jika salah satu sudah lewat, yang belum lewat diutamakan
       if (isAPast && !isBPast) return 1;
       if (!isAPast && isBPast) return -1;
-      
+
       // Jika keduanya upcoming (belum lewat), urutkan dari yang paling dekat dengan hari ini
       if (!isAPast && !isBPast) {
         return dateA.compareTo(dateB);
-      } 
+      }
       // Jika keduanya sudah lewat, tampilkan yang paling baru lewat
       else {
         return dateB.compareTo(dateA);
       }
     });
-    
+
     // Ambil 5 jadwal yang posisinya secara waktu paling dekat dengan hari ini
     final displaySchedules = sortedSchedules.take(5).toList();
 
@@ -850,78 +972,78 @@ class _HomePageState extends State<HomePage> {
               child: Card(
                 margin: EdgeInsets.zero,
                 child: ListTile(
-                contentPadding: const EdgeInsets.all(12),
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    training.gambarPelatihan,
-                    width: 60,
-                    height: 60,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                title: Text(
-                  training.namaPelatihan,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.verified,
-                          size: 14,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            training.sertifikasi,
-                            style: const TextStyle(fontSize: 12),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
+                  contentPadding: const EdgeInsets.all(12),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      training.gambarPelatihan,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_month,
-                          size: 14,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            schedule.tanggalStr,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
+                  ),
+                  title: Text(
+                    training.namaPelatihan,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.verified,
+                            size: 14,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              training.sertifikasi,
+                              style: const TextStyle(fontSize: 12),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_month,
+                            size: 14,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              schedule.tanggalStr,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            TrainingDetailPage(scheduleData: schedule),
+                      ),
+                    );
+                  },
                 ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          TrainingDetailPage(scheduleData: schedule),
-                    ),
-                  );
-                },
-              ),
               ),
             );
           },
@@ -977,10 +1099,10 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.only(bottom: 8),
         child: Card(
           child: ListTile(
-          title: Text(items[i]),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => onTap(items[i]),
-        ),
+            title: Text(items[i]),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => onTap(items[i]),
+          ),
         ),
       ),
     );
@@ -996,22 +1118,24 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.only(bottom: 12),
       child: Card(
         child: ListTile(
-        contentPadding: const EdgeInsets.all(16),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle),
-        trailing: Text(
-          price,
-          style: const TextStyle(
-            color: Colors.green,
-            fontWeight: FontWeight.bold,
+          contentPadding: const EdgeInsets.all(16),
+          title: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
+          subtitle: Text(subtitle),
+          trailing: Text(
+            price,
+            style: const TextStyle(
+              color: Colors.green,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          onTap: onTap,
         ),
-        onTap: onTap,
-      ),
       ),
     );
   }
-
 
   void _navDetailSertifikasi(String title) => Navigator.push(
     context,

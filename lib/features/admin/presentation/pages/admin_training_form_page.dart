@@ -3,7 +3,8 @@ import 'package:safenesia_1/core/database/database_helper.dart';
 import 'package:safenesia_1/features/training/models/training_model.dart';
 
 class AdminTrainingFormPage extends StatefulWidget {
-  final Training? training; // Jika null berarti tambah, jika tidak berarti update
+  final Training?
+  training; // Jika null berarti tambah, jika tidak berarti update
 
   const AdminTrainingFormPage({super.key, this.training});
 
@@ -40,8 +41,6 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
   String _selectedSertifikasi = 'Sertifikasi Kemnaker RI';
   String _selectedStatus = 'Aktif';
 
-
-
   final List<String> _bidangList = [
     'Keahlian K3 Umum',
     'Sistem Manajemen K3',
@@ -59,7 +58,9 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
   ];
 
   final List<String> _sertifikasiList = [
-    'Sertifikasi Kemnaker RI', 'Sertifikasi BNSP', 'Sertifikasi Safenesia'
+    'Sertifikasi Kemnaker RI',
+    'Sertifikasi BNSP',
+    'Sertifikasi Safenesia',
   ];
 
   final List<String> _statusList = ['Aktif', 'Tidak Aktif'];
@@ -70,28 +71,47 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
     final t = widget.training;
 
     _kodeBidangController = TextEditingController(text: t?.kodeBidang ?? '');
-    _namaPelatihanController = TextEditingController(text: t?.namaPelatihan ?? '');
-    _namaPelatihanKapitalController = TextEditingController(text: t?.namaPelatihanKapital ?? '');
-    _kodePelatihanController = TextEditingController(text: t?.kodePelatihan ?? '');
+    _namaPelatihanController = TextEditingController(
+      text: t?.namaPelatihan ?? '',
+    );
+    _namaPelatihanKapitalController = TextEditingController(
+      text: t?.namaPelatihanKapital ?? '',
+    );
+    _kodePelatihanController = TextEditingController(
+      text: t?.kodePelatihan ?? '',
+    );
     _durasiController = TextEditingController(text: t?.durasi ?? '');
-    _hargaPromoController = TextEditingController(text: t?.hargaPromo.toString() ?? '');
-    _hargaNormalController = TextEditingController(text: t?.hargaNormal.toString() ?? '');
+    _hargaPromoController = TextEditingController(
+      text: t?.hargaPromo.toString() ?? '',
+    );
+    _hargaNormalController = TextEditingController(
+      text: t?.hargaNormal.toString() ?? '',
+    );
     _deskripsiController = TextEditingController(text: t?.deskripsi ?? '');
     _dasarHukumController = TextEditingController(text: t?.dasarHukum ?? '');
     _tujuanController = TextEditingController(text: t?.tujuan ?? '');
     _materiController = TextEditingController(text: t?.materi ?? '');
-    _syaratAdministrasiController = TextEditingController(text: t?.syaratAdministrasi ?? '');
+    _syaratAdministrasiController = TextEditingController(
+      text: t?.syaratAdministrasi ?? '',
+    );
     _fasilitasController = TextEditingController(text: t?.fasilitas ?? '');
     _metodeController = TextEditingController(text: t?.metode ?? '');
-    _detailMetodeController = TextEditingController(text: t?.detailMetode ?? '');
-    _syaratKetentuanController = TextEditingController(text: t?.syaratKetentuan ?? '');
+    _detailMetodeController = TextEditingController(
+      text: t?.detailMetode ?? '',
+    );
+    _syaratKetentuanController = TextEditingController(
+      text: t?.syaratKetentuan ?? '',
+    );
     _instrukturController = TextEditingController(text: t?.instruktur ?? '');
     _keteranganController = TextEditingController(text: t?.keterangan ?? '');
-    _gambarPelatihanController = TextEditingController(text: t?.gambarPelatihan ?? '');
+    _gambarPelatihanController = TextEditingController(
+      text: t?.gambarPelatihan ?? '',
+    );
 
     if (t != null) {
       if (_bidangList.contains(t.bidang)) _selectedBidang = t.bidang;
-      if (_sertifikasiList.contains(t.sertifikasi)) _selectedSertifikasi = t.sertifikasi;
+      if (_sertifikasiList.contains(t.sertifikasi))
+        _selectedSertifikasi = t.sertifikasi;
       if (_statusList.contains(t.status)) _selectedStatus = t.status;
     }
   }
@@ -124,7 +144,9 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
     if (_formKey.currentState!.validate()) {
       final isUpdating = widget.training != null;
       final training = Training(
-        idPelatihan: isUpdating ? widget.training!.idPelatihan : DateTime.now().millisecondsSinceEpoch.toString(),
+        idPelatihan: isUpdating
+            ? widget.training!.idPelatihan
+            : DateTime.now().millisecondsSinceEpoch.toString(),
         kodeBidang: _kodeBidangController.text,
         bidang: _selectedBidang,
         namaPelatihan: _namaPelatihanController.text,
@@ -158,13 +180,25 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(isUpdating ? 'Master Pelatihan diperbarui' : 'Master Pelatihan ditambahkan')),
+          SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text(
+              isUpdating
+                  ? 'Master Pelatihan diperbarui'
+                  : 'Master Pelatihan ditambahkan',
+            ),
+          ),
         );
       }
     }
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, {int maxLines = 1, TextInputType? keyboardType}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String label, {
+    int maxLines = 1,
+    TextInputType? keyboardType,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
@@ -189,8 +223,11 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.training == null ? 'Tambah Master Pelatihan' : 'Edit Master Pelatihan'),
-
+        title: Text(
+          widget.training == null
+              ? 'Tambah Master Pelatihan'
+              : 'Edit Master Pelatihan',
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -199,63 +236,124 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
           child: ListView(
             children: [
               _buildTextField(_namaPelatihanController, 'Nama Pelatihan'),
-              _buildTextField(_namaPelatihanKapitalController, 'Nama Pelatihan (Kapital)'),
+              _buildTextField(
+                _namaPelatihanKapitalController,
+                'Nama Pelatihan (Kapital)',
+              ),
               _buildTextField(_kodePelatihanController, 'Kode Pelatihan'),
               _buildTextField(_kodeBidangController, 'Kode Bidang'),
-              
-              DropdownButtonFormField(initialValue: _selectedBidang,
-                decoration: const InputDecoration(labelText: 'Bidang / Kategori', border: OutlineInputBorder()),
-                items: _bidangList.map((String b) => DropdownMenuItem(value: b, child: Text(b))).toList(),
+
+              DropdownButtonFormField(
+                initialValue: _selectedBidang,
+                decoration: const InputDecoration(
+                  labelText: 'Bidang / Kategori',
+                  border: OutlineInputBorder(),
+                ),
+                items: _bidangList
+                    .map(
+                      (String b) => DropdownMenuItem(value: b, child: Text(b)),
+                    )
+                    .toList(),
                 onChanged: (val) => setState(() => _selectedBidang = val!),
               ),
               const SizedBox(height: 16),
 
-              DropdownButtonFormField(initialValue: _selectedSertifikasi,
-                decoration: const InputDecoration(labelText: 'Sertifikasi', border: OutlineInputBorder()),
-                items: _sertifikasiList.map((String s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+              DropdownButtonFormField(
+                initialValue: _selectedSertifikasi,
+                decoration: const InputDecoration(
+                  labelText: 'Sertifikasi',
+                  border: OutlineInputBorder(),
+                ),
+                items: _sertifikasiList
+                    .map(
+                      (String s) => DropdownMenuItem(value: s, child: Text(s)),
+                    )
+                    .toList(),
                 onChanged: (val) => setState(() => _selectedSertifikasi = val!),
               ),
               const SizedBox(height: 16),
 
-              DropdownButtonFormField(initialValue: _selectedStatus,
-                decoration: const InputDecoration(labelText: 'Status', border: OutlineInputBorder()),
-                items: _statusList.map((String s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+              DropdownButtonFormField(
+                initialValue: _selectedStatus,
+                decoration: const InputDecoration(
+                  labelText: 'Status',
+                  border: OutlineInputBorder(),
+                ),
+                items: _statusList
+                    .map(
+                      (String s) => DropdownMenuItem(value: s, child: Text(s)),
+                    )
+                    .toList(),
                 onChanged: (val) => setState(() => _selectedStatus = val!),
               ),
               const SizedBox(height: 16),
 
               Row(
                 children: [
-                  Expanded(child: _buildTextField(_hargaNormalController, 'Harga Normal (Rp)', keyboardType: TextInputType.number)),
+                  Expanded(
+                    child: _buildTextField(
+                      _hargaNormalController,
+                      'Harga Normal (Rp)',
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
                   const SizedBox(width: 16),
-                  Expanded(child: _buildTextField(_hargaPromoController, 'Harga Promo (Rp)', keyboardType: TextInputType.number)),
+                  Expanded(
+                    child: _buildTextField(
+                      _hargaPromoController,
+                      'Harga Promo (Rp)',
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
                 ],
               ),
-              
+
               _buildTextField(_durasiController, 'Durasi (misal: 3 Hari)'),
               const SizedBox(height: 16),
 
               _buildTextField(_deskripsiController, 'Deskripsi', maxLines: 3),
-              _buildTextField(_dasarHukumController, 'Dasar Hukum', maxLines: 2),
+              _buildTextField(
+                _dasarHukumController,
+                'Dasar Hukum',
+                maxLines: 2,
+              ),
               _buildTextField(_tujuanController, 'Tujuan', maxLines: 2),
               _buildTextField(_materiController, 'Materi', maxLines: 3),
-              _buildTextField(_syaratAdministrasiController, 'Syarat Administrasi', maxLines: 2),
+              _buildTextField(
+                _syaratAdministrasiController,
+                'Syarat Administrasi',
+                maxLines: 2,
+              ),
               _buildTextField(_fasilitasController, 'Fasilitas', maxLines: 2),
               _buildTextField(_metodeController, 'Metode (e.g. Offline)'),
-              _buildTextField(_detailMetodeController, 'Detail Metode', maxLines: 2),
-              _buildTextField(_syaratKetentuanController, 'Syarat Ketentuan', maxLines: 2),
+              _buildTextField(
+                _detailMetodeController,
+                'Detail Metode',
+                maxLines: 2,
+              ),
+              _buildTextField(
+                _syaratKetentuanController,
+                'Syarat Ketentuan',
+                maxLines: 2,
+              ),
               _buildTextField(_instrukturController, 'Instruktur'),
               _buildTextField(_keteranganController, 'Keterangan'),
-              _buildTextField(_gambarPelatihanController, 'URL Gambar Pelatihan (Opsional)', maxLines: 1),
+              _buildTextField(
+                _gambarPelatihanController,
+                'URL Gambar Pelatihan (Opsional)',
+                maxLines: 1,
+              ),
 
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: _saveTraining,
-                child: const Text('Simpan Master Pelatihan', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Text(
+                  'Simpan Master Pelatihan',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),

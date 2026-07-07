@@ -130,7 +130,7 @@
 //               onPressed: () {
 //                 Navigator.pop(context);
 //                 ScaffoldMessenger.of(context).showSnackBar(
-//                   const SnackBar(content: Text('Kartu Membership diunduh')),
+//                   const SnackBar(duration: const Duration(milliseconds: 1500), content: Text('Kartu Membership diunduh')),
 //                 );
 //               },
 //               icon: const Icon(Icons.download),
@@ -870,7 +870,7 @@
 //               leading: const Icon(Icons.picture_as_pdf, color: Colors.red),
 //               title: Text('File PDF ${categories[i]} No.1'),
 //               onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-//                 const SnackBar(content: Text('Menampilkan PDF...')),
+//                 const SnackBar(duration: const Duration(milliseconds: 1500), content: Text('Menampilkan PDF...')),
 //               ),
 //             ),
 //           ],

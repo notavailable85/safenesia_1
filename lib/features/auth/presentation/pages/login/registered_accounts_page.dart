@@ -94,7 +94,10 @@ class _RegisteredAccountsPageState extends State<RegisteredAccountsPage> {
 
                 if (name.isEmpty || email.isEmpty || password.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Semua kolom harus diisi')),
+                    const SnackBar(
+                      duration: const Duration(milliseconds: 1500),
+                      content: Text('Semua kolom harus diisi'),
+                    ),
                   );
                   return;
                 }

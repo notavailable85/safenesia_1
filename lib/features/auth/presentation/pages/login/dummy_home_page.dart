@@ -31,15 +31,15 @@ class DummyHomePage extends StatelessWidget {
               ),
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const RegisteredAccountsPage()),
+                MaterialPageRoute(
+                  builder: (context) => const RegisteredAccountsPage(),
+                ),
               ),
               child: const Text('Akun Terdaftar'),
             ),
             const SizedBox(height: 16),
             OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(200, 45),
-              ),
+              style: OutlinedButton.styleFrom(minimumSize: const Size(200, 45)),
               onPressed: () => Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),

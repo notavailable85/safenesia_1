@@ -48,14 +48,20 @@ class _KarirPageState extends State<KarirPage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            const TextField(decoration: InputDecoration(labelText: 'Kota / Lokasi')),
-            const SizedBox(height: 16),
             const TextField(
-              decoration: InputDecoration(labelText: 'Tipe Pekerjaan (Full-time, dll)'),
+              decoration: InputDecoration(labelText: 'Kota / Lokasi'),
             ),
             const SizedBox(height: 16),
             const TextField(
-              decoration: InputDecoration(labelText: 'Tingkat Pengalaman (Entry, Senior)'),
+              decoration: InputDecoration(
+                labelText: 'Tipe Pekerjaan (Full-time, dll)',
+              ),
+            ),
+            const SizedBox(height: 16),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Tingkat Pengalaman (Entry, Senior)',
+              ),
             ),
             const SizedBox(height: 16),
             Row(
@@ -115,7 +121,9 @@ class _KarirPageState extends State<KarirPage> {
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 labelColor: Theme.of(context).colorScheme.onSurface,
-                unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.7),
+                unselectedLabelColor: Theme.of(
+                  context,
+                ).colorScheme.onPrimary.withValues(alpha: 0.7),
                 labelStyle: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -150,11 +158,16 @@ class _KarirPageState extends State<KarirPage> {
                       const SizedBox(width: 8),
                       Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: IconButton(
-                          icon: Icon(Icons.tune, color: Theme.of(context).colorScheme.primary),
+                          icon: Icon(
+                            Icons.tune,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                           onPressed: () => _showFilter(context),
                         ),
                       ),
@@ -168,14 +181,21 @@ class _KarirPageState extends State<KarirPage> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
-                        return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
+                        return Center(
+                          child: Text('Terjadi kesalahan: ${snapshot.error}'),
+                        );
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Center(child: Text('Tidak ada lowongan.'));
                       }
-                      
+
                       final careers = snapshot.data!;
                       return ListView.builder(
-                        padding: const EdgeInsets.only(left: 16, top: 0, right: 16, bottom: 100),
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          top: 0,
+                          right: 16,
+                          bottom: 100,
+                        ),
                         itemCount: careers.length,
                         itemBuilder: (c, i) => _buildJobCard(careers[i]),
                       );
@@ -184,7 +204,7 @@ class _KarirPageState extends State<KarirPage> {
                 ),
               ],
             ),
-            
+
             // TAB 2: TERSIMPAN
             FutureBuilder<List<CareerModel>>(
               future: _careersFuture,
@@ -192,19 +212,32 @@ class _KarirPageState extends State<KarirPage> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
+                  return Center(
+                    child: Text('Terjadi kesalahan: ${snapshot.error}'),
+                  );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('Tidak ada lowongan tersimpan.'));
+                  return const Center(
+                    child: Text('Tidak ada lowongan tersimpan.'),
+                  );
                 }
-                
-                final savedCareers = snapshot.data!.where((c) => c.isSaved == 1).toList();
-                
+
+                final savedCareers = snapshot.data!
+                    .where((c) => c.isSaved == 1)
+                    .toList();
+
                 if (savedCareers.isEmpty) {
-                  return const Center(child: Text('Belum ada lowongan yang disimpan.'));
+                  return const Center(
+                    child: Text('Belum ada lowongan yang disimpan.'),
+                  );
                 }
-                
+
                 return ListView.builder(
-                  padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    top: 16,
+                    right: 16,
+                    bottom: 100,
+                  ),
                   itemCount: savedCareers.length,
                   itemBuilder: (c, i) => _buildJobCard(savedCareers[i]),
                 );
@@ -218,23 +251,37 @@ class _KarirPageState extends State<KarirPage> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
+                  return Center(
+                    child: Text('Terjadi kesalahan: ${snapshot.error}'),
+                  );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('Tidak ada riwayat lamaran.'));
-                }
-                
-                final appliedCareers = snapshot.data!.where((c) => c.isApplied == 1).toList();
-                
-                if (appliedCareers.isEmpty) {
                   return const Center(
-                    child: Text('Anda belum melamar pekerjaan apa pun.\nCari dan lamar sekarang!'),
+                    child: Text('Tidak ada riwayat lamaran.'),
                   );
                 }
-                
+
+                final appliedCareers = snapshot.data!
+                    .where((c) => c.isApplied == 1)
+                    .toList();
+
+                if (appliedCareers.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'Anda belum melamar pekerjaan apa pun.\nCari dan lamar sekarang!',
+                    ),
+                  );
+                }
+
                 return ListView.builder(
-                  padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 100),
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    top: 16,
+                    right: 16,
+                    bottom: 100,
+                  ),
                   itemCount: appliedCareers.length,
-                  itemBuilder: (c, i) => _buildJobCard(appliedCareers[i], isAppliedTab: true),
+                  itemBuilder: (c, i) =>
+                      _buildJobCard(appliedCareers[i], isAppliedTab: true),
                 );
               },
             ),
@@ -284,12 +331,19 @@ class _KarirPageState extends State<KarirPage> {
                       color: Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: career.companyLogoUrl.isNotEmpty 
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(career.companyLogoUrl, fit: BoxFit.cover, errorBuilder: (c,e,s) => const Icon(Icons.business, color: Colors.grey)),
-                        )
-                      : const Icon(Icons.business, color: Colors.grey),
+                    child: career.companyLogoUrl.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              career.companyLogoUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (c, e, s) => const Icon(
+                                Icons.business,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        : const Icon(Icons.business, color: Colors.grey),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -298,14 +352,21 @@ class _KarirPageState extends State<KarirPage> {
                       children: [
                         Text(
                           career.title,
-                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 4),
                         Text(
                           career.company,
-                          style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 14),
+                          style: TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -339,14 +400,16 @@ class _KarirPageState extends State<KarirPage> {
                           isSaved: isSaved ? 0 : 1,
                           isApplied: career.isApplied,
                         );
-                        await DatabaseHelper.instance.updateCareer(updatedCareer);
+                        await DatabaseHelper.instance.updateCareer(
+                          updatedCareer,
+                        );
                         _refreshCareers();
                       },
                     ),
                 ],
               ),
               const SizedBox(height: 16),
-              
+
               // Location & Salary
               Row(
                 children: [
@@ -365,7 +428,11 @@ class _KarirPageState extends State<KarirPage> {
               const SizedBox(height: 6),
               Row(
                 children: [
-                  const Icon(Icons.monetization_on, size: 14, color: Colors.grey),
+                  const Icon(
+                    Icons.monetization_on,
+                    size: 14,
+                    color: Colors.grey,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     'Rp ${career.salaryMin ~/ 1000000} Jt - Rp ${career.salaryMax ~/ 1000000} Jt',
@@ -374,7 +441,7 @@ class _KarirPageState extends State<KarirPage> {
                 ],
               ),
               const SizedBox(height: 16),
-              
+
               // Badges & Date
               Row(
                 children: [
@@ -384,20 +451,30 @@ class _KarirPageState extends State<KarirPage> {
                   const Spacer(),
                   if (isAppliedTab)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.green.shade50,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Text(
                         'Status: Menunggu',
-                        style: TextStyle(fontSize: 10, color: Colors.green, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     )
                   else
                     Text(
                       'Beberapa hari lalu', // Ideally parse postedDate
-                      style: TextStyle(color: Colors.grey.shade500, fontSize: 11),
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontSize: 11,
+                      ),
                     ),
                 ],
               ),
@@ -426,4 +503,3 @@ class _KarirPageState extends State<KarirPage> {
     );
   }
 }
-

@@ -8,7 +8,8 @@ class AdminRegulationFormPage extends StatefulWidget {
   const AdminRegulationFormPage({super.key, this.regulation});
 
   @override
-  State<AdminRegulationFormPage> createState() => _AdminRegulationFormPageState();
+  State<AdminRegulationFormPage> createState() =>
+      _AdminRegulationFormPageState();
 }
 
 class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
@@ -34,7 +35,9 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
   void saveRegulation() async {
     if (_formKey.currentState!.validate()) {
       final regulation = RegulationModel(
-        id: widget.regulation?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        id:
+            widget.regulation?.id ??
+            DateTime.now().millisecondsSinceEpoch.toString(),
         title: title,
         category: category,
         nomor: nomor,
@@ -57,7 +60,9 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.regulation == null ? 'Add Regulation' : 'Edit Regulation'),
+        title: Text(
+          widget.regulation == null ? 'Add Regulation' : 'Edit Regulation',
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
@@ -68,15 +73,23 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
           children: [
             TextFormField(
               initialValue: title,
-              decoration: const InputDecoration(labelText: 'Title', border: OutlineInputBorder()),
-              validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Required' : null,
               onChanged: (value) => title = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: category,
-              decoration: const InputDecoration(labelText: 'Category', border: OutlineInputBorder()),
-              validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+              decoration: const InputDecoration(
+                labelText: 'Category',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Required' : null,
               onChanged: (value) => category = value,
             ),
             const SizedBox(height: 16),
@@ -85,7 +98,10 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
                 Expanded(
                   child: TextFormField(
                     initialValue: nomor,
-                    decoration: const InputDecoration(labelText: 'Nomor (e.g. UU No 1)', border: OutlineInputBorder()),
+                    decoration: const InputDecoration(
+                      labelText: 'Nomor (e.g. UU No 1)',
+                      border: OutlineInputBorder(),
+                    ),
                     onChanged: (value) => nomor = value,
                   ),
                 ),
@@ -93,7 +109,10 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
                 Expanded(
                   child: TextFormField(
                     initialValue: tahun,
-                    decoration: const InputDecoration(labelText: 'Tahun', border: OutlineInputBorder()),
+                    decoration: const InputDecoration(
+                      labelText: 'Tahun',
+                      border: OutlineInputBorder(),
+                    ),
                     onChanged: (value) => tahun = value,
                   ),
                 ),
@@ -103,13 +122,19 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
             TextFormField(
               initialValue: deskripsi,
               maxLines: 3,
-              decoration: const InputDecoration(labelText: 'Deskripsi', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Deskripsi',
+                border: OutlineInputBorder(),
+              ),
               onChanged: (value) => deskripsi = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: fileUrl,
-              decoration: const InputDecoration(labelText: 'URL File PDF', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'URL File PDF',
+                border: OutlineInputBorder(),
+              ),
               onChanged: (value) => fileUrl = value,
             ),
             const SizedBox(height: 32),
@@ -120,7 +145,10 @@ class _AdminRegulationFormPageState extends State<AdminRegulationFormPage> {
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: saveRegulation,
-              child: const Text('Save', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Save',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),

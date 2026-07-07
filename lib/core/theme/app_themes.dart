@@ -13,12 +13,16 @@ class AppThemes {
   // Fungsi utilitas untuk memanipulasi warna dinamis
   static Color _lighten(Color color, [double amount = 0.1]) {
     final hsl = HSLColor.fromColor(color);
-    return hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0)).toColor();
+    return hsl
+        .withLightness((hsl.lightness + amount).clamp(0.0, 1.0))
+        .toColor();
   }
 
   static Color _darken(Color color, [double amount = 0.1]) {
     final hsl = HSLColor.fromColor(color);
-    return hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0)).toColor();
+    return hsl
+        .withLightness((hsl.lightness - amount).clamp(0.0, 1.0))
+        .toColor();
   }
 
   // ==========================================
@@ -65,7 +69,7 @@ class AppThemes {
           color: Colors.white,
         ),
       ),
-      
+
       // Card Theme (Minimalis)
       cardTheme: CardThemeData(
         color: Colors.white,
@@ -99,7 +103,10 @@ class AppThemes {
           }),
           elevation: WidgetStateProperty.all(0),
           padding: WidgetStateProperty.all(
-            const EdgeInsets.symmetric(vertical: AppSizes.md, horizontal: AppSizes.lg),
+            const EdgeInsets.symmetric(
+              vertical: AppSizes.md,
+              horizontal: AppSizes.lg,
+            ),
           ),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -127,16 +134,27 @@ class AppThemes {
           }),
         ),
       ),
-      
+
       // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: customPrimary,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white70,
         selectedIconTheme: const IconThemeData(color: Colors.white, size: 24),
-        unselectedIconTheme: const IconThemeData(color: Colors.white70, size: 24),
-        selectedLabelStyle: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white),
-        unselectedLabelStyle: GoogleFonts.inter(fontWeight: FontWeight.normal, fontSize: 12, color: Colors.white70),
+        unselectedIconTheme: const IconThemeData(
+          color: Colors.white70,
+          size: 24,
+        ),
+        selectedLabelStyle: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+          color: Colors.white,
+        ),
+        unselectedLabelStyle: GoogleFonts.inter(
+          fontWeight: FontWeight.normal,
+          fontSize: 12,
+          color: Colors.white70,
+        ),
         elevation: 0,
         type: BottomNavigationBarType.fixed,
       ),
@@ -158,7 +176,10 @@ class AppThemes {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.grey.shade100,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -180,9 +201,16 @@ class AppThemes {
       // SnackBar Theme Global
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF1F2937), // Dark Gray
-        contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
-        actionTextColor: _lighten(customPrimary, 0.2), // Terang agar kontras di background gelap
+        backgroundColor: const Color(0xFF1F2937).withValues(alpha: 0.65), // Dark Gray with more transparency
+        contentTextStyle: GoogleFonts.inter(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+        actionTextColor: _lighten(
+          customPrimary,
+          0.2,
+        ), // Terang agar kontras di background gelap
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 6,
         insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -264,7 +292,10 @@ class AppThemes {
           }),
           elevation: WidgetStateProperty.all(0),
           padding: WidgetStateProperty.all(
-            const EdgeInsets.symmetric(vertical: AppSizes.md, horizontal: AppSizes.lg),
+            const EdgeInsets.symmetric(
+              vertical: AppSizes.md,
+              horizontal: AppSizes.lg,
+            ),
           ),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -297,9 +328,20 @@ class AppThemes {
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white70,
         selectedIconTheme: const IconThemeData(color: Colors.white, size: 24),
-        unselectedIconTheme: const IconThemeData(color: Colors.white70, size: 24),
-        selectedLabelStyle: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white),
-        unselectedLabelStyle: GoogleFonts.inter(fontWeight: FontWeight.normal, fontSize: 12, color: Colors.white70),
+        unselectedIconTheme: const IconThemeData(
+          color: Colors.white70,
+          size: 24,
+        ),
+        selectedLabelStyle: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+          color: Colors.white,
+        ),
+        unselectedLabelStyle: GoogleFonts.inter(
+          fontWeight: FontWeight.normal,
+          fontSize: 12,
+          color: Colors.white70,
+        ),
         elevation: 0,
         type: BottomNavigationBarType.fixed,
       ),
@@ -319,7 +361,10 @@ class AppThemes {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surfaceDark,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade700),
@@ -341,9 +386,16 @@ class AppThemes {
       // SnackBar Theme Global (Dark Mode)
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF374151), // Slightly lighter gray than background
-        contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
-        actionTextColor: _lighten(customPrimary, 0.3), // Terang agar kontras di background gelap
+        backgroundColor: const Color(0xFF374151).withValues(alpha: 0.65), // Slightly lighter gray than background with more transparency
+        contentTextStyle: GoogleFonts.inter(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+        actionTextColor: _lighten(
+          customPrimary,
+          0.3,
+        ), // Terang agar kontras di background gelap
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 6,
         insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),

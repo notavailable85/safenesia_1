@@ -47,11 +47,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
     'Sertifikasi Safenesia',
   ];
 
-  final List<String> _metodeList = [
-    'Offline',
-    'Online',
-    'Blended',
-  ];
+  final List<String> _metodeList = ['Offline', 'Online', 'Blended'];
 
   // Dynamic Months (Current + next 3)
   late List<DateTime> _monthTabs;
@@ -81,7 +77,10 @@ class _TrainingListPageState extends State<TrainingListPage> {
       if (mounted) {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Terjadi kesalahan memuat jadwal: $e')),
+          SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Terjadi kesalahan memuat jadwal: $e'),
+          ),
         );
       }
     }
@@ -105,8 +104,6 @@ class _TrainingListPageState extends State<TrainingListPage> {
     ];
     return months[month];
   }
-
-  
 
   // Dummy Data has been removed and replaced with SQLite integration.
 
@@ -140,7 +137,9 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       height: 5,
                       margin: const EdgeInsets.only(bottom: 24),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
@@ -160,7 +159,9 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.05),
                           shape: BoxShape.circle,
                         ),
                         child: IconButton(
@@ -188,7 +189,11 @@ class _TrainingListPageState extends State<TrainingListPage> {
                     children: ['terdekat', 'terjauh'].map((sortType) {
                       final isSelected = _sortBy == sortType;
                       return ChoiceChip(
-                        label: Text(sortType == 'terdekat' ? ' Paling Dekat ' : ' Paling Jauh '),
+                        label: Text(
+                          sortType == 'terdekat'
+                              ? ' Paling Dekat '
+                              : ' Paling Jauh ',
+                        ),
                         selected: isSelected,
                         onSelected: (selected) {
                           if (selected) {
@@ -197,17 +202,23 @@ class _TrainingListPageState extends State<TrainingListPage> {
                           }
                         },
                         selectedColor: Theme.of(context).colorScheme.primary,
-                        backgroundColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.05),
                         labelStyle: TextStyle(
-                          color: isSelected 
-                              ? Theme.of(context).colorScheme.onPrimary 
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.onPrimary
                               : Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
-                            color: isSelected ? Theme.of(context).colorScheme.primary : Colors.transparent,
+                            color: isSelected
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.transparent,
                           ),
                         ),
                         showCheckmark: false,
@@ -229,11 +240,19 @@ class _TrainingListPageState extends State<TrainingListPage> {
                   DropdownButtonFormField<String>(
                     isExpanded: true,
                     initialValue: _selectedKategori,
-                    icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
+                      fillColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -244,14 +263,27 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1.5,
+                        ),
                       ),
                     ),
-                    hint: Text('Semua Bidang', style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                    hint: Text(
+                      'Semua Bidang',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     items: [
-                      const DropdownMenuItem<String>(value: null, child: Text('Semua Bidang')),
-                      ..._kategoriList.map((k) => DropdownMenuItem(value: k, child: Text(k))),
+                      const DropdownMenuItem<String>(
+                        value: null,
+                        child: Text('Semua Bidang'),
+                      ),
+                      ..._kategoriList.map(
+                        (k) => DropdownMenuItem(value: k, child: Text(k)),
+                      ),
                     ],
                     onChanged: (val) {
                       setModalState(() => _selectedKategori = val);
@@ -273,11 +305,19 @@ class _TrainingListPageState extends State<TrainingListPage> {
                   DropdownButtonFormField<String>(
                     isExpanded: true,
                     initialValue: _selectedSertifikasi,
-                    icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
+                      fillColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -288,14 +328,27 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1.5,
+                        ),
                       ),
                     ),
-                    hint: Text('Semua Sertifikasi', style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                    hint: Text(
+                      'Semua Sertifikasi',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     items: [
-                      const DropdownMenuItem<String>(value: null, child: Text('Semua Sertifikasi')),
-                      ..._sertifikasiList.map((s) => DropdownMenuItem(value: s, child: Text(s))),
+                      const DropdownMenuItem<String>(
+                        value: null,
+                        child: Text('Semua Sertifikasi'),
+                      ),
+                      ..._sertifikasiList.map(
+                        (s) => DropdownMenuItem(value: s, child: Text(s)),
+                      ),
                     ],
                     onChanged: (val) {
                       setModalState(() => _selectedSertifikasi = val);
@@ -317,11 +370,19 @@ class _TrainingListPageState extends State<TrainingListPage> {
                   DropdownButtonFormField<String>(
                     isExpanded: true,
                     initialValue: _selectedMetode,
-                    icon: Icon(Icons.keyboard_arrow_down, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       filled: true,
-                      fillColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
+                      fillColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.05),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -332,14 +393,27 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1.5,
+                        ),
                       ),
                     ),
-                    hint: Text('Semua Metode', style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                    hint: Text(
+                      'Semua Metode',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     items: [
-                      const DropdownMenuItem<String>(value: null, child: Text('Semua Metode')),
-                      ..._metodeList.map((m) => DropdownMenuItem(value: m, child: Text(m))),
+                      const DropdownMenuItem<String>(
+                        value: null,
+                        child: Text('Semua Metode'),
+                      ),
+                      ..._metodeList.map(
+                        (m) => DropdownMenuItem(value: m, child: Text(m)),
+                      ),
                     ],
                     onChanged: (val) {
                       setModalState(() => _selectedMetode = val);
@@ -356,13 +430,18 @@ class _TrainingListPageState extends State<TrainingListPage> {
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         elevation: 0,
                       ),
                       onPressed: () => Navigator.pop(context),
                       child: Text(
                         'Terapkan Filter',
-                        style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -417,7 +496,9 @@ class _TrainingListPageState extends State<TrainingListPage> {
                       BoxShadow(
                         color: Theme.of(context).brightness == Brightness.dark
                             ? Colors.black26
-                            : Theme.of(context).primaryColor.withValues(alpha: 0.3),
+                            : Theme.of(
+                                context,
+                              ).primaryColor.withValues(alpha: 0.3),
                         blurRadius: 15,
                         offset: const Offset(
                           0,
@@ -511,7 +592,11 @@ class _TrainingListPageState extends State<TrainingListPage> {
     }
     if (_selectedMetode != null) {
       filteredSchedules = filteredSchedules
-          .where((s) => s.trainingData?.metode.toLowerCase() == _selectedMetode!.toLowerCase())
+          .where(
+            (s) =>
+                s.trainingData?.metode.toLowerCase() ==
+                _selectedMetode!.toLowerCase(),
+          )
           .toList();
     }
 
@@ -668,9 +753,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                               Icon(
                                 Icons.calendar_month_outlined,
                                 size: 16,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.primary,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                               const SizedBox(width: 6),
                               Flexible(

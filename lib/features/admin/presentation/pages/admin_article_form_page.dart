@@ -24,7 +24,9 @@ class _AdminArticleFormPageState extends State<AdminArticleFormPage> {
     super.initState();
     title = widget.article?.title ?? '';
     category = widget.article?.category ?? '';
-    date = widget.article?.date ?? DateTime.now().toIso8601String().split('T').first;
+    date =
+        widget.article?.date ??
+        DateTime.now().toIso8601String().split('T').first;
     imageUrl = widget.article?.imageUrl ?? '';
     content = widget.article?.content ?? '';
   }
@@ -77,36 +79,59 @@ class _AdminArticleFormPageState extends State<AdminArticleFormPage> {
           children: [
             TextFormField(
               initialValue: title,
-              decoration: const InputDecoration(labelText: 'Title', border: OutlineInputBorder()),
-              validator: (value) => value != null && value.isEmpty ? 'Title cannot be empty' : null,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) => value != null && value.isEmpty
+                  ? 'Title cannot be empty'
+                  : null,
               onChanged: (value) => setState(() => title = value),
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: category,
-              decoration: const InputDecoration(labelText: 'Category', border: OutlineInputBorder()),
-              validator: (value) => value != null && value.isEmpty ? 'Category cannot be empty' : null,
+              decoration: const InputDecoration(
+                labelText: 'Category',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) => value != null && value.isEmpty
+                  ? 'Category cannot be empty'
+                  : null,
               onChanged: (value) => setState(() => category = value),
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: date,
-              decoration: const InputDecoration(labelText: 'Date (YYYY-MM-DD)', border: OutlineInputBorder()),
-              validator: (value) => value != null && value.isEmpty ? 'Date cannot be empty' : null,
+              decoration: const InputDecoration(
+                labelText: 'Date (YYYY-MM-DD)',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) => value != null && value.isEmpty
+                  ? 'Date cannot be empty'
+                  : null,
               onChanged: (value) => setState(() => date = value),
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: imageUrl,
-              decoration: const InputDecoration(labelText: 'Image URL', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Image URL',
+                border: OutlineInputBorder(),
+              ),
               onChanged: (value) => setState(() => imageUrl = value),
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: content,
-              decoration: const InputDecoration(labelText: 'Content', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Content',
+                border: OutlineInputBorder(),
+              ),
               maxLines: 5,
-              validator: (value) => value != null && value.isEmpty ? 'Content cannot be empty' : null,
+              validator: (value) => value != null && value.isEmpty
+                  ? 'Content cannot be empty'
+                  : null,
               onChanged: (value) => setState(() => content = value),
             ),
             const SizedBox(height: 32),
@@ -117,7 +142,10 @@ class _AdminArticleFormPageState extends State<AdminArticleFormPage> {
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: addOrUpdateArticle,
-              child: const Text('Save', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Save',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),

@@ -25,7 +25,10 @@ class StandardSearchField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           isDense: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 0,
+          ),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(color: Colors.white54, width: 1),
@@ -41,11 +44,7 @@ class StandardSearchField extends StatelessWidget {
           filled: true,
           fillColor: Colors.white12,
           hintStyle: const TextStyle(color: Colors.white70),
-          suffixIcon: const Icon(
-            Icons.search,
-            color: Colors.white70,
-            size: 20,
-          ),
+          suffixIcon: const Icon(Icons.search, color: Colors.white70, size: 20),
         ),
         style: const TextStyle(color: Colors.white),
       ),

@@ -33,7 +33,10 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Terjadi kesalahan: $e')),
+          SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Terjadi kesalahan: $e'),
+          ),
         );
       }
     }
@@ -44,29 +47,35 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
     try {
       final trainings = await DatabaseHelper.instance.readAllTrainings();
       if (trainings.isEmpty) {
-        throw Exception('Tidak ada data pelatihan. Harap tambah data pelatihan terlebih dahulu.');
+        throw Exception(
+          'Tidak ada data pelatihan. Harap tambah data pelatihan terlebih dahulu.',
+        );
       }
-      
+
       final random = Random();
       final randomTraining = trainings[random.nextInt(trainings.length)];
       final trainingId = randomTraining.idPelatihan;
-      
+
       final now = DateTime.now();
-      
+
       // Generate untuk 4 bulan (Bulan ini, dan 3 bulan ke depan)
       for (int i = 0; i < 4; i++) {
         final targetMonth = now.month + i;
-        final targetYear = now.year + (targetMonth > 12 ? (targetMonth - 1) ~/ 12 : 0);
-        final actualMonth = targetMonth > 12 ? (targetMonth - 1) % 12 + 1 : targetMonth;
-        
+        final targetYear =
+            now.year + (targetMonth > 12 ? (targetMonth - 1) ~/ 12 : 0);
+        final actualMonth = targetMonth > 12
+            ? (targetMonth - 1) % 12 + 1
+            : targetMonth;
+
         // Pilih tanggal acak antara tanggal 1 sampai 20
         final startDay = random.nextInt(20) + 1;
         final startDate = DateTime(targetYear, actualMonth, startDay);
         final durationDays = 2 + random.nextInt(4); // durasi 2 sampai 5 hari
         final endDate = startDate.add(Duration(days: durationDays));
-        
-        final dummyId = 'dummy_schedule_${now.millisecondsSinceEpoch}_${random.nextInt(1000)}';
-        
+
+        final dummyId =
+            'dummy_schedule_${now.millisecondsSinceEpoch}_${random.nextInt(1000)}';
+
         final dummySchedule = TrainingSchedule(
           idJadwal: dummyId,
           idPelatihan: trainingId,
@@ -74,13 +83,18 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
           tanggalEnd: endDate.toIso8601String(),
           gambar: '',
         );
-        
+
         await DatabaseHelper.instance.createSchedule(dummySchedule);
       }
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('4 Data dummy jadwal (berurutan 4 bulan) berhasil ditambahkan')),
+          const SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text(
+              '4 Data dummy jadwal (berurutan 4 bulan) berhasil ditambahkan',
+            ),
+          ),
         );
       }
       _refreshSchedules();
@@ -88,7 +102,10 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal menambah data dummy: $e')),
+          SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Gagal menambah data dummy: $e'),
+          ),
         );
       }
     }
@@ -107,7 +124,10 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text('Hapus', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            child: Text(
+              'Hapus',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           ),
         ],
       ),
@@ -118,7 +138,10 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
       _refreshSchedules();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Jadwal berhasil dihapus')),
+          const SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text('Jadwal berhasil dihapus'),
+          ),
         );
       }
     }
@@ -140,48 +163,61 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _schedules.isEmpty
-              ? const Center(child: Text('Belum ada jadwal pelatihan yang dipublikasikan.'))
-              : ListView.builder(
-                  itemCount: _schedules.length,
-                  itemBuilder: (context, index) {
-                    final schedule = _schedules[index];
-                    final trainingName = schedule.trainingData?.namaPelatihan ?? 'Pelatihan Tidak Diketahui';
-                    
-                    return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        title: Text(
-                          trainingName,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text('Pelaksanaan: ${schedule.tanggalStr}'),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
-                              onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminScheduleFormPage(schedule: schedule),
-                                  ),
-                                );
-                                _refreshSchedules();
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-                              onPressed: () => _deleteSchedule(schedule.idJadwal),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-      floatingActionButton: FloatingActionButton(
+          ? const Center(
+              child: Text('Belum ada jadwal pelatihan yang dipublikasikan.'),
+            )
+          : ListView.builder(
+              itemCount: _schedules.length,
+              itemBuilder: (context, index) {
+                final schedule = _schedules[index];
+                final trainingName =
+                    schedule.trainingData?.namaPelatihan ??
+                    'Pelatihan Tidak Diketahui';
 
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      trainingName,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text('Pelaksanaan: ${schedule.tanggalStr}'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.edit,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AdminScheduleFormPage(schedule: schedule),
+                              ),
+                            );
+                            _refreshSchedules();
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                          onPressed: () => _deleteSchedule(schedule.idJadwal),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
           await Navigator.push(

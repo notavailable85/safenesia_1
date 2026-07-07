@@ -100,6 +100,7 @@ flutter:
     # images
     - assets/images/logo_safenesia_horizontal.png
     - assets/images/logo_safenesia_vertical.png
+    - assets/images/dummy_cert.png
     - assets/images/flayer_pelatihan/flayer_ahli_k3_elevator_dan_eskalator.png
     - assets/images/flayer_pelatihan/flayer_ahli_k3_listrik.png
     - assets/images/flayer_pelatihan/flayer_ahli_k3_muda_lingkungan_kerja.png

@@ -93,7 +93,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         color: bgColor,
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black26 : primaryColor.withValues(alpha: 0.3),
+            color: isDark
+                ? Colors.black26
+                : primaryColor.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, -2), // Shadow points upwards
           ),
@@ -102,17 +104,53 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(0, Icons.home_rounded, 'Home', selectedColor, unselectedColor),
-          _buildNavItem(1, Icons.school_rounded, 'Pelatihan', selectedColor, unselectedColor),
-          _buildNavItem(2, Icons.work_rounded, 'Karir', selectedColor, unselectedColor),
-          _buildNavItem(3, Icons.smart_toy_rounded, 'AI Chat', selectedColor, unselectedColor),
-          _buildNavItem(4, Icons.person_rounded, 'Akun', selectedColor, unselectedColor),
+          _buildNavItem(
+            0,
+            Icons.home_rounded,
+            'Home',
+            selectedColor,
+            unselectedColor,
+          ),
+          _buildNavItem(
+            1,
+            Icons.school_rounded,
+            'Pelatihan',
+            selectedColor,
+            unselectedColor,
+          ),
+          _buildNavItem(
+            2,
+            Icons.work_rounded,
+            'Karir',
+            selectedColor,
+            unselectedColor,
+          ),
+          _buildNavItem(
+            3,
+            Icons.smart_toy_rounded,
+            'AI Chat',
+            selectedColor,
+            unselectedColor,
+          ),
+          _buildNavItem(
+            4,
+            Icons.person_rounded,
+            'Akun',
+            selectedColor,
+            unselectedColor,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, String label, Color selectedColor, Color unselectedColor) {
+  Widget _buildNavItem(
+    int index,
+    IconData icon,
+    String label,
+    Color selectedColor,
+    Color unselectedColor,
+  ) {
     final isSelected = _selectedIndex == index;
 
     return GestureDetector(
@@ -121,7 +159,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           _navigatorKeys[0].currentState?.popUntil((route) => route.isFirst);
           if (_selectedIndex != 0) setState(() => _selectedIndex = 0);
         } else if (index == _selectedIndex) {
-          _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+          _navigatorKeys[index].currentState?.popUntil(
+            (route) => route.isFirst,
+          );
         } else {
           setState(() => _selectedIndex = index);
         }
@@ -132,7 +172,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         curve: Curves.easeOutCubic,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? selectedColor.withValues(alpha: 0.2) : Colors.transparent,
+          color: isSelected
+              ? selectedColor.withValues(alpha: 0.2)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(

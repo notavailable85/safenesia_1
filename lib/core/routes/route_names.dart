@@ -1,4 +1,3 @@
-
 class RouteNames {
   RouteNames._();
 

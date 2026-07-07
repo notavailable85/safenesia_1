@@ -31,7 +31,10 @@ class _AdminUserListPageState extends State<AdminUserListPage> {
     refreshUsers();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User deleted')),
+        const SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content: Text('User deleted'),
+        ),
       );
     }
   }
@@ -47,75 +50,81 @@ class _AdminUserListPageState extends State<AdminUserListPage> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : users.isEmpty
-              ? const Center(child: Text('No Users found'))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: users.length,
-                  itemBuilder: (context, index) {
-                    final user = users[index];
-                    return Card(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                          child: const Icon(Icons.person, color: Colors.deepPurple),
+          ? const Center(child: Text('No Users found'))
+          : ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: users.length,
+              itemBuilder: (context, index) {
+                final user = users[index];
+                return Card(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primaryContainer,
+                      child: const Icon(Icons.person, color: Colors.deepPurple),
+                    ),
+                    title: Text(user.name),
+                    subtitle: Text('${user.email} (${user.role})'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.orange),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AdminUserFormPage(user: user),
+                              ),
+                            );
+                            refreshUsers();
+                          },
                         ),
-                        title: Text(user.name),
-                        subtitle: Text('${user.email} (${user.role})'),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.orange),
-                              onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminUserFormPage(user: user),
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Delete User'),
+                                content: const Text(
+                                  'Are you sure you want to delete this user?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Cancel'),
                                   ),
-                                );
-                                refreshUsers();
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('Delete User'),
-                                    content: const Text('Are you sure you want to delete this user?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          deleteUser(user.id);
-                                        },
-                                        child: const Text('Delete', style: TextStyle(color: Colors.red)),
-                                      ),
-                                    ],
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      deleteUser(user.id);
+                                    },
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
                                   ),
-                                );
-                              },
-                            ),
-                          ],
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const AdminUserFormPage(),
-            ),
+            MaterialPageRoute(builder: (context) => const AdminUserFormPage()),
           );
           refreshUsers();
         },

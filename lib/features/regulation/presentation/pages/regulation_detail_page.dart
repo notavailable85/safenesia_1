@@ -9,11 +9,9 @@ class RegulationDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detail Regulasi'),
-      ),
+      appBar: AppBar(title: const Text('Detail Regulasi')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -36,7 +34,7 @@ class RegulationDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // Title
             Text(
               regulation.title,
@@ -46,7 +44,7 @@ class RegulationDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            
+
             // Nomor dan Tahun
             Row(
               children: [
@@ -62,10 +60,10 @@ class RegulationDetailPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24),
-            
+
             const Divider(),
             const SizedBox(height: 16),
-            
+
             // Description
             Text(
               'Deskripsi',
@@ -75,8 +73,8 @@ class RegulationDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              regulation.deskripsi.isEmpty 
-                  ? 'Belum ada deskripsi untuk regulasi ini.' 
+              regulation.deskripsi.isEmpty
+                  ? 'Belum ada deskripsi untuk regulasi ini.'
                   : regulation.deskripsi,
               style: theme.textTheme.bodyLarge?.copyWith(
                 height: 1.5,

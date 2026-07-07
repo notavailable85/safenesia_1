@@ -8,7 +8,7 @@ class TrainingSchedule {
   final String gambar;
   final String? namaLokasi;
   final String? linkPetaLokasi;
-  
+
   // Joined property
   final Training? trainingData;
 
@@ -35,7 +35,10 @@ class TrainingSchedule {
     };
   }
 
-  factory TrainingSchedule.fromMap(Map<String, dynamic> map, {Training? trainingData}) {
+  factory TrainingSchedule.fromMap(
+    Map<String, dynamic> map, {
+    Training? trainingData,
+  }) {
     return TrainingSchedule(
       idJadwal: map['idJadwal'] as String,
       idPelatihan: map['idPelatihan'] as String,
@@ -54,9 +57,23 @@ class TrainingSchedule {
     try {
       final start = DateTime.parse(tanggalStart);
       final end = DateTime.parse(tanggalEnd);
-      
+
       String getShortMonthName(int month) {
-        const months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+        const months = [
+          '',
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'Mei',
+          'Jun',
+          'Jul',
+          'Ags',
+          'Sep',
+          'Okt',
+          'Nov',
+          'Des',
+        ];
         return months[month];
       }
 

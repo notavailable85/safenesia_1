@@ -40,8 +40,10 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
         _searchResults = _allArticles;
       } else {
         _searchResults = _allArticles
-            .where((article) =>
-                article.title.toLowerCase().contains(query.toLowerCase()))
+            .where(
+              (article) =>
+                  article.title.toLowerCase().contains(query.toLowerCase()),
+            )
             .toList();
       }
     });
@@ -49,6 +51,9 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: StandardSearchField(
@@ -60,79 +65,114 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _searchResults.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.search_off, size: 80, color: Colors.grey.shade400),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Tidak menemukan artikel "$_searchQuery"',
-                        style: GoogleFonts.inter(color: Colors.grey.shade600),
-                      ),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.search_off,
+                    size: 80,
+                    color: theme.colorScheme.onSurfaceVariant.withValues(
+                      alpha: 0.5,
+                    ),
                   ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _searchResults.length,
-                  itemBuilder: (context, index) {
-                    final article = _searchResults[index];
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Tidak menemukan artikel "$_searchQuery"',
+                    style: GoogleFonts.inter(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _searchResults.length,
+              itemBuilder: (context, index) {
+                final article = _searchResults[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  elevation: isDark ? 1 : 2,
+                  shadowColor: isDark ? Colors.transparent : Colors.black12,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ArticleDetailPage(article: article),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Hero(
+                            tag: 'article_image_\${article.id}',
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                article.imageUrl,
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                      width: 80,
+                                      height: 80,
+                                      color: theme
+                                          .colorScheme
+                                          .surfaceContainerHighest,
+                                      child: Icon(
+                                        Icons.image,
+                                        color:
+                                            theme.colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  article.title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  article.category,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(8),
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            article.imageUrl,
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
-                              width: 80,
-                              height: 80,
-                              color: Colors.grey.shade300,
-                              child: const Icon(Icons.image),
-                            ),
-                          ),
-                        ),
-                        title: Text(
-                          article.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            article.category,
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ArticleDetailPage(article: article),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }

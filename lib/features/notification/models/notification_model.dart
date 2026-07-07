@@ -12,12 +12,7 @@ class NotificationModel {
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'subtitle': subtitle,
-      'type': type,
-    };
+    return {'id': id, 'title': title, 'subtitle': subtitle, 'type': type};
   }
 
   factory NotificationModel.fromMap(Map<String, dynamic> map) {

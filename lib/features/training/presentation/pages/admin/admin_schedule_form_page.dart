@@ -31,15 +31,20 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
   @override
   void initState() {
     super.initState();
-    _gambarController = TextEditingController(text: widget.schedule?.gambar ?? '');
+    _gambarController = TextEditingController(
+      text: widget.schedule?.gambar ?? '',
+    );
 
     if (widget.schedule != null) {
-      _tanggalStart = DateTime.tryParse(widget.schedule!.tanggalStart) ?? DateTime.now();
-      _tanggalEnd = DateTime.tryParse(widget.schedule!.tanggalEnd) ?? DateTime.now().add(const Duration(days: 3));
+      _tanggalStart =
+          DateTime.tryParse(widget.schedule!.tanggalStart) ?? DateTime.now();
+      _tanggalEnd =
+          DateTime.tryParse(widget.schedule!.tanggalEnd) ??
+          DateTime.now().add(const Duration(days: 3));
       _selectedLokasi = widget.schedule!.namaLokasi;
       _linkPetaLokasi = widget.schedule!.linkPetaLokasi;
     }
-    
+
     _loadMasterTrainings();
   }
 
@@ -50,7 +55,10 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
         _masterTrainings = trainings;
         if (trainings.isNotEmpty) {
           // If editing, try to select existing training ID. Otherwise, pick first.
-          if (widget.schedule != null && trainings.any((t) => t.idPelatihan == widget.schedule!.idPelatihan)) {
+          if (widget.schedule != null &&
+              trainings.any(
+                (t) => t.idPelatihan == widget.schedule!.idPelatihan,
+              )) {
             _selectedIdPelatihan = widget.schedule!.idPelatihan;
           } else {
             _selectedIdPelatihan = trainings.first.idPelatihan;
@@ -96,7 +104,9 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
     if (_formKey.currentState!.validate() && _selectedIdPelatihan != null) {
       final isUpdating = widget.schedule != null;
       final schedule = TrainingSchedule(
-        idJadwal: isUpdating ? widget.schedule!.idJadwal : DateTime.now().millisecondsSinceEpoch.toString(),
+        idJadwal: isUpdating
+            ? widget.schedule!.idJadwal
+            : DateTime.now().millisecondsSinceEpoch.toString(),
         idPelatihan: _selectedIdPelatihan!,
         tanggalStart: _tanggalStart.toIso8601String(),
         tanggalEnd: _tanggalEnd.toIso8601String(),
@@ -114,7 +124,12 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(isUpdating ? 'Jadwal diperbarui' : 'Jadwal ditambahkan')),
+          SnackBar(
+            duration: const Duration(milliseconds: 1500),
+            content: Text(
+              isUpdating ? 'Jadwal diperbarui' : 'Jadwal ditambahkan',
+            ),
+          ),
         );
       }
     }
@@ -130,15 +145,20 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
       return Scaffold(
         appBar: AppBar(title: const Text('Buat Jadwal Baru')),
         body: const Center(
-          child: Text('Data Master Pelatihan masih kosong. Harap isi data pelatihan terlebih dahulu.'),
+          child: Text(
+            'Data Master Pelatihan masih kosong. Harap isi data pelatihan terlebih dahulu.',
+          ),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.schedule == null ? 'Tambah Jadwal Pelatihan' : 'Edit Jadwal Pelatihan'),
-
+        title: Text(
+          widget.schedule == null
+              ? 'Tambah Jadwal Pelatihan'
+              : 'Edit Jadwal Pelatihan',
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -148,27 +168,50 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
             children: [
               DropdownButtonFormField<String>(
                 value: _selectedIdPelatihan,
-                decoration: const InputDecoration(labelText: 'Pilih Pelatihan', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                  labelText: 'Pilih Pelatihan',
+                  border: OutlineInputBorder(),
+                ),
                 items: _masterTrainings.map((t) {
-                  return DropdownMenuItem(value: t.idPelatihan, child: Text(t.namaPelatihan));
+                  return DropdownMenuItem(
+                    value: t.idPelatihan,
+                    child: Text(t.namaPelatihan),
+                  );
                 }).toList(),
                 onChanged: (val) => setState(() => _selectedIdPelatihan = val),
-                validator: (val) => val == null ? 'Pilih pelatihan terlebih dahulu' : null,
+                validator: (val) =>
+                    val == null ? 'Pilih pelatihan terlebih dahulu' : null,
               ),
               const SizedBox(height: 16),
 
               // Tanggal Mulai
               Container(
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(border: Border.all(color: Theme.of(context).colorScheme.outline), borderRadius: BorderRadius.circular(4)),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
                 child: Row(
                   children: [
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Tanggal Mulai', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),
-                          Text('${_tanggalStart.day}/${_tanggalStart.month}/${_tanggalStart.year}', style: const TextStyle(fontSize: 16)),
+                          Text(
+                            'Tanggal Mulai',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          Text(
+                            '${_tanggalStart.day}/${_tanggalStart.month}/${_tanggalStart.year}',
+                            style: const TextStyle(fontSize: 16),
+                          ),
                         ],
                       ),
                     ),
@@ -184,15 +227,31 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
               // Tanggal Selesai
               Container(
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(border: Border.all(color: Theme.of(context).colorScheme.outline), borderRadius: BorderRadius.circular(4)),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
                 child: Row(
                   children: [
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Tanggal Selesai', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),
-                          Text('${_tanggalEnd.day}/${_tanggalEnd.month}/${_tanggalEnd.year}', style: const TextStyle(fontSize: 16)),
+                          Text(
+                            'Tanggal Selesai',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          Text(
+                            '${_tanggalEnd.day}/${_tanggalEnd.month}/${_tanggalEnd.year}',
+                            style: const TextStyle(fontSize: 16),
+                          ),
                         ],
                       ),
                     ),
@@ -208,18 +267,29 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _selectedLokasi,
-                decoration: const InputDecoration(labelText: 'Pilih Lokasi', border: OutlineInputBorder()),
+                decoration: const InputDecoration(
+                  labelText: 'Pilih Lokasi',
+                  border: OutlineInputBorder(),
+                ),
                 items: [
-                  const DropdownMenuItem<String>(value: null, child: Text('Sesuai Metode Pelatihan')),
+                  const DropdownMenuItem<String>(
+                    value: null,
+                    child: Text('Sesuai Metode Pelatihan'),
+                  ),
                   ...TrainingLocation.dummyLocations.map((loc) {
-                    return DropdownMenuItem(value: loc.namaLokasi, child: Text(loc.namaLokasi));
+                    return DropdownMenuItem(
+                      value: loc.namaLokasi,
+                      child: Text(loc.namaLokasi),
+                    );
                   }),
                 ],
                 onChanged: (val) {
                   setState(() {
                     _selectedLokasi = val;
                     if (val != null) {
-                      final loc = TrainingLocation.dummyLocations.firstWhere((l) => l.namaLokasi == val);
+                      final loc = TrainingLocation.dummyLocations.firstWhere(
+                        (l) => l.namaLokasi == val,
+                      );
                       _linkPetaLokasi = loc.petaLokasi;
                     } else {
                       _linkPetaLokasi = null;
@@ -240,11 +310,13 @@ class _AdminScheduleFormPageState extends State<AdminScheduleFormPage> {
 
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 onPressed: _saveSchedule,
-                child: const Text('Publikasikan Jadwal', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Text(
+                  'Publikasikan Jadwal',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),

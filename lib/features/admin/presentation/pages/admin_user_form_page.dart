@@ -67,37 +67,57 @@ class _AdminUserFormPageState extends State<AdminUserFormPage> {
           children: [
             TextFormField(
               initialValue: name,
-              decoration: const InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
-              validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+              decoration: const InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Required' : null,
               onChanged: (value) => name = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: email,
-              decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
               keyboardType: TextInputType.emailAddress,
-              validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Required' : null,
               onChanged: (value) => email = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: password,
-              decoration: const InputDecoration(labelText: 'Password', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
+              ),
               obscureText: true,
-              validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Required' : null,
               onChanged: (value) => password = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: phoneNumber,
-              decoration: const InputDecoration(labelText: 'Phone Number', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Phone Number',
+                border: OutlineInputBorder(),
+              ),
               keyboardType: TextInputType.phone,
-              validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Required' : null,
               onChanged: (value) => phoneNumber = value,
             ),
             const SizedBox(height: 16),
-            DropdownButtonFormField(initialValue: role,
-              decoration: const InputDecoration(labelText: 'Role', border: OutlineInputBorder()),
+            DropdownButtonFormField(
+              initialValue: role,
+              decoration: const InputDecoration(
+                labelText: 'Role',
+                border: OutlineInputBorder(),
+              ),
               items: roles.map((r) {
                 return DropdownMenuItem(value: r, child: Text(r));
               }).toList(),
@@ -113,7 +133,10 @@ class _AdminUserFormPageState extends State<AdminUserFormPage> {
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: saveUser,
-              child: const Text('Save', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Save',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),

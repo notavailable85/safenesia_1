@@ -8,42 +8,62 @@ class CertSuccessPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.verified_rounded,
-                size: 120,
-                color: Colors.green,
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.green.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.verified_rounded,
+                  size: 100,
+                  color: Colors.green,
+                ),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              const SizedBox(height: 32),
+              Text(
                 'Pendaftaran Berhasil!',
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                ),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Terima kasih! Pembayaran sertifikasi telah kami terima. Tim kami akan segera menghubungi PIC terdaftar untuk mengatur jadwal Kick-off Meeting.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.grey, height: 1.5),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  height: 1.5,
+                ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 48),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
                     padding: const EdgeInsets.all(16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   onPressed: () {
                     Navigator.pop(context); // Kembali ke Root
                   },
                   child: const Text(
                     'Kembali ke Halaman Utama',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

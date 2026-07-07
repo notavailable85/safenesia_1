@@ -8,7 +8,8 @@ class AdminNotificationFormPage extends StatefulWidget {
   const AdminNotificationFormPage({super.key, this.notification});
 
   @override
-  State<AdminNotificationFormPage> createState() => _AdminNotificationFormPageState();
+  State<AdminNotificationFormPage> createState() =>
+      _AdminNotificationFormPageState();
 }
 
 class _AdminNotificationFormPageState extends State<AdminNotificationFormPage> {
@@ -30,7 +31,9 @@ class _AdminNotificationFormPageState extends State<AdminNotificationFormPage> {
   void saveNotification() async {
     if (_formKey.currentState!.validate()) {
       final notif = NotificationModel(
-        id: widget.notification?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        id:
+            widget.notification?.id ??
+            DateTime.now().millisecondsSinceEpoch.toString(),
         title: title,
         subtitle: subtitle,
         type: type,
@@ -50,7 +53,11 @@ class _AdminNotificationFormPageState extends State<AdminNotificationFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.notification == null ? 'Add Notification' : 'Edit Notification'),
+        title: Text(
+          widget.notification == null
+              ? 'Add Notification'
+              : 'Edit Notification',
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
@@ -61,22 +68,33 @@ class _AdminNotificationFormPageState extends State<AdminNotificationFormPage> {
           children: [
             TextFormField(
               initialValue: title,
-              decoration: const InputDecoration(labelText: 'Title', border: OutlineInputBorder()),
-              validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Required' : null,
               onChanged: (value) => title = value,
             ),
             const SizedBox(height: 16),
             TextFormField(
               initialValue: subtitle,
-              decoration: const InputDecoration(labelText: 'Subtitle', border: OutlineInputBorder()),
-              validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+              decoration: const InputDecoration(
+                labelText: 'Subtitle',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Required' : null,
               onChanged: (value) => subtitle = value,
               maxLines: 3,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               initialValue: type,
-              decoration: const InputDecoration(labelText: 'Type', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                labelText: 'Type',
+                border: OutlineInputBorder(),
+              ),
               items: notificationTypes.map((t) {
                 return DropdownMenuItem(value: t, child: Text(t));
               }).toList(),
@@ -92,7 +110,10 @@ class _AdminNotificationFormPageState extends State<AdminNotificationFormPage> {
                 padding: const EdgeInsets.all(16),
               ),
               onPressed: saveNotification,
-              child: const Text('Save', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Save',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
