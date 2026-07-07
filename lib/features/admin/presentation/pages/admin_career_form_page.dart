@@ -4,7 +4,6 @@ import 'package:safenesia_1/features/career/models/career_model.dart';
 
 class AdminCareerFormPage extends StatefulWidget {
   final CareerModel? career;
-
   const AdminCareerFormPage({super.key, this.career});
 
   @override
@@ -13,67 +12,169 @@ class AdminCareerFormPage extends StatefulWidget {
 
 class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
   final _formKey = GlobalKey<FormState>();
-  late String title;
-  late String company;
-  late String field;
-  late String location;
-  late String jobType;
-  late String experienceLevel;
-  late int salaryMin;
-  late int salaryMax;
-  late String description;
-  late String requirements;
-  late String benefits;
-  late String companyLogoUrl;
+
+  late TextEditingController _titleCtrl;
+  late TextEditingController _slugCtrl;
+  late TextEditingController _descCtrl;
+  late TextEditingController _reqCtrl;
+  late TextEditingController _respCtrl;
+  late TextEditingController _benCtrl;
+  late TextEditingController _compNameCtrl;
+  late TextEditingController _compLogoCtrl;
+  late TextEditingController _empTypeCtrl;
+  late TextEditingController _workTypeCtrl;
+  late TextEditingController _levelCtrl;
+  late TextEditingController _provCtrl;
+  late TextEditingController _cityCtrl;
+  late TextEditingController _addressCtrl;
+  late TextEditingController _salMinCtrl;
+  late TextEditingController _salMaxCtrl;
+  late TextEditingController _salPeriodCtrl;
+  late TextEditingController _eduCtrl;
+  late TextEditingController _minExpCtrl;
+  late TextEditingController _skillsCtrl;
+  late TextEditingController _certsCtrl;
+  late TextEditingController _applyUrlCtrl;
+  late TextEditingController _emailCtrl;
+  late TextEditingController _phoneCtrl;
+
+  bool _salaryVisible = true;
+  bool _isFeatured = false;
+  bool _isUrgent = false;
+  bool _isActive = true;
 
   @override
   void initState() {
     super.initState();
-    title = widget.career?.title ?? '';
-    company = widget.career?.company ?? '';
-    field = widget.career?.field ?? '';
-    location = widget.career?.location ?? '';
-    jobType = widget.career?.jobType ?? 'Full-time';
-    experienceLevel = widget.career?.experienceLevel ?? 'Entry Level';
-    salaryMin = widget.career?.salaryMin ?? 0;
-    salaryMax = widget.career?.salaryMax ?? 0;
-    description = widget.career?.description ?? '';
-    requirements = widget.career?.requirements ?? '';
-    benefits = widget.career?.benefits ?? '';
-    companyLogoUrl = widget.career?.companyLogoUrl ?? '';
+    final c = widget.career;
+    
+    _titleCtrl = TextEditingController(text: c?.title ?? '');
+    _slugCtrl = TextEditingController(text: c?.slug ?? '');
+    _descCtrl = TextEditingController(text: c?.description ?? '');
+    _reqCtrl = TextEditingController(text: c?.requirements ?? '');
+    _respCtrl = TextEditingController(text: c?.responsibilities ?? '');
+    _benCtrl = TextEditingController(text: c?.benefits ?? '');
+    _compNameCtrl = TextEditingController(text: c?.companyName ?? '');
+    _compLogoCtrl = TextEditingController(text: c?.companyLogo ?? '');
+    _empTypeCtrl = TextEditingController(text: c?.employmentType ?? '');
+    _workTypeCtrl = TextEditingController(text: c?.workplaceType ?? '');
+    _levelCtrl = TextEditingController(text: c?.level ?? '');
+    _provCtrl = TextEditingController(text: c?.province ?? '');
+    _cityCtrl = TextEditingController(text: c?.city ?? '');
+    _addressCtrl = TextEditingController(text: c?.address ?? '');
+    _salMinCtrl = TextEditingController(text: c?.salaryMin?.toString() ?? '');
+    _salMaxCtrl = TextEditingController(text: c?.salaryMax?.toString() ?? '');
+    _salPeriodCtrl = TextEditingController(text: c?.salaryPeriod ?? 'Bulan');
+    _eduCtrl = TextEditingController(text: c?.education ?? '');
+    _minExpCtrl = TextEditingController(text: c?.minimumExperience.toString() ?? '0');
+    _skillsCtrl = TextEditingController(text: c?.skills.join(', ') ?? '');
+    _certsCtrl = TextEditingController(text: c?.certificates.join(', ') ?? '');
+    _applyUrlCtrl = TextEditingController(text: c?.applyUrl ?? '');
+    _emailCtrl = TextEditingController(text: c?.email ?? '');
+    _phoneCtrl = TextEditingController(text: c?.phone ?? '');
+
+    if (c != null) {
+      _salaryVisible = c.salaryVisible;
+      _isFeatured = c.isFeatured;
+      _isUrgent = c.isUrgent;
+      _isActive = c.isActive;
+    }
   }
 
-  void saveCareer() async {
-    if (_formKey.currentState!.validate()) {
-      final career = CareerModel(
-        id:
-            widget.career?.id ??
-            DateTime.now().millisecondsSinceEpoch.toString(),
-        title: title,
-        company: company,
-        field: field,
-        location: location,
-        jobType: jobType,
-        experienceLevel: experienceLevel,
-        salaryMin: salaryMin,
-        salaryMax: salaryMax,
-        description: description,
-        requirements: requirements,
-        benefits: benefits,
-        postedDate:
-            widget.career?.postedDate ?? DateTime.now().toIso8601String(),
-        companyLogoUrl: companyLogoUrl,
-        isSaved: widget.career?.isSaved ?? 0,
-        isApplied: widget.career?.isApplied ?? 0,
-      );
+  @override
+  void dispose() {
+    _titleCtrl.dispose();
+    _slugCtrl.dispose();
+    _descCtrl.dispose();
+    _reqCtrl.dispose();
+    _respCtrl.dispose();
+    _benCtrl.dispose();
+    _compNameCtrl.dispose();
+    _compLogoCtrl.dispose();
+    _empTypeCtrl.dispose();
+    _workTypeCtrl.dispose();
+    _levelCtrl.dispose();
+    _provCtrl.dispose();
+    _cityCtrl.dispose();
+    _addressCtrl.dispose();
+    _salMinCtrl.dispose();
+    _salMaxCtrl.dispose();
+    _salPeriodCtrl.dispose();
+    _eduCtrl.dispose();
+    _minExpCtrl.dispose();
+    _skillsCtrl.dispose();
+    _certsCtrl.dispose();
+    _applyUrlCtrl.dispose();
+    _emailCtrl.dispose();
+    _phoneCtrl.dispose();
+    super.dispose();
+  }
 
-      if (widget.career != null) {
-        await DatabaseHelper.instance.updateCareer(career);
-      } else {
-        await DatabaseHelper.instance.createCareer(career);
-      }
+  Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
 
-      if (mounted) Navigator.pop(context);
+    final id = widget.career?.id ?? DateTime.now().millisecondsSinceEpoch.toString();
+    
+    final List<String> skillsList = _skillsCtrl.text
+        .split(',')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+        
+    final List<String> certsList = _certsCtrl.text
+        .split(',')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    final career = CareerModel(
+      id: id,
+      title: _titleCtrl.text,
+      slug: _slugCtrl.text.isEmpty ? _titleCtrl.text.toLowerCase().replaceAll(' ', '-') : _slugCtrl.text,
+      description: _descCtrl.text,
+      requirements: _reqCtrl.text,
+      responsibilities: _respCtrl.text,
+      benefits: _benCtrl.text,
+      companyId: widget.career?.companyId ?? 'comp_$id',
+      companyName: _compNameCtrl.text,
+      companyLogo: _compLogoCtrl.text,
+      employmentType: _empTypeCtrl.text,
+      workplaceType: _workTypeCtrl.text,
+      level: _levelCtrl.text,
+      province: _provCtrl.text,
+      city: _cityCtrl.text,
+      address: _addressCtrl.text,
+      salaryVisible: _salaryVisible,
+      salaryMin: double.tryParse(_salMinCtrl.text),
+      salaryMax: double.tryParse(_salMaxCtrl.text),
+      salaryPeriod: _salPeriodCtrl.text,
+      education: _eduCtrl.text,
+      minimumExperience: int.tryParse(_minExpCtrl.text) ?? 0,
+      skills: skillsList,
+      certificates: certsList,
+      applyUrl: _applyUrlCtrl.text,
+      email: _emailCtrl.text,
+      phone: _phoneCtrl.text,
+      applicants: widget.career?.applicants ?? 0,
+      bookmarks: widget.career?.bookmarks ?? 0,
+      shares: widget.career?.shares ?? 0,
+      isFeatured: _isFeatured,
+      isUrgent: _isUrgent,
+      isActive: _isActive,
+      postedAt: widget.career?.postedAt ?? DateTime.now(),
+      expiredAt: widget.career?.expiredAt ?? DateTime.now().add(const Duration(days: 30)),
+      createdAt: widget.career?.createdAt ?? DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+
+    if (widget.career == null) {
+      await DatabaseHelper.instance.createCareer(career);
+    } else {
+      await DatabaseHelper.instance.updateCareer(career);
+    }
+
+    if (mounted) {
+      Navigator.pop(context, true);
     }
   }
 
@@ -81,212 +182,133 @@ class _AdminCareerFormPageState extends State<AdminCareerFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.career == null ? 'Tambah Karir K3' : 'Edit Karir K3',
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: Text(widget.career == null ? 'Tambah Karir' : 'Edit Karir'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save),
+            onPressed: _save,
+          ),
+        ],
       ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            const Text(
-              'Informasi Dasar',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              initialValue: title,
-              decoration: const InputDecoration(
-                labelText: 'Posisi / Jabatan',
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'Wajib diisi' : null,
-              onChanged: (value) => title = value,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              initialValue: company,
-              decoration: const InputDecoration(
-                labelText: 'Nama Perusahaan',
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'Wajib diisi' : null,
-              onChanged: (value) => company = value,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    initialValue: field,
-                    decoration: const InputDecoration(
-                      labelText: 'Bidang',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Wajib diisi' : null,
-                    onChanged: (value) => field = value,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: TextFormField(
-                    initialValue: location,
-                    decoration: const InputDecoration(
-                      labelText: 'Lokasi (Kota)',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Wajib diisi' : null,
-                    onChanged: (value) => location = value,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    initialValue: jobType,
-                    decoration: const InputDecoration(
-                      labelText: 'Tipe Pekerjaan',
-                      border: OutlineInputBorder(),
-                    ),
-                    items:
-                        [
-                              'Full-time',
-                              'Part-time',
-                              'Contract',
-                              'Internship',
-                              'Freelance',
-                            ]
-                            .map(
-                              (type) => DropdownMenuItem(
-                                value: type,
-                                child: Text(type),
-                              ),
-                            )
-                            .toList(),
-                    onChanged: (value) => setState(() => jobType = value!),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    initialValue: experienceLevel,
-                    decoration: const InputDecoration(
-                      labelText: 'Level Pengalaman',
-                      border: OutlineInputBorder(),
-                    ),
-                    items: ['Entry Level', 'Mid Level', 'Senior']
-                        .map(
-                          (level) => DropdownMenuItem(
-                            value: level,
-                            child: Text(level),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) =>
-                        setState(() => experienceLevel = value!),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    initialValue: salaryMin == 0 ? '' : salaryMin.toString(),
-                    decoration: const InputDecoration(
-                      labelText: 'Gaji Min',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) => salaryMin = int.tryParse(value) ?? 0,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: TextFormField(
-                    initialValue: salaryMax == 0 ? '' : salaryMax.toString(),
-                    decoration: const InputDecoration(
-                      labelText: 'Gaji Max',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) => salaryMax = int.tryParse(value) ?? 0,
-                  ),
-                ),
-              ],
-            ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSectionTitle('Informasi Dasar'),
+              _buildTextField(_titleCtrl, 'Judul Lowongan', true),
+              _buildTextField(_slugCtrl, 'Slug (Opsional)', false),
+              _buildTextField(_descCtrl, 'Deskripsi', true, maxLines: 4),
+              _buildTextField(_reqCtrl, 'Persyaratan', true, maxLines: 3),
+              _buildTextField(_respCtrl, 'Tanggung Jawab', true, maxLines: 3),
+              _buildTextField(_benCtrl, 'Keuntungan / Benefit', true, maxLines: 3),
+              
+              const SizedBox(height: 16),
+              _buildSectionTitle('Informasi Perusahaan'),
+              _buildTextField(_compNameCtrl, 'Nama Perusahaan', true),
+              _buildTextField(_compLogoCtrl, 'URL Logo Perusahaan', false),
+              
+              const SizedBox(height: 16),
+              _buildSectionTitle('Tipe & Lokasi Pekerjaan'),
+              _buildTextField(_empTypeCtrl, 'Tipe Pekerjaan (Full-time, Contract, dll)', true),
+              _buildTextField(_workTypeCtrl, 'Lokasi Kerja (On-site, Remote, Hybrid)', true),
+              _buildTextField(_levelCtrl, 'Tingkat Pekerjaan (Entry, Middle, Senior)', true),
+              _buildTextField(_provCtrl, 'Provinsi', true),
+              _buildTextField(_cityCtrl, 'Kota/Kabupaten', true),
+              _buildTextField(_addressCtrl, 'Alamat Lengkap', true, maxLines: 2),
 
-            const SizedBox(height: 24),
-            const Text(
-              'Detail Pekerjaan',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              initialValue: description,
-              decoration: const InputDecoration(
-                labelText: 'Deskripsi Pekerjaan',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 16),
+              _buildSectionTitle('Gaji (Rp)'),
+              SwitchListTile(
+                title: const Text('Tampilkan Gaji ke Pengguna'),
+                value: _salaryVisible,
+                onChanged: (v) => setState(() => _salaryVisible = v),
               ),
-              maxLines: 4,
-              onChanged: (value) => description = value,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              initialValue: requirements,
-              decoration: const InputDecoration(
-                labelText: 'Persyaratan',
-                border: OutlineInputBorder(),
+              Row(
+                children: [
+                  Expanded(child: _buildTextField(_salMinCtrl, 'Gaji Minimal', false, isNumber: true)),
+                  const SizedBox(width: 16),
+                  Expanded(child: _buildTextField(_salMaxCtrl, 'Gaji Maksimal', false, isNumber: true)),
+                ],
               ),
-              maxLines: 4,
-              onChanged: (value) => requirements = value,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              initialValue: benefits,
-              decoration: const InputDecoration(
-                labelText: 'Keuntungan / Benefit',
-                border: OutlineInputBorder(),
+              _buildTextField(_salPeriodCtrl, 'Periode Gaji (cth: Bulan, Tahun)', true),
+
+              const SizedBox(height: 16),
+              _buildSectionTitle('Kualifikasi & Keahlian'),
+              _buildTextField(_eduCtrl, 'Minimal Pendidikan', true),
+              _buildTextField(_minExpCtrl, 'Minimal Pengalaman (Tahun)', true, isNumber: true),
+              _buildTextField(_skillsCtrl, 'Keahlian (pisahkan dengan koma)', false, maxLines: 2),
+              _buildTextField(_certsCtrl, 'Sertifikat (pisahkan dengan koma)', false, maxLines: 2),
+
+              const SizedBox(height: 16),
+              _buildSectionTitle('Kontak & Pendaftaran'),
+              _buildTextField(_applyUrlCtrl, 'URL Pendaftaran (Web External)', false),
+              _buildTextField(_emailCtrl, 'Email HR/Perusahaan', false),
+              _buildTextField(_phoneCtrl, 'No Telepon', false),
+
+              const SizedBox(height: 16),
+              _buildSectionTitle('Status & Lainnya'),
+              SwitchListTile(
+                title: const Text('Aktif (Ditampilkan di aplikasi)'),
+                value: _isActive,
+                onChanged: (v) => setState(() => _isActive = v),
               ),
-              maxLines: 3,
-              onChanged: (value) => benefits = value,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              initialValue: companyLogoUrl,
-              decoration: const InputDecoration(
-                labelText: 'URL Logo Perusahaan (Opsional)',
-                border: OutlineInputBorder(),
+              SwitchListTile(
+                title: const Text('Disorot (Featured)'),
+                value: _isFeatured,
+                onChanged: (v) => setState(() => _isFeatured = v),
               ),
-              onChanged: (value) => companyLogoUrl = value,
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                padding: const EdgeInsets.all(16),
+              SwitchListTile(
+                title: const Text('Mendesak (Urgent)'),
+                value: _isUrgent,
+                onChanged: (v) => setState(() => _isUrgent = v),
               ),
-              onPressed: saveCareer,
-              child: const Text(
-                'Simpan Lowongan',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 32),
-          ],
+              const SizedBox(height: 32),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+    TextEditingController controller,
+    String label,
+    bool required, {
+    int maxLines = 1,
+    bool isNumber = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TextFormField(
+        controller: controller,
+        maxLines: maxLines,
+        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          filled: true,
+          fillColor: Theme.of(context).colorScheme.surface,
+        ),
+        validator: required
+            ? (v) => v == null || v.isEmpty ? 'Wajib diisi' : null
+            : null,
       ),
     );
   }

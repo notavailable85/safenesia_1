@@ -1,98 +1,221 @@
-class Article {
+class ArticleModel {
   final String id;
+
+  // Basic Information
   final String title;
-  final String category;
-  final String date;
-  final String imageUrl;
+  final String slug;
+  final String summary;
   final String content;
 
-  const Article({
+  // Media
+  final String thumbnail;
+  final List<String> images;
+
+  // Relationship
+  final String categoryId;
+  final String authorId;
+
+  // Metadata
+  final List<String> tags;
+  final int readingTime;
+
+  // Statistics
+  final int likes;
+  final int bookmarks;
+  final int shares;
+
+  // Status
+  final bool isFeatured;
+  final bool isPublished;
+
+  // Source
+  final String source;
+  final String sourceUrl;
+
+  // Timestamp
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? publishedAt;
+
+  const ArticleModel({
     required this.id,
     required this.title,
-    required this.category,
-    required this.date,
-    required this.imageUrl,
+    required this.slug,
+    required this.summary,
     required this.content,
+    required this.thumbnail,
+    required this.images,
+    required this.categoryId,
+    required this.authorId,
+    required this.tags,
+    required this.readingTime,
+    required this.likes,
+    required this.bookmarks,
+    required this.shares,
+    required this.isFeatured,
+    required this.isPublished,
+    required this.source,
+    required this.sourceUrl,
+    required this.createdAt,
+    required this.updatedAt,
+    this.publishedAt,
   });
+
+  factory ArticleModel.fromMap(Map<String, dynamic> map) {
+    return ArticleModel(
+      id: map['id'],
+      title: map['title'],
+      slug: map['slug'],
+      summary: map['summary'],
+      content: map['content'],
+      thumbnail: map['thumbnail'],
+      images: List<String>.from(map['images'] ?? []),
+      categoryId: map['category_id'],
+      authorId: map['author_id'],
+      tags: List<String>.from(map['tags'] ?? []),
+      readingTime: map['reading_time'],
+      likes: map['likes'],
+      bookmarks: map['bookmarks'],
+      shares: map['shares'],
+      isFeatured: map['is_featured'] == 1 || map['is_featured'] == true,
+      isPublished: map['is_published'] == 1 || map['is_published'] == true,
+      source: map['source'],
+      sourceUrl: map['source_url'],
+      createdAt: DateTime.parse(map['created_at']),
+      updatedAt: DateTime.parse(map['updated_at']),
+      publishedAt: map['published_at'] != null
+          ? DateTime.parse(map['published_at'])
+          : null,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
-      'category': category,
-      'date': date,
-      'imageUrl': imageUrl,
+      'slug': slug,
+      'summary': summary,
       'content': content,
+      'thumbnail': thumbnail,
+      'images': images,
+      'category_id': categoryId,
+      'author_id': authorId,
+      'tags': tags,
+      'reading_time': readingTime,
+      'likes': likes,
+      'bookmarks': bookmarks,
+      'shares': shares,
+      'is_featured': isFeatured ? 1 : 0,
+      'is_published': isPublished ? 1 : 0,
+      'source': source,
+      'source_url': sourceUrl,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+      'published_at': publishedAt?.toIso8601String(),
     };
   }
 
-  factory Article.fromMap(Map<String, dynamic> map) {
-    return Article(
-      id: map['id'] as String,
-      title: map['title'] as String,
-      category: map['category'] as String,
-      date: map['date'] as String,
-      imageUrl: map['imageUrl'] as String,
-      content: map['content'] as String,
+  factory ArticleModel.fromJson(Map<String, dynamic> json) =>
+      ArticleModel.fromMap(json);
+
+  Map<String, dynamic> toJson() => toMap();
+
+  ArticleModel copyWith({
+    String? id,
+    String? title,
+    String? slug,
+    String? summary,
+    String? content,
+    String? thumbnail,
+    List<String>? images,
+    String? categoryId,
+    String? authorId,
+    List<String>? tags,
+    int? readingTime,
+    int? likes,
+    int? bookmarks,
+    int? shares,
+    bool? isFeatured,
+    bool? isPublished,
+    String? source,
+    String? sourceUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    DateTime? publishedAt,
+  }) {
+    return ArticleModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      slug: slug ?? this.slug,
+      summary: summary ?? this.summary,
+      content: content ?? this.content,
+      thumbnail: thumbnail ?? this.thumbnail,
+      images: images ?? this.images,
+      categoryId: categoryId ?? this.categoryId,
+      authorId: authorId ?? this.authorId,
+      tags: tags ?? this.tags,
+      readingTime: readingTime ?? this.readingTime,
+      likes: likes ?? this.likes,
+      bookmarks: bookmarks ?? this.bookmarks,
+      shares: shares ?? this.shares,
+      isFeatured: isFeatured ?? this.isFeatured,
+      isPublished: isPublished ?? this.isPublished,
+      source: source ?? this.source,
+      sourceUrl: sourceUrl ?? this.sourceUrl,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      publishedAt: publishedAt ?? this.publishedAt,
     );
   }
 }
 
 // Dummy Data
-final List<Article> dummyArticles = [
-  const Article(
+final List<ArticleModel> dummyArticles = [
+  ArticleModel(
     id: '1',
     title: 'Pentingnya APD di Sektor Konstruksi',
-    category: 'Konstruksi',
-    date: '12 Agustus 2026',
-    imageUrl: 'https://picsum.photos/seed/k3_1/400/200',
-    content:
-        'Alat Pelindung Diri (APD) sangat penting untuk mencegah terjadinya kecelakaan kerja, terutama di sektor konstruksi. Penggunaan helm, sepatu safety, dan rompi reflektif harus menjadi standar wajib di setiap proyek.\n\nSelain itu, para pekerja juga harus diberikan pelatihan berkala mengenai cara pemakaian APD yang benar dan tepat sasaran. Kelalaian kecil dalam penggunaan APD bisa berdampak fatal pada keselamatan jiwa.',
+    slug: 'pentingnya-apd-di-sektor-konstruksi',
+    summary: 'Alat Pelindung Diri (APD) sangat penting untuk mencegah terjadinya kecelakaan kerja.',
+    content: 'Alat Pelindung Diri (APD) sangat penting untuk mencegah terjadinya kecelakaan kerja, terutama di sektor konstruksi. Penggunaan helm, sepatu safety, dan rompi reflektif harus menjadi standar wajib di setiap proyek.\n\nSelain itu, para pekerja juga harus diberikan pelatihan berkala mengenai cara pemakaian APD yang benar dan tepat sasaran. Kelalaian kecil dalam penggunaan APD bisa berdampak fatal pada keselamatan jiwa.',
+    thumbnail: 'https://picsum.photos/seed/k3_1/400/200',
+    images: [],
+    categoryId: 'Konstruksi',
+    authorId: 'admin1',
+    tags: ['APD', 'Konstruksi', 'Safety'],
+    readingTime: 3,
+    likes: 120,
+    bookmarks: 45,
+    shares: 10,
+    isFeatured: true,
+    isPublished: true,
+    source: 'Safety Magazine',
+    sourceUrl: 'https://example.com',
+    createdAt: DateTime.now().subtract(const Duration(days: 2)),
+    updatedAt: DateTime.now().subtract(const Duration(days: 2)),
+    publishedAt: DateTime.now().subtract(const Duration(days: 2)),
   ),
-  const Article(
+  ArticleModel(
     id: '2',
     title: 'Prosedur Evakuasi Kebakaran Gedung',
-    category: 'Umum',
-    date: '10 Agustus 2026',
-    imageUrl: 'https://picsum.photos/seed/k3_2/400/200',
-    content:
-        'Saat terjadi kebakaran, hal yang paling utama adalah tetap tenang dan tidak panik. Segera ikuti petunjuk arah evakuasi yang menempel di dinding dan berjalanlah dengan cepat (jangan berlari).\n\nDilarang keras menggunakan lift saat evakuasi. Gunakan selalu tangga darurat. Setelah keluar dari gedung, segera menuju titik kumpul (assembly point) dan jangan kembali ke dalam gedung sampai ada instruksi aman dari petugas.',
-  ),
-  const Article(
-    id: '3',
-    title: 'Bahaya Listrik Tegangan Tinggi',
-    category: 'Listrik',
-    date: '08 Agustus 2026',
-    imageUrl: 'https://picsum.photos/seed/k3_3/400/200',
-    content:
-        'Bekerja dengan instalasi listrik tegangan tinggi memiliki risiko fatal berupa tersengat listrik (electrocution) hingga kebakaran. Pekerja wajib menerapkan prosedur LOTO (Lock Out Tag Out) sebelum bekerja.\n\nPastikan juga menggunakan sarung tangan berbahan dielektrik, sepatu safety isolator, dan bekerja di area yang kering. Hindari bekerja sendirian pada panel listrik utama.',
-  ),
-  const Article(
-    id: '4',
-    title: 'Standar Keselamatan Area Tambang Terbuka',
-    category: 'Tambang',
-    date: '05 Agustus 2026',
-    imageUrl: 'https://picsum.photos/seed/k3_4/400/200',
-    content:
-        'Aktivitas pertambangan terbuka melibatkan penggunaan alat-alat berat ekstrem seperti ekskavator raksasa dan truk angkut (haul truck). Jarak pandang (blind spot) dari alat-alat ini sangat besar.\n\nAturan jarak aman minimal 50 meter antar kendaraan harus dipatuhi dengan ketat. Pengemudi kendaraan ringan (LV) wajib menyalakan buggy whip dan berkomunikasi melalui radio dua arah sebelum mendekati alat berat.',
-  ),
-  const Article(
-    id: '5',
-    title: 'Penanganan Limbah Medis B3',
-    category: 'Rumah Sakit',
-    date: '02 Agustus 2026',
-    imageUrl: 'https://picsum.photos/seed/k3_5/400/200',
-    content:
-        'Limbah medis yang dihasilkan dari kegiatan rumah sakit termasuk dalam kategori B3 (Bahan Berbahaya dan Beracun) yang dapat menularkan penyakit (infeksius).\n\nPenanganannya meliputi pemilahan langsung di sumbernya menggunakan plastik kuning untuk sampah infeksius, dan safety box untuk benda tajam seperti jarum suntik. Pemusnahan wajib menggunakan mesin insinerator dengan suhu minimal 800 derajat celcius.',
-  ),
-  const Article(
-    id: '6',
-    title: 'Keselamatan Kerja di Anjungan Lepas Pantai',
-    category: 'Oil & Gas',
-    date: '28 Juli 2026',
-    imageUrl: 'https://picsum.photos/seed/k3_6/400/200',
-    content:
-        'Bekerja di anjungan minyak lepas pantai (offshore) memiliki tantangan tersendiri karena lokasi yang terisolasi dan cuaca laut yang tidak menentu.\n\nSetiap pekerja yang menuju ke rig wajib memiliki sertifikasi BOSIET (Basic Offshore Safety Induction and Emergency Training) yang mencakup teknik bertahan hidup di laut (Sea Survival) dan penyelamatan diri dari helikopter jatuh (HUET).',
+    slug: 'prosedur-evakuasi-kebakaran-gedung',
+    summary: 'Saat terjadi kebakaran, hal yang paling utama adalah tetap tenang dan tidak panik.',
+    content: 'Saat terjadi kebakaran, hal yang paling utama adalah tetap tenang dan tidak panik. Segera ikuti petunjuk arah evakuasi yang menempel di dinding dan berjalanlah dengan cepat (jangan berlari).\n\nDilarang keras menggunakan lift saat evakuasi. Gunakan selalu tangga darurat. Setelah keluar dari gedung, segera menuju titik kumpul (assembly point) dan jangan kembali ke dalam gedung sampai ada instruksi aman dari petugas.',
+    thumbnail: 'https://picsum.photos/seed/k3_2/400/200',
+    images: [],
+    categoryId: 'Umum',
+    authorId: 'admin2',
+    tags: ['Kebakaran', 'Evakuasi'],
+    readingTime: 5,
+    likes: 85,
+    bookmarks: 20,
+    shares: 5,
+    isFeatured: false,
+    isPublished: true,
+    source: 'Damkar Indonesia',
+    sourceUrl: 'https://example.com',
+    createdAt: DateTime.now().subtract(const Duration(days: 5)),
+    updatedAt: DateTime.now().subtract(const Duration(days: 5)),
+    publishedAt: DateTime.now().subtract(const Duration(days: 5)),
   ),
 ];
 

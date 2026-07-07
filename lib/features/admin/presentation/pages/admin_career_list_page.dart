@@ -74,9 +74,9 @@ class _AdminCareerListPageState extends State<AdminCareerListPage> {
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${career.company} - ${career.location}'),
+                        Text('${career.companyName} - ${career.city}, ${career.province}'),
                         Text(
-                          '${career.jobType} • ${career.experienceLevel}',
+                          '${career.employmentType} • ${career.level}',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontSize: 12,

@@ -1,175 +1,358 @@
+import 'dart:convert';
+
 class CareerModel {
   final String id;
+
+  // Basic Information
   final String title;
-  final String company;
-  final String field;
-  final String location;
-  final String jobType;
-  final String experienceLevel;
-  final int salaryMin;
-  final int salaryMax;
+  final String slug;
   final String description;
   final String requirements;
+  final String responsibilities;
   final String benefits;
-  final String postedDate;
-  final String companyLogoUrl;
-  final int isSaved; // 0 for false, 1 for true
-  final int isApplied; // 0 for false, 1 for true
 
-  CareerModel({
+  // Company
+  final String companyId;
+  final String companyName;
+  final String companyLogo;
+
+  // Job Information
+  final String employmentType;
+  final String workplaceType;
+  final String level;
+
+  // Location
+  final String province;
+  final String city;
+  final String address;
+
+  // Salary
+  final bool salaryVisible;
+  final double? salaryMin;
+  final double? salaryMax;
+  final String salaryPeriod;
+
+  // Qualification
+  final String education;
+  final int minimumExperience;
+
+  // Skills
+  final List<String> skills;
+
+  // Certificate
+  final List<String> certificates;
+
+  // Contact
+  final String applyUrl;
+  final String email;
+  final String phone;
+
+  // Statistics
+  final int applicants;
+  final int bookmarks;
+  final int shares;
+
+  // Status
+  final bool isFeatured;
+  final bool isUrgent;
+  final bool isActive;
+
+  // Dates
+  final DateTime postedAt;
+  final DateTime expiredAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  const CareerModel({
     required this.id,
     required this.title,
-    required this.company,
-    required this.field,
-    required this.location,
-    required this.jobType,
-    required this.experienceLevel,
-    required this.salaryMin,
-    required this.salaryMax,
+    required this.slug,
     required this.description,
     required this.requirements,
+    required this.responsibilities,
     required this.benefits,
-    required this.postedDate,
-    required this.companyLogoUrl,
-    this.isSaved = 0,
-    this.isApplied = 0,
+    required this.companyId,
+    required this.companyName,
+    required this.companyLogo,
+    required this.employmentType,
+    required this.workplaceType,
+    required this.level,
+    required this.province,
+    required this.city,
+    required this.address,
+    required this.salaryVisible,
+    this.salaryMin,
+    this.salaryMax,
+    required this.salaryPeriod,
+    required this.education,
+    required this.minimumExperience,
+    required this.skills,
+    required this.certificates,
+    required this.applyUrl,
+    required this.email,
+    required this.phone,
+    required this.applicants,
+    required this.bookmarks,
+    required this.shares,
+    required this.isFeatured,
+    required this.isUrgent,
+    required this.isActive,
+    required this.postedAt,
+    required this.expiredAt,
+    required this.createdAt,
+    required this.updatedAt,
   });
+
+  factory CareerModel.fromMap(Map<String, dynamic> map) {
+    return CareerModel(
+      id: map['id'],
+      title: map['title'],
+      slug: map['slug'],
+      description: map['description'],
+      requirements: map['requirements'],
+      responsibilities: map['responsibilities'],
+      benefits: map['benefits'],
+      companyId: map['company_id'],
+      companyName: map['company_name'],
+      companyLogo: map['company_logo'],
+      employmentType: map['employment_type'],
+      workplaceType: map['workplace_type'],
+      level: map['level'],
+      province: map['province'],
+      city: map['city'],
+      address: map['address'],
+      salaryVisible: map['salary_visible'] == 1 || map['salary_visible'] == true,
+      salaryMin: map['salary_min']?.toDouble(),
+      salaryMax: map['salary_max']?.toDouble(),
+      salaryPeriod: map['salary_period'],
+      education: map['education'],
+      minimumExperience: map['minimum_experience'],
+      skills: List<String>.from(
+          map['skills'] is String ? jsonDecode(map['skills']) : (map['skills'] ?? [])),
+      certificates: List<String>.from(
+          map['certificates'] is String ? jsonDecode(map['certificates']) : (map['certificates'] ?? [])),
+      applyUrl: map['apply_url'],
+      email: map['email'],
+      phone: map['phone'],
+      applicants: map['applicants'],
+      bookmarks: map['bookmarks'],
+      shares: map['shares'],
+      isFeatured: map['is_featured'] == 1 || map['is_featured'] == true,
+      isUrgent: map['is_urgent'] == 1 || map['is_urgent'] == true,
+      isActive: map['is_active'] == 1 || map['is_active'] == true,
+      postedAt: DateTime.parse(map['posted_at']),
+      expiredAt: DateTime.parse(map['expired_at']),
+      createdAt: DateTime.parse(map['created_at']),
+      updatedAt: DateTime.parse(map['updated_at']),
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
-      'company': company,
-      'field': field,
-      'location': location,
-      'jobType': jobType,
-      'experienceLevel': experienceLevel,
-      'salaryMin': salaryMin,
-      'salaryMax': salaryMax,
+      'slug': slug,
       'description': description,
       'requirements': requirements,
+      'responsibilities': responsibilities,
       'benefits': benefits,
-      'postedDate': postedDate,
-      'companyLogoUrl': companyLogoUrl,
-      'isSaved': isSaved,
-      'isApplied': isApplied,
+      'company_id': companyId,
+      'company_name': companyName,
+      'company_logo': companyLogo,
+      'employment_type': employmentType,
+      'workplace_type': workplaceType,
+      'level': level,
+      'province': province,
+      'city': city,
+      'address': address,
+      'salary_visible': salaryVisible ? 1 : 0,
+      'salary_min': salaryMin,
+      'salary_max': salaryMax,
+      'salary_period': salaryPeriod,
+      'education': education,
+      'minimum_experience': minimumExperience,
+      'skills': jsonEncode(skills),
+      'certificates': jsonEncode(certificates),
+      'apply_url': applyUrl,
+      'email': email,
+      'phone': phone,
+      'applicants': applicants,
+      'bookmarks': bookmarks,
+      'shares': shares,
+      'is_featured': isFeatured ? 1 : 0,
+      'is_urgent': isUrgent ? 1 : 0,
+      'is_active': isActive ? 1 : 0,
+      'posted_at': postedAt.toIso8601String(),
+      'expired_at': expiredAt.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
 
-  factory CareerModel.fromMap(Map<String, dynamic> map) {
+  factory CareerModel.fromJson(Map<String, dynamic> json) =>
+      CareerModel.fromMap(json);
+
+  Map<String, dynamic> toJson() => toMap();
+
+  CareerModel copyWith({
+    String? id,
+    String? title,
+    String? slug,
+    String? description,
+    String? requirements,
+    String? responsibilities,
+    String? benefits,
+    String? companyId,
+    String? companyName,
+    String? companyLogo,
+    String? employmentType,
+    String? workplaceType,
+    String? level,
+    String? province,
+    String? city,
+    String? address,
+    bool? salaryVisible,
+    double? salaryMin,
+    double? salaryMax,
+    String? salaryPeriod,
+    String? education,
+    int? minimumExperience,
+    List<String>? skills,
+    List<String>? certificates,
+    String? applyUrl,
+    String? email,
+    String? phone,
+    int? applicants,
+    int? bookmarks,
+    int? shares,
+    bool? isFeatured,
+    bool? isUrgent,
+    bool? isActive,
+    DateTime? postedAt,
+    DateTime? expiredAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
     return CareerModel(
-      id: map['id'] as String,
-      title: map['title'] as String,
-      company: map['company'] as String,
-      field: map['field'] as String,
-      location: map['location'] as String,
-      jobType: map['jobType'] as String? ?? 'Full-time',
-      experienceLevel: map['experienceLevel'] as String? ?? 'Entry Level',
-      salaryMin: map['salaryMin'] as int,
-      salaryMax: map['salaryMax'] as int,
-      description: map['description'] as String? ?? 'Deskripsi tidak tersedia.',
-      requirements: map['requirements'] as String? ?? '-',
-      benefits: map['benefits'] as String? ?? '-',
-      postedDate:
-          map['postedDate'] as String? ?? DateTime.now().toIso8601String(),
-      companyLogoUrl: map['companyLogoUrl'] as String? ?? '',
-      isSaved: map['isSaved'] as int? ?? 0,
-      isApplied: map['isApplied'] as int? ?? 0,
+      id: id ?? this.id,
+      title: title ?? this.title,
+      slug: slug ?? this.slug,
+      description: description ?? this.description,
+      requirements: requirements ?? this.requirements,
+      responsibilities: responsibilities ?? this.responsibilities,
+      benefits: benefits ?? this.benefits,
+      companyId: companyId ?? this.companyId,
+      companyName: companyName ?? this.companyName,
+      companyLogo: companyLogo ?? this.companyLogo,
+      employmentType: employmentType ?? this.employmentType,
+      workplaceType: workplaceType ?? this.workplaceType,
+      level: level ?? this.level,
+      province: province ?? this.province,
+      city: city ?? this.city,
+      address: address ?? this.address,
+      salaryVisible: salaryVisible ?? this.salaryVisible,
+      salaryMin: salaryMin ?? this.salaryMin,
+      salaryMax: salaryMax ?? this.salaryMax,
+      salaryPeriod: salaryPeriod ?? this.salaryPeriod,
+      education: education ?? this.education,
+      minimumExperience: minimumExperience ?? this.minimumExperience,
+      skills: skills ?? this.skills,
+      certificates: certificates ?? this.certificates,
+      applyUrl: applyUrl ?? this.applyUrl,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      applicants: applicants ?? this.applicants,
+      bookmarks: bookmarks ?? this.bookmarks,
+      shares: shares ?? this.shares,
+      isFeatured: isFeatured ?? this.isFeatured,
+      isUrgent: isUrgent ?? this.isUrgent,
+      isActive: isActive ?? this.isActive,
+      postedAt: postedAt ?? this.postedAt,
+      expiredAt: expiredAt ?? this.expiredAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }
 
+// Dummy Data
 final List<CareerModel> dummyCareers = [
   CareerModel(
-    id: '1',
+    id: 'c1',
     title: 'HSE Officer',
-    company: 'PT Maju Jaya',
-    field: 'Manufaktur',
-    location: 'Jakarta',
-    jobType: 'Full-time',
-    experienceLevel: 'Entry Level',
-    salaryMin: 8000000,
-    salaryMax: 12000000,
-    description:
-        'Kami mencari HSE Officer yang berdedikasi untuk bergabung dengan tim kami di Jakarta. Anda akan bertanggung jawab untuk memantau keselamatan di lingkungan kerja dan memastikan kepatuhan terhadap standar HSE nasional.',
-    requirements:
-        '• Minimal S1 Teknik Lingkungan / K3\n• Memiliki sertifikat AK3 Umum\n• Pengalaman minimal 1 tahun di bidang manufaktur\n• Mampu membuat laporan investigasi kecelakaan',
-    benefits:
-        '• Asuransi Kesehatan Pribadi & Keluarga\n• BPJS Ketenagakerjaan\n• Uang Makan & Transport\n• Bonus Tahunan',
-    postedDate: DateTime.now()
-        .subtract(const Duration(days: 2))
-        .toIso8601String(),
-    companyLogoUrl: '',
-    isSaved: 0,
-    isApplied: 0,
-  ),
-  CareerModel(
-    id: '2',
-    title: 'Safety Inspector',
-    company: 'PT Konstruksi Hebat',
-    field: 'Konstruksi',
-    location: 'Surabaya',
-    jobType: 'Contract',
-    experienceLevel: 'Mid Level',
+    slug: 'hse-officer',
+    description: 'Kami mencari HSE Officer yang berpengalaman untuk mengawasi implementasi K3 di proyek konstruksi.',
+    requirements: '- Minimal lulusan S1 Teknik K3 atau terkait\n- Memiliki sertifikat AK3U dari Kemnaker\n- Pengalaman minimal 2 tahun',
+    responsibilities: '- Melakukan inspeksi harian\n- Membuat laporan K3\n- Memberikan toolbox meeting',
+    benefits: '- BPJS Kesehatan & Tenaga Kerja\n- Tunjangan Transportasi\n- Bonus Tahunan',
+    companyId: 'comp1',
+    companyName: 'PT Waskita Karya',
+    companyLogo: 'https://picsum.photos/seed/c1/100/100',
+    employmentType: 'Full-time',
+    workplaceType: 'On-site',
+    level: 'Middle',
+    province: 'DKI Jakarta',
+    city: 'Jakarta Selatan',
+    address: 'Jl. MT Haryono No. 10',
+    salaryVisible: true,
     salaryMin: 6000000,
     salaryMax: 9000000,
-    description:
-        'Dibutuhkan segera Safety Inspector untuk proyek konstruksi gedung bertingkat di Surabaya. Anda akan bekerja langsung di lapangan untuk memastikan prosedur kerja aman diterapkan oleh seluruh pekerja.',
-    requirements:
-        '• Minimal D3/S1 Teknik Sipil / K3\n• Pengalaman minimal 3 tahun di konstruksi\n• Memiliki sertifikat K3 Konstruksi\n• Bersedia bekerja shifting',
-    benefits:
-        '• Asuransi Kesehatan\n• Akomodasi/Mess disediakan\n• Uang Lembur',
-    postedDate: DateTime.now()
-        .subtract(const Duration(days: 5))
-        .toIso8601String(),
-    companyLogoUrl: '',
-    isSaved: 1,
-    isApplied: 0,
+    salaryPeriod: 'Bulan',
+    education: 'S1',
+    minimumExperience: 2,
+    skills: ['Hazard Identification', 'Risk Assessment', 'ISO 45001'],
+    certificates: ['Ahli K3 Umum'],
+    applyUrl: 'https://example.com/apply/c1',
+    email: 'hr@example.com',
+    phone: '08123456789',
+    applicants: 45,
+    bookmarks: 12,
+    shares: 5,
+    isFeatured: true,
+    isUrgent: false,
+    isActive: true,
+    postedAt: DateTime.now().subtract(const Duration(days: 2)),
+    expiredAt: DateTime.now().add(const Duration(days: 30)),
+    createdAt: DateTime.now().subtract(const Duration(days: 2)),
+    updatedAt: DateTime.now().subtract(const Duration(days: 2)),
   ),
   CareerModel(
-    id: '3',
-    title: 'Ahli K3 Umum',
-    company: 'PT Tambang Emas',
-    field: 'Tambang',
-    location: 'Papua',
-    jobType: 'Full-time',
-    experienceLevel: 'Senior',
-    salaryMin: 15000000,
-    salaryMax: 25000000,
-    description:
-        'Peluang emas bergabung dengan perusahaan pertambangan multinasional. Kandidat akan memimpin dan mengawasi implementasi Sistem Manajemen K3 di area tambang.',
-    requirements:
-        '• S1 semua jurusan (diutamakan Teknik)\n• Memiliki sertifikat AK3 Umum dari Kemnaker\n• Pengalaman di industri tambang minimal 5 tahun\n• Memiliki leadership yang kuat',
-    benefits:
-        '• Tiket pesawat cuti roster\n• Fasilitas mess lengkap\n• Asuransi Internasional\n• Jenjang karir yang jelas',
-    postedDate: DateTime.now()
-        .subtract(const Duration(days: 10))
-        .toIso8601String(),
-    companyLogoUrl: '',
-    isSaved: 0,
-    isApplied: 1,
-  ),
-  CareerModel(
-    id: '4',
-    title: 'HSE Manager',
-    company: 'PT Oil & Gas Nusantara',
-    field: 'Oil & Gas',
-    location: 'Balikpapan',
-    jobType: 'Full-time',
-    experienceLevel: 'Senior',
-    salaryMin: 20000000,
-    salaryMax: 35000000,
-    description:
-        'Mencari HSE Manager yang berpengalaman untuk memimpin departemen HSE di sektor Oil & Gas. Anda akan bertanggung jawab untuk strategi HSE, audit, dan hubungan dengan regulator.',
-    requirements:
-        '• S1 Teknik/Kesehatan Masyarakat\n• Pengalaman HSE Manager >7 tahun\n• Menguasai ISO 45001 & ISO 14001\n• Kemampuan bahasa Inggris yang sangat baik',
-    benefits:
-        '• Mobil Dinas\n• Asuransi Premium\n• Saham Perusahaan\n• Dana Pensiun',
-    postedDate: DateTime.now()
-        .subtract(const Duration(hours: 5))
-        .toIso8601String(),
-    companyLogoUrl: '',
-    isSaved: 1,
-    isApplied: 0,
+    id: 'c2',
+    title: 'Safety Inspector',
+    slug: 'safety-inspector',
+    description: 'Dicari Safety Inspector untuk area pertambangan.',
+    requirements: '- Pendidikan minimal D3\n- Memahami standar K3 Pertambangan',
+    responsibilities: '- Inspeksi alat berat\n- Investigasi kecelakaan',
+    benefits: '- Mess karyawan\n- Uang makan',
+    companyId: 'comp2',
+    companyName: 'PT Freeport Indonesia',
+    companyLogo: 'https://picsum.photos/seed/c2/100/100',
+    employmentType: 'Contract',
+    workplaceType: 'On-site',
+    level: 'Entry Level',
+    province: 'Papua',
+    city: 'Mimika',
+    address: 'Tembagapura',
+    salaryVisible: false,
+    salaryMin: 8000000,
+    salaryMax: 12000000,
+    salaryPeriod: 'Bulan',
+    education: 'D3',
+    minimumExperience: 1,
+    skills: ['Mining Safety', 'First Aid'],
+    certificates: ['POP'],
+    applyUrl: 'https://example.com/apply/c2',
+    email: 'hr.papua@example.com',
+    phone: '08987654321',
+    applicants: 120,
+    bookmarks: 34,
+    shares: 10,
+    isFeatured: false,
+    isUrgent: true,
+    isActive: true,
+    postedAt: DateTime.now().subtract(const Duration(days: 1)),
+    expiredAt: DateTime.now().add(const Duration(days: 14)),
+    createdAt: DateTime.now().subtract(const Duration(days: 1)),
+    updatedAt: DateTime.now().subtract(const Duration(days: 1)),
   ),
 ];

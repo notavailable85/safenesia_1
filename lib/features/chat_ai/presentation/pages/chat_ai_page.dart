@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 
 class ChatMessage {
   final String text;
@@ -29,6 +30,7 @@ class _ChatAiPageState extends State<ChatAiPage> {
   @override
   void initState() {
     super.initState();
+
     // Welcome message from AI
     _messages.add(
       ChatMessage(
@@ -40,8 +42,9 @@ class _ChatAiPageState extends State<ChatAiPage> {
     );
   }
 
-  void _handleSubmitted(String text) {
+  void _handleSubmitted(String text) async {
     if (text.trim().isEmpty) return;
+    if (_isTyping) return; // Mencegah submit beruntun
 
     _textController.clear();
     setState(() {
@@ -53,14 +56,16 @@ class _ChatAiPageState extends State<ChatAiPage> {
 
     _scrollToBottom();
 
-    // Simulate AI thinking and replying
+    // Mock API Call untuk keperluan UI/Development
+    // Siap dihubungkan ke Firebase Cloud Functions atau API backend di masa mendatang
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
+      
       setState(() {
         _isTyping = false;
         _messages.add(
           ChatMessage(
-            text: _getDummyResponse(text),
+            text: 'Fitur respon pintar AI sedang dinonaktifkan sementara. Pesan Anda: "$text" telah diterima dan antarmuka ini siap diintegrasikan dengan backend AI Safenesia!',
             isUser: false,
             timestamp: DateTime.now(),
           ),
@@ -68,79 +73,6 @@ class _ChatAiPageState extends State<ChatAiPage> {
       });
       _scrollToBottom();
     });
-  }
-
-  String _getDummyResponse(String input) {
-    final lower = input.toLowerCase();
-
-    // GREETINGS & CHITCHAT
-    if (lower.contains('halo') ||
-        lower.contains('hai') ||
-        lower.contains('hello')) {
-      return 'Halo! Saya Chat AI Safenesia. Ada yang bisa saya bantu terkait K3, pelatihan, atau riksa uji hari ini?';
-    } else if (lower.contains('pagi') ||
-        lower.contains('siang') ||
-        lower.contains('sore') ||
-        lower.contains('malam')) {
-      return 'Selamat ${lower.contains('pagi')
-          ? 'pagi'
-          : lower.contains('siang')
-          ? 'siang'
-          : lower.contains('sore')
-          ? 'sore'
-          : 'malam'}! Semoga Anda selalu dalam keadaan aman dan sehat. Ada yang ingin didiskusikan terkait Keselamatan Kerja?';
-    } else if (lower.contains('siapa kamu') ||
-        lower.contains('nama kamu') ||
-        lower.contains('kamu siapa')) {
-      return 'Saya adalah Asisten Virtual K3 dari Safenesia! Saya bertugas membantu Anda mencari informasi pelatihan, regulasi K3, riksa uji, dan menjawab pertanyaan dasar seputar Keselamatan dan Kesehatan Kerja.';
-    } else if (lower.contains('terima kasih') ||
-        lower.contains('makasih') ||
-        lower.contains('thanks')) {
-      return 'Sama-sama! Selalu utamakan keselamatan kerja (Safety First). Jangan ragu untuk bertanya lagi jika Anda butuh bantuan.';
-    }
-    // K3 & DEFINITIONS
-    else if (lower.contains('apa itu k3') ||
-        (lower.contains('k3') && lower.contains('pengertian'))) {
-      return 'K3 singkatan dari Keselamatan dan Kesehatan Kerja. Ini adalah segala kegiatan untuk menjamin dan melindungi keselamatan serta kesehatan tenaga kerja melalui upaya pencegahan kecelakaan kerja dan penyakit akibat kerja.';
-    } else if (lower.contains('smk3')) {
-      return 'SMK3 (Sistem Manajemen Keselamatan dan Kesehatan Kerja) adalah bagian dari sistem manajemen perusahaan secara keseluruhan dalam rangka pengendalian risiko yang berkaitan dengan kegiatan kerja.';
-    } else if (lower.contains('iso 45001') || lower.contains('iso')) {
-      return 'ISO 45001 adalah standar internasional untuk Sistem Manajemen K3. Safenesia menyediakan layanan konsultasi dan sertifikasi ISO 45001, ISO 9001, dan ISO 14001. Anda bisa melihatnya di menu Home -> Sertifikasi ISO.';
-    }
-    // APP FEATURES & HOW TO USE
-    else if (lower.contains('cara daftar') ||
-        lower.contains('pesan pelatihan') ||
-        lower.contains('beli')) {
-      return 'Untuk mendaftar pelatihan: Buka tab "Pelatihan" di bawah, pilih jadwal pelatihan yang Anda inginkan, lalu tap "Pesan Sekarang". Anda dapat membayar dengan QRIS atau Bank Transfer.';
-    } else if (lower.contains('membership') ||
-        lower.contains('platinum') ||
-        lower.contains('kartu')) {
-      return 'Kartu Membership Platinum Safenesia memberikan Anda diskon khusus dan prioritas pendaftaran. Anda dapat melihat dan mengunduh kartu Anda langsung dari menu Home!';
-    }
-    // CORE K3 TOPICS (APD, RIKSA UJI, KECELAKAAN, REGULASI)
-    else if (lower.contains('apd') ||
-        lower.contains('alat pelindung') ||
-        lower.contains('helm')) {
-      return 'Alat Pelindung Diri (APD) sangat esensial. Pastikan setiap pekerja memakai APD standar (Helm, Kacamata, Sepatu Safety, Sarung Tangan) yang disesuaikan dengan Analisis Keselamatan Kerja (JSA) di area masing-masing.';
-    } else if (lower.contains('kecelakaan') ||
-        lower.contains('insiden') ||
-        lower.contains('lapor')) {
-      return 'Jika terjadi insiden: 1. Amankan area, 2. Berikan P3K jika ada korban, 3. Laporkan segera ke atasan/tim HSE. Jangan mengubah lokasi kejadian sebelum investigasi awal selesai.';
-    } else if (lower.contains('riksa uji') ||
-        lower.contains('inspeksi') ||
-        lower.contains('alat berat')) {
-      return 'Semua pesawat angkat/angkut (Crane, Forklift) dan bejana tekan wajib diriksa uji berkala sesuai Permenaker No. 8 Tahun 2020. Safenesia melayani pemesanan Riksa Uji resmi dari PJK3, cek di menu Home!';
-    } else if (lower.contains('regulasi') ||
-        lower.contains('undang-undang') ||
-        lower.contains('uu no 1')) {
-      return 'Dasar hukum K3 tertinggi di Indonesia adalah UU No. 1 Tahun 1970 tentang Keselamatan Kerja. Untuk detail regulasi spesifik lainnya, Anda bisa mengeksplorasi fitur Regulasi di aplikasi kami.';
-    } else if (lower.contains('p3k') || lower.contains('pertolongan pertama')) {
-      return 'Sesuai Permenaker No. 15 Tahun 2008, setiap tempat kerja harus memiliki petugas P3K berlisensi dan kotak P3K yang isinya harus dicek secara berkala.';
-    }
-    // FALLBACK
-    else {
-      return 'Maaf, pertanyaan Anda terlalu spesifik atau di luar konteks database saya saat ini. Anda dapat mencoba menanyakan seputar pengertian K3, APD, pendaftaran pelatihan, riksa uji alat, atau sertifikasi ISO.';
-    }
   }
 
   void _scrollToBottom() {
@@ -161,40 +93,45 @@ class _ChatAiPageState extends State<ChatAiPage> {
     final primaryColor = theme.colorScheme.primary;
 
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Row(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        foregroundColor: theme.colorScheme.onSurface,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        title: Column(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.white.withValues(alpha: 0.2),
-              radius: 16,
-              child: const Icon(
-                Icons.smart_toy_rounded,
-                size: 20,
-                color: Colors.white,
+            Text(
+              'Asisten K3',
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+                color: theme.colorScheme.onSurface,
               ),
             ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: 2),
+            Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
+                Icon(Icons.auto_awesome_rounded, size: 12, color: primaryColor),
+                const SizedBox(width: 4),
                 Text(
-                  'Chat AI',
+                  'Didukung oleh Gemini AI',
                   style: GoogleFonts.inter(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                    color: primaryColor,
                   ),
-                ),
-                const Text(
-                  'Online - K3 Assistant',
-                  style: TextStyle(fontSize: 12, color: Colors.white70),
                 ),
               ],
             ),
           ],
         ),
-        backgroundColor: primaryColor,
-        foregroundColor: theme.colorScheme.onPrimary,
-        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Column(
         children: [
@@ -206,7 +143,7 @@ class _ChatAiPageState extends State<ChatAiPage> {
                 top: 16,
                 left: 16,
                 right: 16,
-                bottom: 20,
+                bottom: 24,
               ),
               itemCount: _messages.length,
               itemBuilder: (context, index) {
@@ -214,7 +151,7 @@ class _ChatAiPageState extends State<ChatAiPage> {
                 final isUser = message.isUser;
 
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 20.0),
                   child: Row(
                     mainAxisAlignment: isUser
                         ? MainAxisAlignment.end
@@ -224,10 +161,10 @@ class _ChatAiPageState extends State<ChatAiPage> {
                       if (!isUser) ...[
                         CircleAvatar(
                           backgroundColor: primaryColor.withValues(alpha: 0.1),
-                          radius: 16,
+                          radius: 14,
                           child: Icon(
-                            Icons.smart_toy_rounded,
-                            size: 18,
+                            Icons.auto_awesome_rounded,
+                            size: 16,
                             color: primaryColor,
                           ),
                         ),
@@ -236,33 +173,31 @@ class _ChatAiPageState extends State<ChatAiPage> {
                       Flexible(
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
+                            horizontal: 18,
+                            vertical: 14,
                           ),
                           decoration: BoxDecoration(
-                            color: isUser ? primaryColor : theme.cardColor,
+                            color: isUser
+                                ? primaryColor
+                                : theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.06,
+                                  ),
                             borderRadius: BorderRadius.only(
-                              topLeft: const Radius.circular(12),
-                              topRight: const Radius.circular(12),
-                              bottomLeft: Radius.circular(isUser ? 16 : 0),
-                              bottomRight: Radius.circular(isUser ? 0 : 16),
+                              topLeft: const Radius.circular(20),
+                              topRight: const Radius.circular(20),
+                              bottomLeft: Radius.circular(isUser ? 20 : 4),
+                              bottomRight: Radius.circular(isUser ? 4 : 20),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.05),
-                                blurRadius: 5,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
                           ),
                           child: Text(
                             message.text,
                             style: GoogleFonts.inter(
                               color: isUser
-                                  ? Colors.white
-                                  : theme.textTheme.bodyLarge?.color,
-                              fontSize: 14,
-                              height: 1.4,
+                                  ? theme.colorScheme.onPrimary
+                                  : theme.colorScheme.onSurface,
+                              fontSize: 15,
+                              height: 1.5,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
@@ -279,14 +214,20 @@ class _ChatAiPageState extends State<ChatAiPage> {
           // Typing Indicator
           if (_isTyping)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              padding: const EdgeInsets.only(left: 48, right: 24, bottom: 16),
               child: Row(
                 children: [
+                  Icon(
+                    Icons.auto_awesome_rounded,
+                    size: 14,
+                    color: primaryColor,
+                  ),
+                  const SizedBox(width: 8),
                   Text(
-                    'AI sedang mengetik...',
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontSize: 12,
+                    'Gemini sedang berpikir...',
+                    style: GoogleFonts.inter(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontSize: 13,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -300,52 +241,63 @@ class _ChatAiPageState extends State<ChatAiPage> {
               left: 16,
               right: 16,
               top: 12,
-              // Tambahkan 100px padding bottom agar tidak tertutup bottom navbar mengambang
-              bottom: 12 + 100.0,
+              bottom: MediaQuery.paddingOf(context).bottom + 16.0,
             ),
-            decoration: BoxDecoration(
-              color: theme.scaffoldBackgroundColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
+            decoration: BoxDecoration(color: theme.scaffoldBackgroundColor),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: theme.cardColor,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade300),
+                      color: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.04,
+                      ),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: theme.colorScheme.outlineVariant.withValues(
+                          alpha: 0.5,
+                        ),
+                      ),
                     ),
                     child: TextField(
                       controller: _textController,
-                      decoration: const InputDecoration(
+                      style: GoogleFonts.inter(fontSize: 15),
+                      decoration: InputDecoration(
                         hintText: 'Tanya seputar K3...',
+                        hintStyle: GoogleFonts.inter(
+                          color: theme.colorScheme.onSurfaceVariant.withValues(
+                            alpha: 0.6,
+                          ),
+                          fontSize: 15,
+                        ),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 14,
                         ),
                       ),
-                      maxLines: null,
+                      maxLines: 4,
+                      minLines: 1,
                       textInputAction: TextInputAction.send,
                       onSubmitted: _handleSubmitted,
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 Container(
+                  margin: const EdgeInsets.only(bottom: 2),
                   decoration: BoxDecoration(
                     color: primaryColor,
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
-                    icon: const Icon(Icons.send_rounded, color: Colors.white),
+                    padding: const EdgeInsets.all(12),
+                    icon: const Icon(
+                      Icons.arrow_upward_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                     onPressed: () => _handleSubmitted(_textController.text),
                   ),
                 ),

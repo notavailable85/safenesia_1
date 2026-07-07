@@ -5,6 +5,8 @@ class StandardSearchField extends StatelessWidget {
   final bool autofocus;
   final ValueChanged<String>? onChanged;
   final TextEditingController? controller;
+  final bool readOnly;
+  final VoidCallback? onTap;
 
   const StandardSearchField({
     super.key,
@@ -12,6 +14,8 @@ class StandardSearchField extends StatelessWidget {
     this.autofocus = false,
     this.onChanged,
     this.controller,
+    this.readOnly = false,
+    this.onTap,
   });
 
   @override
@@ -22,6 +26,8 @@ class StandardSearchField extends StatelessWidget {
         controller: controller,
         autofocus: autofocus,
         onChanged: onChanged,
+        readOnly: readOnly,
+        onTap: onTap,
         decoration: InputDecoration(
           hintText: hintText,
           isDense: true,

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:safenesia_1/features/article/models/article_model.dart';
@@ -14,7 +15,7 @@ import 'package:safenesia_1/features/profile/models/transaction_model.dart';
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static const _databaseName = "safenesia.db";
-  static const _databaseVersion = 18;
+  static const _databaseVersion = 20;
 
   static Database? _database;
 
@@ -109,29 +110,62 @@ class DatabaseHelper {
       await db.execute('DROP TABLE IF EXISTS certifications');
       await _createCertificationsTable(db);
     }
+    if (oldVersion < 19) {
+      await db.execute('DROP TABLE IF EXISTS articles');
+      await _createArticlesTable(db);
+      for (var article in dummyArticles) {
+        final map = article.toMap();
+        map['images'] = jsonEncode(map['images']);
+        map['tags'] = jsonEncode(map['tags']);
+        await db.insert('articles', map);
+      }
+    }
+    if (oldVersion < 20) {
+      await db.execute('DROP TABLE IF EXISTS careers');
+      await _createCareersTable(db);
+    }
+  }
+
+  Future _createArticlesTable(Database db) async {
+    await db.execute('''
+CREATE TABLE articles (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  content TEXT NOT NULL,
+  thumbnail TEXT NOT NULL,
+  images TEXT NOT NULL,
+  category_id TEXT NOT NULL,
+  author_id TEXT NOT NULL,
+  tags TEXT NOT NULL,
+  reading_time INTEGER NOT NULL,
+  likes INTEGER NOT NULL,
+  bookmarks INTEGER NOT NULL,
+  shares INTEGER NOT NULL,
+  is_featured INTEGER NOT NULL,
+  is_published INTEGER NOT NULL,
+  source TEXT NOT NULL,
+  source_url TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  published_at TEXT
+)
+''');
   }
 
   Future _createDB(Database db, int version) async {
-    const idType = 'TEXT PRIMARY KEY';
-    const textType = 'TEXT NOT NULL';
-
-    await db.execute('''
-CREATE TABLE articles (
-  id $idType,
-  title $textType,
-  category $textType,
-  date $textType,
-  imageUrl $textType,
-  content $textType
-)
-''');
+    await _createArticlesTable(db);
 
     await _createTrainingsTable(db);
     await _createTrainingSchedulesTable(db);
 
     // Prepopulate with dummy data
     for (var article in dummyArticles) {
-      await db.insert('articles', article.toMap());
+      final map = article.toMap();
+      map['images'] = jsonEncode(map['images']);
+      map['tags'] = jsonEncode(map['tags']);
+      await db.insert('articles', map);
     }
     await _createCertificationsTable(db);
     await _createCareersTable(db);
@@ -186,20 +220,41 @@ CREATE TABLE certifications (
 CREATE TABLE careers (
   id TEXT PRIMARY KEY,
   title TEXT NOT NULL,
-  company TEXT NOT NULL,
-  field TEXT NOT NULL,
-  location TEXT NOT NULL,
-  jobType TEXT NOT NULL,
-  experienceLevel TEXT NOT NULL,
-  salaryMin INTEGER NOT NULL,
-  salaryMax INTEGER NOT NULL,
+  slug TEXT NOT NULL,
   description TEXT NOT NULL,
   requirements TEXT NOT NULL,
+  responsibilities TEXT NOT NULL,
   benefits TEXT NOT NULL,
-  postedDate TEXT NOT NULL,
-  companyLogoUrl TEXT NOT NULL,
-  isSaved INTEGER NOT NULL,
-  isApplied INTEGER NOT NULL
+  company_id TEXT NOT NULL,
+  company_name TEXT NOT NULL,
+  company_logo TEXT NOT NULL,
+  employment_type TEXT NOT NULL,
+  workplace_type TEXT NOT NULL,
+  level TEXT NOT NULL,
+  province TEXT NOT NULL,
+  city TEXT NOT NULL,
+  address TEXT NOT NULL,
+  salary_visible INTEGER NOT NULL,
+  salary_min REAL,
+  salary_max REAL,
+  salary_period TEXT NOT NULL,
+  education TEXT NOT NULL,
+  minimum_experience INTEGER NOT NULL,
+  skills TEXT NOT NULL,
+  certificates TEXT NOT NULL,
+  apply_url TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  applicants INTEGER NOT NULL,
+  bookmarks INTEGER NOT NULL,
+  shares INTEGER NOT NULL,
+  is_featured INTEGER NOT NULL,
+  is_urgent INTEGER NOT NULL,
+  is_active INTEGER NOT NULL,
+  posted_at TEXT NOT NULL,
+  expired_at TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
 )
 ''');
     for (var career in dummyCareers) {
@@ -337,34 +392,48 @@ CREATE TABLE training_schedules (
 
   // ================= ARTICLE METHODS =================
 
-  Future<Article> create(Article article) async {
+  Future<ArticleModel> create(ArticleModel article) async {
     final db = await instance.database;
-    await db.insert('articles', article.toMap());
+    final map = article.toMap();
+    map['images'] = jsonEncode(map['images']);
+    map['tags'] = jsonEncode(map['tags']);
+    await db.insert('articles', map);
     return article;
   }
 
-  Future<Article?> readArticle(String id) async {
+  Future<ArticleModel?> readArticle(String id) async {
     final db = await instance.database;
     final maps = await db.query('articles', where: 'id = ?', whereArgs: [id]);
     if (maps.isNotEmpty) {
-      return Article.fromMap(maps.first);
+      final map = Map<String, dynamic>.from(maps.first);
+      map['images'] = jsonDecode(map['images'] as String? ?? '[]');
+      map['tags'] = jsonDecode(map['tags'] as String? ?? '[]');
+      return ArticleModel.fromMap(map);
     } else {
       return null;
     }
   }
 
-  Future<List<Article>> readAllArticles() async {
+  Future<List<ArticleModel>> readAllArticles() async {
     final db = await instance.database;
-    const orderBy = 'date DESC';
+    const orderBy = 'created_at DESC';
     final result = await db.query('articles', orderBy: orderBy);
-    return result.map((json) => Article.fromMap(json)).toList();
+    return result.map((json) {
+      final map = Map<String, dynamic>.from(json);
+      map['images'] = jsonDecode(map['images'] as String? ?? '[]');
+      map['tags'] = jsonDecode(map['tags'] as String? ?? '[]');
+      return ArticleModel.fromMap(map);
+    }).toList();
   }
 
-  Future<int> update(Article article) async {
+  Future<int> update(ArticleModel article) async {
     final db = await instance.database;
+    final map = article.toMap();
+    map['images'] = jsonEncode(map['images']);
+    map['tags'] = jsonEncode(map['tags']);
     return db.update(
       'articles',
-      article.toMap(),
+      map,
       where: 'id = ?',
       whereArgs: [article.id],
     );
@@ -373,6 +442,28 @@ CREATE TABLE training_schedules (
   Future<int> delete(String id) async {
     final db = await instance.database;
     return await db.delete('articles', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> updateArticleInteractions(String id, {int likesDelta = 0, int bookmarksDelta = 0, int sharesDelta = 0}) async {
+    final db = await instance.database;
+    final maps = await db.query('articles', where: 'id = ?', whereArgs: [id]);
+    if (maps.isNotEmpty) {
+      final current = maps.first;
+      final newLikes = (current['likes'] as int? ?? 0) + likesDelta;
+      final newBookmarks = (current['bookmarks'] as int? ?? 0) + bookmarksDelta;
+      final newShares = (current['shares'] as int? ?? 0) + sharesDelta;
+
+      await db.update(
+        'articles',
+        {
+          'likes': newLikes < 0 ? 0 : newLikes,
+          'bookmarks': newBookmarks < 0 ? 0 : newBookmarks,
+          'shares': newShares < 0 ? 0 : newShares,
+        },
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    }
   }
 
   // ================= TRAINING METHODS =================

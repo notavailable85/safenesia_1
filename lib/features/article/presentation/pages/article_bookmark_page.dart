@@ -13,7 +13,7 @@ class ArticleBookmarkPage extends StatefulWidget {
 }
 
 class _ArticleBookmarkPageState extends State<ArticleBookmarkPage> {
-  List<Article> _bookmarkedArticles = [];
+  List<ArticleModel> _bookmarkedArticles = [];
   bool _isLoading = true;
 
   @override
@@ -102,7 +102,7 @@ class _ArticleBookmarkPageState extends State<ArticleBookmarkPage> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.network(
-                                article.imageUrl,
+                                article.thumbnail,
                                 width: 80,
                                 height: 80,
                                 fit: BoxFit.cover,
@@ -139,7 +139,7 @@ class _ArticleBookmarkPageState extends State<ArticleBookmarkPage> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  article.category,
+                                  article.categoryId,
                                   style: TextStyle(
                                     color: theme.colorScheme.primary,
                                     fontWeight: FontWeight.w600,

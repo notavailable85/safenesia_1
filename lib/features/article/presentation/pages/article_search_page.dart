@@ -14,8 +14,8 @@ class ArticleSearchPage extends StatefulWidget {
 
 class _ArticleSearchPageState extends State<ArticleSearchPage> {
   String _searchQuery = '';
-  List<Article> _allArticles = [];
-  List<Article> _searchResults = [];
+  List<ArticleModel> _allArticles = [];
+  List<ArticleModel> _searchResults = [];
   bool _isLoading = true;
 
   @override
@@ -119,7 +119,7 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.network(
-                                article.imageUrl,
+                                article.thumbnail,
                                 width: 80,
                                 height: 80,
                                 fit: BoxFit.cover,
@@ -156,7 +156,7 @@ class _ArticleSearchPageState extends State<ArticleSearchPage> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  article.category,
+                                  article.categoryId,
                                   style: TextStyle(
                                     color: theme.colorScheme.primary,
                                     fontWeight: FontWeight.w600,
