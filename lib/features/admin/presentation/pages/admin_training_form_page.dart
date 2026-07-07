@@ -110,8 +110,9 @@ class _AdminTrainingFormPageState extends State<AdminTrainingFormPage> {
 
     if (t != null) {
       if (_bidangList.contains(t.bidang)) _selectedBidang = t.bidang;
-      if (_sertifikasiList.contains(t.sertifikasi))
+      if (_sertifikasiList.contains(t.sertifikasi)) {
         _selectedSertifikasi = t.sertifikasi;
+      }
       if (_statusList.contains(t.status)) _selectedStatus = t.status;
     }
   }

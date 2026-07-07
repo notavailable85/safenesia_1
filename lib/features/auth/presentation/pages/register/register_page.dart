@@ -115,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        duration: const Duration(milliseconds: 1500),
+        duration: Duration(milliseconds: 1500),
         content: Text('Registrasi berhasil! Silakan login.'),
       ),
     );

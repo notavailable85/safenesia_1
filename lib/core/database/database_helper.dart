@@ -18,8 +18,6 @@ class DatabaseHelper {
 
   static Database? _database;
 
-  DatabaseHelper._privateConstructor();
-
   DatabaseHelper._init();
 
   Future<Database> get database async {

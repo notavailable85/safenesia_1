@@ -44,7 +44,7 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
       if (scheduledDate == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            duration: const Duration(milliseconds: 1500),
+            duration: Duration(milliseconds: 1500),
             content: Text('Pilih tanggal inspeksi terlebih dahulu'),
           ),
         );
@@ -66,7 +66,7 @@ class _InspectionOrderPageState extends State<InspectionOrderPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            duration: const Duration(milliseconds: 1500),
+            duration: Duration(milliseconds: 1500),
             content: Text('Pesanan berhasil diajukan!'),
           ),
         );

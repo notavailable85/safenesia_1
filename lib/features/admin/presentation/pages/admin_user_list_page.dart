@@ -32,7 +32,7 @@ class _AdminUserListPageState extends State<AdminUserListPage> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          duration: const Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: 1500),
           content: Text('User deleted'),
         ),
       );

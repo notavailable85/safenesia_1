@@ -502,7 +502,7 @@ class TrainingDetailPage extends StatelessWidget {
     try {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          duration: const Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: 1500),
           content: Text('Menyimpan gambar...'),
         ),
       );
@@ -539,7 +539,7 @@ class TrainingDetailPage extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            duration: const Duration(milliseconds: 1500),
+            duration: Duration(milliseconds: 1500),
             content: Text('Gambar berhasil disimpan ke galeri!'),
           ),
         );

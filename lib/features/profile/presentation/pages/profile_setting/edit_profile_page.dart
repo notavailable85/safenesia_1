@@ -56,7 +56,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       UserState.notifyProfileUpdated(); // Notify other pages to update
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          duration: const Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: 1500),
           content: Text('Profil berhasil diperbarui'),
         ),
       );

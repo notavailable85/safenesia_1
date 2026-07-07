@@ -33,7 +33,7 @@ class _AdminNotificationListPageState extends State<AdminNotificationListPage> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          duration: const Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: 1500),
           content: Text('Notification deleted'),
         ),
       );

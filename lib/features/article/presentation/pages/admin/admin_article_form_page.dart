@@ -48,7 +48,7 @@ class _AdminArticleFormPageState extends State<AdminArticleFormPage> {
       'November',
       'Desember',
     ];
-    final defaultDate = '\${now.day} \${months[now.month]} \${now.year}';
+    final defaultDate = '${now.day} ${months[now.month]} ${now.year}';
 
     _dateController = TextEditingController(
       text: widget.article?.date ?? defaultDate,
@@ -162,7 +162,7 @@ class _AdminArticleFormPageState extends State<AdminArticleFormPage> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField(
-                value: _selectedCategory,
+                initialValue: _selectedCategory,
                 decoration: InputDecoration(
                   labelText: 'Kategori',
                   border: OutlineInputBorder(

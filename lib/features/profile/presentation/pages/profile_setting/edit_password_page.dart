@@ -81,7 +81,7 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  duration: const Duration(milliseconds: 1500),
+                  duration: Duration(milliseconds: 1500),
                   content: Text('Password berhasil diubah!'),
                 ),
               );

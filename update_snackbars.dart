@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'dart:io';
 
 void main() {
@@ -29,5 +30,5 @@ void main() {
       }
     }
   }
-  print('Updated \$count files.');
+  print('Updated $count files.');
 }

@@ -129,7 +129,7 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        duration: const Duration(milliseconds: 1500),
+        duration: Duration(milliseconds: 1500),
         content: Text('Status: Menunggu Pembayaran'),
       ),
     );
@@ -268,7 +268,7 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    duration: const Duration(
+                                    duration: Duration(
                                       milliseconds: 2500,
                                     ),
                                     content: Text('Nominal berhasil disalin!'),
@@ -342,7 +342,7 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
                                   try {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                        duration: const Duration(
+                                        duration: Duration(
                                           milliseconds: 2500,
                                         ),
                                         content: Text('Mengunduh QRIS...'),
@@ -378,7 +378,7 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
                                     if (!context.mounted) return;
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                        duration: const Duration(
+                                        duration: Duration(
                                           milliseconds: 2500,
                                         ),
                                         content: Text(
@@ -418,7 +418,7 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
                                   try {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                        duration: const Duration(
+                                        duration: Duration(
                                           milliseconds: 2500,
                                         ),
                                         content: Text('Menyiapkan Invoice...'),

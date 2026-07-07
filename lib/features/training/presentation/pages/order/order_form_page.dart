@@ -162,8 +162,9 @@ class _OrderFormPageState extends State<OrderFormPage>
   String? _validateEmail(String? v) {
     if (v == null || v.isEmpty) return 'Wajib diisi';
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(v))
+    if (!emailRegex.hasMatch(v)) {
       return 'Format email tidak valid (contoh: budi@email.com)';
+    }
     return null;
   }
 
@@ -172,10 +173,12 @@ class _OrderFormPageState extends State<OrderFormPage>
 
     String cleanNumber = v.replaceAll(' ', '').replaceAll('-', '');
 
-    if (!RegExp(r'^\+?[0-9]+$').hasMatch(cleanNumber))
+    if (!RegExp(r'^\+?[0-9]+$').hasMatch(cleanNumber)) {
       return 'Hanya boleh berisi angka';
-    if (cleanNumber.length < 9 || cleanNumber.length > 15)
+    }
+    if (cleanNumber.length < 9 || cleanNumber.length > 15) {
       return 'Nomor tidak valid (9-15 digit)';
+    }
     if (!cleanNumber.startsWith('08') &&
         !cleanNumber.startsWith('62') &&
         !cleanNumber.startsWith('+62')) {

@@ -278,7 +278,7 @@ class _CertDetailPageState extends State<CertDetailPage> {
                         'Biaya tambahan: ${_consultationFee.toRupiah()}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: _withConsultation
-                              ? colorScheme.primary.withOpacity(0.8)
+                              ? colorScheme.primary.withValues(alpha: 0.8)
                               : colorScheme.onSurfaceVariant,
                         ),
                       ),
@@ -368,9 +368,7 @@ class _CertDetailPageState extends State<CertDetailPage> {
     BuildContext context,
     IconData icon,
     String label,
-    String value, {
-    String? url,
-  }) {
+    String value) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -533,7 +531,7 @@ class _CertDetailPageState extends State<CertDetailPage> {
     try {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          duration: const Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: 1500),
           content: Text('Menyimpan gambar...'),
         ),
       );
@@ -570,7 +568,7 @@ class _CertDetailPageState extends State<CertDetailPage> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            duration: const Duration(milliseconds: 1500),
+            duration: Duration(milliseconds: 1500),
             content: Text('Gambar berhasil disimpan ke galeri!'),
           ),
         );

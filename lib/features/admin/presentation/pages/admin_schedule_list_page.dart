@@ -90,7 +90,7 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            duration: const Duration(milliseconds: 1500),
+            duration: Duration(milliseconds: 1500),
             content: Text(
               '4 Data dummy jadwal (berurutan 4 bulan) berhasil ditambahkan',
             ),
@@ -139,7 +139,7 @@ class _AdminScheduleListPageState extends State<AdminScheduleListPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            duration: const Duration(milliseconds: 1500),
+            duration: Duration(milliseconds: 1500),
             content: Text('Jadwal berhasil dihapus'),
           ),
         );

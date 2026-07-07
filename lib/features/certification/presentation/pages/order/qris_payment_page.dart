@@ -98,7 +98,7 @@ class _CertPaymentQrisPageState extends State<CertPaymentQrisPage> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: colorScheme.shadow.withOpacity(0.05),
+                        color: colorScheme.shadow.withValues(alpha: 0.05),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -145,7 +145,7 @@ class _CertPaymentQrisPageState extends State<CertPaymentQrisPage> {
                   try {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        duration: const Duration(milliseconds: 1500),
+                        duration: Duration(milliseconds: 1500),
                         content: Text('Mengunduh QRIS...'),
                       ),
                     );
@@ -173,7 +173,7 @@ class _CertPaymentQrisPageState extends State<CertPaymentQrisPage> {
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        duration: const Duration(milliseconds: 1500),
+                        duration: Duration(milliseconds: 1500),
                         content: Text('QRIS berhasil disimpan ke Galeri'),
                       ),
                     );

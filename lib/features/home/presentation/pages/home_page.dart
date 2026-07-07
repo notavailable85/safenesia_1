@@ -6,7 +6,6 @@ import 'package:safenesia_1/features/career/career_page.dart';
 import 'package:safenesia_1/features/certification/presentation/pages/certification_list_page.dart';
 import 'package:safenesia_1/features/home/presentation/pages/detail_page.dart';
 import 'package:safenesia_1/features/notification/notification_page.dart';
-import 'package:safenesia_1/features/regulation/regulation_page.dart';
 import 'package:safenesia_1/features/search/search_page.dart';
 import 'package:safenesia_1/features/training/presentation/pages/training_list_page.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
@@ -339,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.pop(context); // Tutup loading
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            duration: const Duration(milliseconds: 1500),
+                            duration: Duration(milliseconds: 1500),
                             content: Text(
                               'Izin penyimpanan diperlukan untuk mengunduh kartu',
                             ),
@@ -374,7 +373,7 @@ class _HomePageState extends State<HomePage> {
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      duration: const Duration(milliseconds: 1500),
+                      duration: Duration(milliseconds: 1500),
                       content: Text(
                         'Kartu berhasil diunduh dan masuk ke galeri!',
                       ),
@@ -556,7 +555,7 @@ class _HomePageState extends State<HomePage> {
         title == 'Perpanjangan') {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          duration: const Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: 1500),
           content: Text('Fitur sedang dalam pengembangan'),
         ),
       );
