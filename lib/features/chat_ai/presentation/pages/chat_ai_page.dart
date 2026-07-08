@@ -247,40 +247,53 @@ class _ChatAiPageState extends State<ChatAiPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurface.withValues(
+                  child: TextField(
+                    controller: _textController,
+                    style: GoogleFonts.inter(fontSize: 15),
+                    decoration: InputDecoration(
+                      hintText: 'Tanya seputar K3...',
+                      hintStyle: GoogleFonts.inter(
+                        color: theme.colorScheme.onSurfaceVariant.withValues(
+                          alpha: 0.6,
+                        ),
+                        fontSize: 15,
+                      ),
+                      filled: true,
+                      fillColor: theme.colorScheme.onSurface.withValues(
                         alpha: 0.04,
                       ),
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: theme.colorScheme.outlineVariant.withValues(
-                          alpha: 0.5,
-                        ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14,
                       ),
-                    ),
-                    child: TextField(
-                      controller: _textController,
-                      style: GoogleFonts.inter(fontSize: 15),
-                      decoration: InputDecoration(
-                        hintText: 'Tanya seputar K3...',
-                        hintStyle: GoogleFonts.inter(
-                          color: theme.colorScheme.onSurfaceVariant.withValues(
-                            alpha: 0.6,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: BorderSide(
+                          color: theme.colorScheme.outlineVariant.withValues(
+                            alpha: 0.5,
                           ),
-                          fontSize: 15,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 14,
                         ),
                       ),
-                      maxLines: 4,
-                      minLines: 1,
-                      textInputAction: TextInputAction.send,
-                      onSubmitted: _handleSubmitted,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: BorderSide(
+                          color: theme.colorScheme.outlineVariant.withValues(
+                            alpha: 0.5,
+                          ),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: BorderSide(
+                          color: primaryColor,
+                          width: 1.5,
+                        ),
+                      ),
                     ),
+                    maxLines: 4,
+                    minLines: 1,
+                    textInputAction: TextInputAction.send,
+                    onSubmitted: _handleSubmitted,
                   ),
                 ),
                 const SizedBox(width: 8),

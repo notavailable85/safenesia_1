@@ -97,96 +97,90 @@ class _HistoryTransactionPageState extends State<HistoryTransactionPage> {
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
 
-    var filteredData = selectedFilter == 'Semua'
-        ? allData
-        : allData.where((e) => e.layanan == selectedFilter).toList();
-
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          'Riwayat Transaksi',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-            color: theme.colorScheme.onPrimary,
-          ),
-        ),
-        backgroundColor: primaryColor,
-        iconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Filter Chips
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              children: filters.map((f) {
-                final isSelected = selectedFilter == f;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () => setState(() => selectedFilter = f),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected ? primaryColor : Colors.transparent,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: isSelected
-                              ? primaryColor
-                              : theme.colorScheme.outlineVariant,
-                        ),
-                      ),
-                      child: Text(
-                        f,
-                        style: GoogleFonts.inter(
-                          color: isSelected
-                              ? Colors.white
-                              : theme.colorScheme.onSurface,
-                          fontWeight:
-                              isSelected ? FontWeight.w600 : FontWeight.w400,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
+    return DefaultTabController(
+      length: filters.length,
+      child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        appBar: AppBar(
+          title: Text(
+            'Riwayat Transaksi',
+            style: GoogleFonts.inter(
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+              color: theme.colorScheme.onPrimary,
             ),
           ),
-          
-          // Transaction List
-          Expanded(
-            child: isLoading
-                ? Center(
-                    child: CircularProgressIndicator(color: primaryColor),
-                  )
-                : filteredData.isEmpty
-                    ? _buildEmptyState(theme)
-                    : ListView.builder(
-                        padding: const EdgeInsets.only(
-                          left: 16,
-                          right: 16,
-                          bottom: 24,
-                          top: 8,
-                        ),
-                        itemCount: filteredData.length,
-                        itemBuilder: (context, i) {
-                          final trx = filteredData[i];
-                          return _buildTransactionCard(trx, theme, primaryColor);
-                        },
+          backgroundColor: primaryColor,
+          iconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
+          elevation: 0,
+          centerTitle: true,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(58),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Divider(
+                  height: 2,
+                  thickness: 2,
+                  color: theme.brightness == Brightness.dark
+                      ? Colors.black
+                      : Colors.white,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    color: theme.scaffoldBackgroundColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.brightness == Brightness.dark
+                            ? Colors.black26
+                            : primaryColor.withValues(alpha: 0.3),
+                        blurRadius: 15,
+                        offset: const Offset(0, 2),
                       ),
+                    ],
+                  ),
+                  child: TabBar(
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.start,
+                    dividerColor: Colors.transparent,
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 24),
+                    indicatorPadding: const EdgeInsets.symmetric(horizontal: -8, vertical: 6),
+                    indicator: BoxDecoration(
+                      color: primaryColor,
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    ),
+                    labelColor: Colors.white,
+                    unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    labelStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500),
+                    unselectedLabelStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500),
+                    tabs: filters.map((f) => Tab(text: f)).toList(),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
+        body: isLoading
+            ? Center(child: CircularProgressIndicator(color: primaryColor))
+            : TabBarView(
+                children: filters.map((f) {
+                  final tabData = f == 'Semua'
+                      ? allData
+                      : allData.where((e) => e.layanan == f).toList();
+                  
+                  if (tabData.isEmpty) return _buildEmptyState(theme);
+                  
+                  return ListView.builder(
+                    padding: const EdgeInsets.only(left: 16, right: 16, bottom: 24, top: 16),
+                    itemCount: tabData.length,
+                    itemBuilder: (context, i) {
+                      final trx = tabData[i];
+                      return _buildTransactionCard(trx, theme, primaryColor);
+                    },
+                  );
+                }).toList(),
+              ),
       ),
     );
   }
@@ -199,16 +193,16 @@ class _HistoryTransactionPageState extends State<HistoryTransactionPage> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        color: theme.cardTheme.color ?? theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: theme.shadowColor.withValues(alpha: 0.04),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
           ),
         ],
       ),

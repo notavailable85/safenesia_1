@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/splash/auth_wrapper.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/activities/my_certificate_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/activities/my_document_page.dart';
@@ -7,6 +9,8 @@ import 'package:safenesia_1/features/profile/presentation/pages/activities/my_tr
 import 'package:safenesia_1/features/profile/presentation/pages/activities/my_transaction_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/information/about_us_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/information/support_center_page.dart';
+import 'package:safenesia_1/features/profile/presentation/pages/information/terms_conditions_page.dart';
+import 'package:safenesia_1/features/profile/presentation/pages/information/privacy_policy_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_password_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/edit_profile_page.dart';
 import 'package:safenesia_1/features/profile/presentation/pages/profile_setting/theme_setting_page.dart';
@@ -29,12 +33,23 @@ class _AccountPageState extends State<AccountPage> {
   String _userName = 'Pengguna';
   String _userEmail = '';
   String? _userAvatarPath;
+  final LocalAuthentication _auth = LocalAuthentication();
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
     UserState.profileUpdatedNotifier.addListener(_loadUserData);
+    _loadBiometricStatus();
+  }
+
+  Future<void> _loadBiometricStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        isBiometricEnabled = prefs.getBool('is_biometric_enabled') ?? false;
+      });
+    }
   }
 
   @override
@@ -68,11 +83,71 @@ class _AccountPageState extends State<AccountPage> {
                   const Text('Gunakan Sidik Jari'),
                   Switch(
                     value: isBiometricEnabled,
-                    onChanged: (val) {
-                      setStateDialog(() => isBiometricEnabled = val);
-                      setState(
-                        () => isBiometricEnabled = val,
-                      ); // Update parent state
+                    onChanged: (val) async {
+                      if (val) {
+                        try {
+                          final List<BiometricType> availableBiometrics = await _auth.getAvailableBiometrics();
+                          
+                          if (availableBiometrics.isEmpty) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Anda belum mendaftarkan sidik jari di pengaturan HP Anda.')),
+                              );
+                              setStateDialog(() => isBiometricEnabled = false);
+                              setState(() => isBiometricEnabled = false);
+                            }
+                            return;
+                          }
+
+                          final bool canAuthenticateWithBiometrics = await _auth.canCheckBiometrics;
+                          final bool canAuthenticate = canAuthenticateWithBiometrics || await _auth.isDeviceSupported();
+                          
+                          if (canAuthenticate) {
+                            final bool didAuthenticate = await _auth.authenticate(
+                              localizedReason: 'Pindai sidik jari Anda untuk mengaktifkan fitur ini',
+                              biometricOnly: true,
+                            );
+                            
+                            if (didAuthenticate) {
+                              final prefs = await SharedPreferences.getInstance();
+                              await prefs.setBool('is_biometric_enabled', true);
+                              setStateDialog(() => isBiometricEnabled = true);
+                              setState(() => isBiometricEnabled = true);
+                              
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Login sidik jari berhasil diaktifkan')),
+                                );
+                              }
+                            } else {
+                              // User cancelled
+                              setStateDialog(() => isBiometricEnabled = false);
+                              setState(() => isBiometricEnabled = false);
+                            }
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Perangkat tidak mendukung sidik jari')),
+                              );
+                              setStateDialog(() => isBiometricEnabled = false);
+                              setState(() => isBiometricEnabled = false);
+                            }
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Anda belum mendaftarkan sidik jari / kunci layar.')),
+                            );
+                            setStateDialog(() => isBiometricEnabled = false);
+                            setState(() => isBiometricEnabled = false);
+                          }
+                        }
+                      } else {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('is_biometric_enabled', false);
+                        setStateDialog(() => isBiometricEnabled = false);
+                        setState(() => isBiometricEnabled = false);
+                      }
                     },
                   ),
                 ],
@@ -90,6 +165,50 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
+  Future<void> _clearCache() async {
+    try {
+      // 1. Clear Image Cache
+      PaintingBinding.instance.imageCache.clear();
+      PaintingBinding.instance.imageCache.clearLiveImages();
+      
+      // 2. Clear Temporary Directory (Cache)
+      final tempDir = await getTemporaryDirectory();
+      if (tempDir.existsSync()) {
+        final List<FileSystemEntity> children = tempDir.listSync();
+        for (final FileSystemEntity child in children) {
+          try {
+            // Jangan hapus foto profil pengguna jika tersimpan di cache
+            if (_userAvatarPath != null && _userAvatarPath!.startsWith(child.path)) {
+              continue;
+            }
+            child.deleteSync(recursive: true);
+          } catch (_) {
+            // Ignore if a specific file/dir cannot be deleted
+          }
+        }
+      }
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Cache berhasil dibersihkan'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal membersihkan cache: $e'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,10 +219,10 @@ class _AccountPageState extends State<AccountPage> {
           children: [
             CircleAvatar(
               backgroundColor: Colors.white,
-              backgroundImage: _userAvatarPath != null
+              backgroundImage: _userAvatarPath != null && File(_userAvatarPath!).existsSync()
                   ? FileImage(File(_userAvatarPath!))
                   : null,
-              child: _userAvatarPath == null
+              child: _userAvatarPath == null || !File(_userAvatarPath!).existsSync()
                   ? Icon(
                       Icons.person,
                       color: Theme.of(context).colorScheme.primary,
@@ -135,7 +254,16 @@ class _AccountPageState extends State<AccountPage> {
           ],
         ),
       ),
-      body: ListView(
+      body: ListTileTheme(
+        data: ListTileThemeData(
+          iconColor: Theme.of(context).colorScheme.primary,
+          titleTextStyle: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+        child: ListView(
         padding: const EdgeInsets.only(
           left: 16,
           top: 16,
@@ -146,7 +274,7 @@ class _AccountPageState extends State<AccountPage> {
           // KONTAINER 1
           const Text(
             'Aktivitas Saya',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
           Card(
             margin: const EdgeInsets.only(top: 8, bottom: 24),
@@ -168,10 +296,14 @@ class _AccountPageState extends State<AccountPage> {
                   leading: const Icon(Icons.school),
                   title: const Text('Pelatihan yang Saya Ikuti'),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (c) => const MyTrainingPage()),
-                  ),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Fitur ini sedang dalam tahap pengembangan'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                 ),
                 const Divider(height: 1),
                 ListTile(
@@ -188,10 +320,14 @@ class _AccountPageState extends State<AccountPage> {
                   leading: const Icon(Icons.workspace_premium),
                   title: const Text('E-Certificate'),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (c) => const ECertificatePage()),
-                  ),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Fitur ini sedang dalam tahap pengembangan'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -200,7 +336,7 @@ class _AccountPageState extends State<AccountPage> {
           // KONTAINER 2
           const Text(
             'Pengaturan Akun',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
           Card(
             margin: const EdgeInsets.only(top: 8, bottom: 24),
@@ -258,13 +394,7 @@ class _AccountPageState extends State<AccountPage> {
                 ListTile(
                   leading: const Icon(Icons.cleaning_services),
                   title: const Text('Bersihkan Cache'),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Cache berhasil dibersihkan'),
-                      ),
-                    );
-                  },
+                  onTap: _clearCache,
                 ),
               ],
             ),
@@ -273,7 +403,7 @@ class _AccountPageState extends State<AccountPage> {
           // KONTAINER 3
           const Text(
             'Informasi Umum',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
           Card(
             margin: const EdgeInsets.only(top: 8, bottom: 32),
@@ -299,11 +429,31 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.description),
+                  title: const Text('Syarat dan Ketentuan'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (c) => const TermsConditionsPage()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.privacy_tip),
+                  title: const Text('Kebijakan Privasi'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (c) => const PrivacyPolicyPage()),
+                  ),
+                ),
+                const Divider(height: 1),
                 const ListTile(
                   leading: Icon(Icons.android),
                   title: Text('Versi Aplikasi'),
                   trailing: Text(
-                    'v1.0.0',
+                    'v1.0.0+2',
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
@@ -314,20 +464,27 @@ class _AccountPageState extends State<AccountPage> {
           // KONTAINER ADMIN
           const Text(
             'Admin',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
           Card(
+            color: Theme.of(context).colorScheme.primary,
             margin: const EdgeInsets.only(top: 8, bottom: 32),
             child: ListTile(
               leading: const Icon(
                 Icons.admin_panel_settings,
-                color: Colors.blue,
+                color: Colors.white,
               ),
               title: const Text(
                 'Admin Dashboard',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: const Icon(
+                Icons.chevron_right,
+                color: Colors.white,
+              ),
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (c) => const AdminDashboardPage()),
@@ -344,7 +501,7 @@ class _AccountPageState extends State<AccountPage> {
             ),
             icon: const Icon(Icons.logout),
             label: const Text(
-              'Keluar (Logout)',
+              'Keluar',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             onPressed: () async {
@@ -362,6 +519,7 @@ class _AccountPageState extends State<AccountPage> {
           ),
           const SizedBox(height: 32),
         ],
+      ),
       ),
     );
   }

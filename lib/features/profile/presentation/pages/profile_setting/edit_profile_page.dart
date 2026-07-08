@@ -137,10 +137,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.grey.shade300,
-                  backgroundImage: _imagePath != null
+                  backgroundImage: _imagePath != null && File(_imagePath!).existsSync()
                       ? FileImage(File(_imagePath!))
                       : null,
-                  child: _imagePath == null
+                  child: _imagePath == null || !File(_imagePath!).existsSync()
                       ? const Icon(Icons.person, size: 50, color: Colors.grey)
                       : null,
                 ),

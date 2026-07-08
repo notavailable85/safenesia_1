@@ -480,9 +480,9 @@ class _KarirPageState extends State<KarirPage> {
               // Badges & Date
               Row(
                 children: [
-                  _buildMiniBadge(career.employmentType),
+                  Flexible(child: _buildMiniBadge(career.employmentType)),
                   const SizedBox(width: 8),
-                  _buildMiniBadge(career.level),
+                  Flexible(child: _buildMiniBadge(career.level)),
                   const Spacer(),
                   if (isAppliedTab)
                     Container(
@@ -529,6 +529,8 @@ class _KarirPageState extends State<KarirPage> {
       ),
       child: Text(
         text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontSize: 11,
           color: Colors.grey.shade700,

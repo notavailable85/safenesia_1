@@ -4,11 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/gestures.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/forgot_password/forgot_password_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/register/register_page.dart';
-import 'package:safenesia_1/features/auth/presentation/pages/terms/terms_and_conditions_page.dart';
-import 'package:safenesia_1/features/auth/presentation/pages/terms/privacy_policy_page.dart';
+import 'package:safenesia_1/features/profile/presentation/pages/information/terms_conditions_page.dart';
+import 'package:safenesia_1/features/profile/presentation/pages/information/privacy_policy_page.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
 
 import '../../../../../core/constants/constants.dart';
@@ -26,8 +27,60 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _isPasswordVisible = false;
   bool _isLoadingGoogle = false;
+  bool _isBiometricEnabled = false;
+  final LocalAuthentication _auth = LocalAuthentication();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometricStatus();
+  }
+
+  Future<void> _checkBiometricStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        _isBiometricEnabled = prefs.getBool('is_biometric_enabled') ?? false;
+      });
+      if (_isBiometricEnabled) {
+        _authenticateWithBiometrics();
+      }
+    }
+  }
+
+  Future<void> _authenticateWithBiometrics() async {
+    try {
+      final bool didAuthenticate = await _auth.authenticate(
+        localizedReason: 'Pindai sidik jari Anda untuk masuk',
+        biometricOnly: true,
+      );
+      
+      if (didAuthenticate) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('login_method', 'biometric');
+        await prefs.setBool('is_logged_in', true);
+        await prefs.setInt('last_active_time', DateTime.now().millisecondsSinceEpoch);
+        
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (c) => const MainNavigationScreen()),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Gagal verifikasi sidik jari'),
+            backgroundColor: Colors.red.shade600,
+          ),
+        );
+      }
+    }
+  }
 
   String _getErrorMessage(String errorCode) {
     switch (errorCode) {
@@ -201,13 +254,35 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 6),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: _login,
-                    child: const Text('Login', style: TextStyle(fontSize: 16)),
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: _login,
+                          child: const Text('Login', style: TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                    ),
+                    if (_isBiometricEnabled) ...[
+                      const SizedBox(width: 12),
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: _authenticateWithBiometrics,
+                          child: const Icon(Icons.fingerprint),
+                        ),
+                      ),
+                    ]
+                  ],
                 ),
 
                 Padding(
@@ -373,7 +448,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const TermsAndConditionsPage(),
+                                  builder: (context) => const TermsConditionsPage(),
                                 ),
                               );
                             },

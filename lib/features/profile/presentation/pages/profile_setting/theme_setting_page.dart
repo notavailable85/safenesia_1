@@ -86,6 +86,11 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
                 return SizedBox(
                   width: double.infinity,
                   child: SegmentedButton<ThemeMode>(
+                    style: SegmentedButton.styleFrom(
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                     segments: const [
                       ButtonSegment(
                         value: ThemeMode.light,
@@ -143,7 +148,7 @@ class _ThemeSettingPageState extends State<ThemeSettingPage> {
             Container(
               height: 40,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(colors: hueColors),
               ),
               child: SliderTheme(
