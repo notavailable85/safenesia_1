@@ -100,6 +100,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   }
 
   Future<void> _shareArticle() async {
+    // ignore: deprecated_member_use
     await Share.share('${widget.article.title}\n\nBaca selengkapnya di: ${widget.article.sourceUrl}');
     await DatabaseHelper.instance.updateArticleInteractions(widget.article.id, sharesDelta: 1);
     setState(() {

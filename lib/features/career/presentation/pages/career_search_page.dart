@@ -52,6 +52,7 @@ class _CareerSearchPageState extends State<CareerSearchPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // ignore: unused_local_variable
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(

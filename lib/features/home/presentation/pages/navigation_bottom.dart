@@ -18,13 +18,7 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
-  final List<GlobalKey<NavigatorState>> _navigatorKeys = [
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(), // Chat AI
-  ];
+  // Removed _navigatorKeys to use the root navigator for all pushes, preventing bottom navbar stacking.
 
   final List<Widget> _pages = [
     const HomePage(),
@@ -37,18 +31,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   void _onPopInvoked(bool didPop) {
     if (didPop) return;
 
-    final navigator = _navigatorKeys[_selectedIndex].currentState!;
-    if (navigator.canPop()) {
-      navigator.pop();
+    if (_selectedIndex != 0) {
+      setState(() => _selectedIndex = 0);
     } else {
-      if (_selectedIndex != 0) {
-        setState(() => _selectedIndex = 0);
-      } else {
-        // We are on the first tab and first route, close app if needed
-        // Since canPop is false, if we want to allow closing, we can call
-        // Navigator.of(context).pop() or SystemNavigator.pop()
-        // But for now, returning will do nothing or we can allow pop.
-      }
+      // If we are on the first tab and there's no route to pop,
+      // allow pop (which will likely exit the app).
     }
   }
 
@@ -61,12 +48,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         extendBody: false,
         body: IndexedStack(
           index: _selectedIndex,
-          children: _pages.asMap().entries.map((entry) {
-            return TabNavigator(
-              navigatorKey: _navigatorKeys[entry.key],
-              rootPage: entry.value,
-            );
-          }).toList(),
+          children: _pages,
         ),
         bottomNavigationBar: _buildModernBottomNavBar(),
       ),
@@ -156,13 +138,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return GestureDetector(
       onTap: () {
         if (index == 0) {
-          _navigatorKeys[0].currentState?.popUntil((route) => route.isFirst);
           if (_selectedIndex != 0) setState(() => _selectedIndex = 0);
-        } else if (index == _selectedIndex) {
-          _navigatorKeys[index].currentState?.popUntil(
-            (route) => route.isFirst,
-          );
-        } else {
+        } else if (index != _selectedIndex) {
           setState(() => _selectedIndex = index);
         }
       },
@@ -209,23 +186,4 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 }
 
-class TabNavigator extends StatelessWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
-  final Widget rootPage;
 
-  const TabNavigator({
-    super.key,
-    required this.navigatorKey,
-    required this.rootPage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Navigator(
-      key: navigatorKey,
-      onGenerateRoute: (routeSettings) {
-        return MaterialPageRoute(builder: (context) => rootPage);
-      },
-    );
-  }
-}

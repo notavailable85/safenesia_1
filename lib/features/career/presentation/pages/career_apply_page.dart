@@ -203,8 +203,10 @@ class _CareerApplyPageState extends State<CareerApplyPage> {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   decoration: BoxDecoration(
+                    // ignore: deprecated_member_use
                     color: _isFileUploaded ? Colors.green.shade50 : primaryColor.withOpacity(0.05),
                     border: Border.all(
+                      // ignore: deprecated_member_use
                       color: _isFileUploaded ? Colors.green : primaryColor.withOpacity(0.3),
                       style: BorderStyle.solid,
                       width: 1,

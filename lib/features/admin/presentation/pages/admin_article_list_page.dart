@@ -77,7 +77,7 @@ class _AdminArticleListPageState extends State<AdminArticleListPage> {
     
     for (int i = 0; i < 5; i++) {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final id = '\${timestamp}_$i';
+      final id = '${timestamp}_$i';
       final randomCategory = categories[random.nextInt(categories.length)];
       
       final dummy = ArticleModel(

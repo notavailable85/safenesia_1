@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/forgot_password/forgot_password_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/register/register_page.dart';
+import 'package:safenesia_1/core/database/database_helper.dart';
 
 import '../../../../../core/constants/constants.dart';
 
@@ -83,36 +84,16 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     final prefs = await SharedPreferences.getInstance();
-    final usersStr = prefs.getString('registered_users');
 
-    bool userFound = false;
+    final user = await DatabaseHelper.instance.getUserByEmail(identifier);
+    bool userFound = user != null;
     bool passwordCorrect = false;
     String? foundUserName;
 
-    if (usersStr != null) {
-      final List<dynamic> registeredUsers = jsonDecode(usersStr);
-      for (var user in registeredUsers) {
-        if (user['email'] == identifier) {
-          userFound = true;
-          if (user['password'] == password) {
-            passwordCorrect = true;
-            foundUserName = user['name'];
-            break;
-          }
-        }
-      }
-    }
-
-    // Fallback jika belum ada list json (kompatibilitas)
-    if (!userFound) {
-      final fallbackEmail = prefs.getString('registered_email');
-      final fallbackPassword = prefs.getString('registered_password');
-      if (fallbackEmail == identifier) {
-        userFound = true;
-        if (fallbackPassword == password) {
-          passwordCorrect = true;
-          foundUserName = 'Pengguna';
-        }
+    if (userFound) {
+      if (user.password == password) {
+        passwordCorrect = true;
+        foundUserName = user.name;
       }
     }
 

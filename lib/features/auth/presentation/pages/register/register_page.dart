@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,7 +6,8 @@ import 'package:safenesia_1/core/constants/app_assets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/register/verify_email_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/login/dummy_home_page.dart';
-
+import 'package:safenesia_1/core/database/database_helper.dart';
+import 'package:safenesia_1/features/auth/models/user_model.dart';
 // ==========================================
 // 5. REGISTER PAGE
 // ==========================================
@@ -90,27 +91,21 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    final prefs = await SharedPreferences.getInstance();
-
-    final existingUsersStr = prefs.getString('registered_users');
-    List<dynamic> registeredUsers = [];
-    if (existingUsersStr != null) {
-      registeredUsers = jsonDecode(existingUsersStr);
-      for (var user in registeredUsers) {
-        if (user['email'] == email) {
-          _showError('email_already_in_use');
-          return;
-        }
-      }
+    final existingUser = await DatabaseHelper.instance.getUserByEmail(email);
+    if (existingUser != null) {
+      _showError('email_already_in_use');
+      return;
     }
 
-    registeredUsers.add({'name': name, 'email': email, 'password': password});
-
-    await prefs.setString('registered_users', jsonEncode(registeredUsers));
-
-    // Tetap simpan untuk kompatibilitas login_page lama
-    await prefs.setString('registered_email', email);
-    await prefs.setString('registered_password', password);
+    final newUser = UserModel(
+      id: 'user-${DateTime.now().millisecondsSinceEpoch}',
+      name: name,
+      email: email,
+      password: password,
+      phoneNumber: '',
+      role: 'user',
+    );
+    await DatabaseHelper.instance.createUser(newUser);
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

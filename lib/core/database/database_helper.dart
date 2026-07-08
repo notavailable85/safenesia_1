@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:safenesia_1/features/article/models/article_model.dart';
@@ -11,11 +12,12 @@ import 'package:safenesia_1/features/regulation/models/regulation_model.dart';
 import 'package:safenesia_1/features/inspection/models/inspection_model.dart';
 import 'package:safenesia_1/features/auth/models/user_model.dart';
 import 'package:safenesia_1/features/profile/models/transaction_model.dart';
+import 'package:safenesia_1/features/profile/models/document_model.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static const _databaseName = "safenesia.db";
-  static const _databaseVersion = 20;
+  static const _databaseVersion = 21;
 
   static Database? _database;
 
@@ -124,6 +126,9 @@ class DatabaseHelper {
       await db.execute('DROP TABLE IF EXISTS careers');
       await _createCareersTable(db);
     }
+    if (oldVersion < 21) {
+      await _createDocumentsTable(db);
+    }
   }
 
   Future _createArticlesTable(Database db) async {
@@ -174,6 +179,7 @@ CREATE TABLE articles (
     await _createInspectionsTable(db);
     await _createUsersTable(db);
     await _createTransactionsTable(db);
+    await _createDocumentsTable(db);
   }
 
   Future _createUsersTable(Database db) async {
@@ -693,6 +699,19 @@ CREATE TABLE training_schedules (
     return result.map((json) => UserModel.fromMap(json)).toList();
   }
 
+  Future<UserModel?> getUserByEmail(String email) async {
+    final db = await instance.database;
+    final result = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+    if (result.isNotEmpty) {
+      return UserModel.fromMap(result.first);
+    }
+    return null;
+  }
+
   Future<int> updateUser(UserModel user) async {
     final db = await instance.database;
     return db.update(
@@ -789,11 +808,14 @@ CREATE TABLE transactions (
     });
   }
 
+  static final ValueNotifier<int> transactionNotifier = ValueNotifier(0);
+
   Future<TransactionModel> createTransaction(
     TransactionModel transaction,
   ) async {
     final db = await instance.database;
     await db.insert('transactions', transaction.toMap());
+    transactionNotifier.value++; // Trigger UI update
     return transaction;
   }
 
@@ -816,6 +838,36 @@ CREATE TABLE transactions (
   Future<int> deleteTransaction(String id) async {
     final db = await instance.database;
     return await db.delete('transactions', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // ================= DOCUMENT METHODS =================
+  Future _createDocumentsTable(Database db) async {
+    await db.execute('''
+CREATE TABLE documents (
+  id TEXT PRIMARY KEY,
+  jenis TEXT NOT NULL,
+  nama_file TEXT NOT NULL,
+  path_file TEXT NOT NULL,
+  tanggal_upload TEXT NOT NULL
+)
+''');
+  }
+
+  Future<DocumentModel> createDocument(DocumentModel doc) async {
+    final db = await instance.database;
+    await db.insert('documents', doc.toMap());
+    return doc;
+  }
+
+  Future<List<DocumentModel>> readAllDocuments() async {
+    final db = await instance.database;
+    final result = await db.query('documents', orderBy: 'ROWID DESC');
+    return result.map((json) => DocumentModel.fromMap(json)).toList();
+  }
+
+  Future<int> deleteDocument(String id) async {
+    final db = await instance.database;
+    return await db.delete('documents', where: 'id = ?', whereArgs: [id]);
   }
 
   Future close() async {

@@ -558,6 +558,7 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
                 // Tombol Cek Status Pembayaran
                 SizedBox(
                   height: 54,
+                  width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(
@@ -571,6 +572,17 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
                       ),
                     ),
                     onPressed: _checkPaymentStatus,
+                    onLongPress: () async {
+                      await _saveTransaction();
+                      if (!context.mounted) return;
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PaymentSuccessPage(),
+                        ),
+                        (route) => route.isFirst,
+                      );
+                    },
                     child: const Text(
                       'Cek Status Pembayaran',
                       style: TextStyle(
@@ -581,30 +593,16 @@ class _QrisPaymentPageState extends State<QrisPaymentPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // Simulasi Pembayaran Sukses (Sebagai dummy developer - Akan dihapus di production)
-                GestureDetector(
-                  onLongPress: () async {
-                    await _saveTransaction();
-                    if (!context.mounted) return;
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PaymentSuccessPage(),
-                      ),
-                      (route) => route.isFirst,
-                    );
-                  },
-                  child: Opacity(
-                    opacity: 0.3,
-                    child: const Text(
-                      'Tahan untuk Simulasi Bayar Berhasil (Admin Only)',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 10),
-                    ),
+                
+                Opacity(
+                  opacity: 0.5,
+                  child: const Text(
+                    '(Tekan lama tombol di atas untuk simulasi bayar sukses)',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 11),
                   ),
                 ),
-
+                
                 const SizedBox(height: 32),
               ],
             ),

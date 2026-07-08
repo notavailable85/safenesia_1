@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safenesia_1/features/article/models/article_model.dart';
 import 'package:safenesia_1/features/article/presentation/pages/article_detail_page.dart';
-import 'package:safenesia_1/features/article/presentation/pages/article_search_page.dart';
-import 'package:safenesia_1/features/article/presentation/pages/article_category_page.dart';
 import 'package:safenesia_1/features/article/presentation/pages/article_bookmark_page.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +16,7 @@ class ArticleListPage extends StatefulWidget {
 }
 
 class _ArticleListPageState extends State<ArticleListPage> {
+  // ignore: unused_field
   String _selectedKategori = 'Semua';
   late Future<List<ArticleModel>> _articlesFuture;
   Set<String> _bookmarkedArticleIds = {};
@@ -467,7 +466,8 @@ class _ArticleListPageState extends State<ArticleListPage> {
                                         minHeight: 32,
                                       ),
                                       onPressed: () async {
-                                        await Share.share('${article.title}\n\nBaca selengkapnya di: ${article.sourceUrl}');
+                                        // ignore: deprecated_member_use
+                                        Share.share('${article.title}\n\nBaca selengkapnya di: ${article.sourceUrl}');
                                         await DatabaseHelper.instance
                                             .updateArticleInteractions(
                                               article.id,

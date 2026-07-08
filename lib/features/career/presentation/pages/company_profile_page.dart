@@ -59,6 +59,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                     color: Theme.of(context)
                         .colorScheme
                         .surfaceContainerHighest
+                        // ignore: deprecated_member_use
                         .withOpacity(0.3),
                     width: double.infinity,
                     child: Column(
@@ -71,6 +72,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
+                                // ignore: deprecated_member_use
                                 color: Colors.black.withOpacity(0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),

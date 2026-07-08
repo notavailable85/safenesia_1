@@ -22,3 +22,19 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+
+subprojects {
+    pluginManager.withPlugin("com.android.library") {
+        if (project.name == "file_picker") {
+            val androidExt = project.extensions.findByName("android")
+            if (androidExt != null) {
+                try {
+                    val setNamespaceMethod = androidExt.javaClass.getMethod("setNamespace", String::class.java)
+                    setNamespaceMethod.invoke(androidExt, "com.mr.flutter.plugin.filepicker")
+                } catch (e: Exception) {
+                    println("Could not set namespace for file_picker via reflection: ${e.message}")
+                }
+            }
+        }
+    }
+}
