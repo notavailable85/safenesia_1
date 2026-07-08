@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/gestures.dart';
 import 'package:safenesia_1/features/home/presentation/pages/navigation_bottom.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/forgot_password/forgot_password_page.dart';
 import 'package:safenesia_1/features/auth/presentation/pages/register/register_page.dart';
+import 'package:safenesia_1/features/auth/presentation/pages/terms/terms_and_conditions_page.dart';
+import 'package:safenesia_1/features/auth/presentation/pages/terms/privacy_policy_page.dart';
 import 'package:safenesia_1/core/database/database_helper.dart';
 
 import '../../../../../core/constants/constants.dart';
@@ -365,6 +368,15 @@ class _LoginPageState extends State<LoginPage> {
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TermsAndConditionsPage(),
+                                ),
+                              );
+                            },
                         ),
                         const TextSpan(text: ' dan '),
                         TextSpan(
@@ -373,6 +385,15 @@ class _LoginPageState extends State<LoginPage> {
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PrivacyPolicyPage(),
+                                ),
+                              );
+                            },
                         ),
                         const TextSpan(text: ' kami.'),
                       ],
